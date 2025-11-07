@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IM SAFE Readiness Check — Flying M</title>
+<style>
+  :root{--bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;--accent:#4da3ff;--good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial}
+  .wrap{max-width:720px;margin:0 auto;padding:20px}
+  .card{background:var(--card);border-radius:16px;padding:18px 18px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin:14px 0}
+  h1{font-size:1.5rem;margin:.2rem 0 .6rem} h2{font-size:1.15rem;margin:.2rem 0 .4rem}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{appearance:none;border:0;border-radius:14px;padding:14px 18px;font-weight:600;color:#0b0f14;background:var(--accent);cursor:pointer;min-width:120px}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .btn-ghost{background:transparent;color:var(--ink);border:2px solid var(--muted)}
+  .btn-wide{width:100%}
+  .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:#0e141c;border:1px solid #223042;color:var(--muted);font-size:.9rem}
+  .grid{display:grid;gap:10px} .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .center{display:flex;justify-content:center;align-items:center;text-align:center}
+  .big{font-size:2.2rem;font-weight:700}
+  .muted{color:var(--muted)} .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace}
+  .tapTarget{width:180px;height:180px;border-radius:999px;background:#3a485c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;user-select:none}
+  .tapTarget.ready{background:#6a7688} .tapTarget.go{background:#3aa657}
+  .bar{height:10px;border-radius:999px;background:#1a2330;overflow:hidden}
+  .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4da3ff,#13c27a)}
+  .scoreLight{display:flex;gap:8px;align-items:center}
+  .dot{width:12px;height:12px;border-radius:999px;background:var(--muted)}
+  .dot.green{background:var(--good)} .dot.amber{background:var(--warn)} .dot.red{background:var(--bad)}
+  .kbd{display:inline-block;padding:.2rem .45rem;border-radius:.4rem;border:1px solid #2a3850;background:#0c121a;font-weight:700}
+  .callout{border-left:4px solid #2a7bff;padding:.6rem .8rem;background:#0e1520;border-radius:8px}
+  .hr{height:1px;background:#213043;margin:12px 0}
+  .tag{display:inline-block;padding:4px 8px;border-radius:8px;background:#0f1622;color:var(--muted);border:1px solid #223042;font-size:.85rem}
+  .chip{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid #223042;background:#101826}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="card">
+    <h1>IM SAFE Readiness Check</h1>
+    <div class="muted">A 90-second, baseline-referenced snapshot of cognitive speed, attention control, and working memory. <span class="tag">Local & private</span></div>
+    <div class="hr"></div>
+    <div class="grid grid-2">
+      <div>
+        <h2>How it works</h2>
+        <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
+          <li>3 mini-tasks: Reaction (20s), Color-Word (30s), 1-back (30s)</li>
+          <li>Compare today vs. your personal baseline</li>
+          <li>Result: <b>Fit</b> / <b>Caution</b> / <b>No-Go</b> + Readiness %</li>
+        </ul>
+      </div>
+      <div>
+        <h2>When to set a baseline</h2>
+        <div class="muted">Rested, sober (≥48h alcohol-free), low stress, well-fed/hydrated. Add multiple baseline sessions for best accuracy.</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="row">
+      <button id="startBtn" class="btn">Start 90-second Check</button>
+      <button id="addBaselineBtn" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
+      <button id="resetBaselineBtn" class="btn btn-ghost">Manage Baseline</button>
+    </div>
+    <div class="muted" style="margin-top:6px">Tip: Put your phone in <span class="kbd">Airplane Mode</span> so notifications don’t interrupt timing.</div>
+  </header>
+
+  <!-- Test Card -->
+  <section id="testCard" class="card hide">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
+      <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
+    </div>
+    <div class="bar" style="margin:10px 0 14px"><i id="progressBar"></i></div>
+
+    <!-- Simple Reaction -->
+    <div id="srtPane" class="center" style="min-height:220px">
+      <div id="srtTarget" class="tapTarget">WAIT</div>
+    </div>
+
+    <!-- Stroop -->
+    <div id="stroopPane" class="hide" style="min-height:220px">
+      <div class="center" style="margin:10px 0 18px">
+        <div id="stroopWord" class="big mono">RED</div>
+      </div>
+      <div class="row center" style="justify-content:center">
+        <button id="btnMatch" class="btn">MATCH</button>
+        <button id="btnMismatch" class="btn btn-ghost">MISMATCH</button>
+      </div>
+    </div>
+
+    <!-- 1-back -->
+    <div id="nbackPane" class="hide" style="min-height:220px">
+      <div class="center" style="margin:10px 0 18px">
+        <div id="nbackDigit" class="big mono">5</div>
+      </div>
+      <div class="center">
+        <button id="btnTarget" class="btn">TARGET (Same as previous)</button>
+      </div>
+      <div class="muted center" style="margin-top:6px">Tap only when this digit equals the previous digit.</div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section id="resultCard" class="card hide">
+    <h2>Result</h2>
+    <div class="row" style="align-items:center;gap:14px">
+      <div class="scoreLight"><span id="lightDot" class="dot"></span><b id="lightLabel">—</b></div>
+      <div class="big" id="readinessPct">—%</div>
+    </div>
+    <div class="muted" id="driverText" style="margin-top:6px"></div>
+    <div class="callout" style="margin-top:10px">
+      <b>Guidance:</b> <span id="guidanceText">—</span>
+    </div>
+    <div class="hr"></div>
+    <div class="grid grid-2">
+      <div>
+        <h3>Today’s metrics</h3>
+        <div class="muted" id="metricToday"></div>
+      </div>
+      <div>
+        <h3>Baseline (mean ± SD)</h3>
+        <div class="muted" id="metricBase"></div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="row">
+      <button id="againBtn" class="btn">Run Again</button>
+      <button id="shareBtn" class="btn btn-ghost">Export Summary</button>
+      <button id="addBaselineBtn2" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
+    </div>
+    <div class="muted" style="margin-top:8px">
+      This tool supports—but does not replace—your obligations under 14 CFR 91.17 and the full IM SAFE self-assessment.
+    </div>
+  </section>
+
+  <!-- Baseline Manager -->
+  <section id="baselineCard" class="card hide">
+    <h2>Baseline Sessions</h2>
+    <div id="baselineList" class="muted">No baseline yet.</div>
+    <div class="row" style="margin-top:10px">
+      <button id="deleteBaselineBtn" class="btn btn-ghost">Delete All Baseline</button>
+      <button id="closeBaselineBtn" class="btn">Close</button>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  // ---------- Utilities ----------
+  const $ = sel => document.querySelector(sel);
+  const fmt = n => (typeof n === "number" ? (Math.round(n*10)/10) : n);
+  const clamp = (v, lo, hi)=> Math.max(lo, Math.min(hi, v));
+  const mean = arr => arr.reduce((a,b)=>a+b,0)/arr.length || 0;
+  const sd = arr => {
+    if(arr.length<2) return 0;
+    const m=mean(arr); const v=mean(arr.map(x=>(x-m)*(x-m)));
+    return Math.sqrt(v);
+  };
+  const now = ()=> performance.now();
+
+  const storeKey = "flyingm_imsafe_baseline_v1";
+  function loadBaseline(){ try{ return JSON.parse(localStorage.getItem(storeKey)||"[]"); }catch{ return []; } }
+  function saveBaseline(sessions){ localStorage.setItem(storeKey, JSON.stringify(sessions||[])); }
+
+  // ---------- DOM refs ----------
+  const startBtn = $("#startBtn");
+  const addBaselineBtn = $("#addBaselineBtn");
+  const addBaselineBtn2 = $("#addBaselineBtn2");
+  const resetBaselineBtn = $("#resetBaselineBtn");
+
+  const testCard = $("#testCard");
+  const stepName = $("#stepName");
+  const countdown = $("#countdown");
+  const progressBar = $("#progressBar");
+
+  const srtPane = $("#srtPane"), srtTarget = $("#srtTarget");
+  const stroopPane = $("#stroopPane"), stroopWord = $("#stroopWord");
+  const btnMatch = $("#btnMatch"), btnMismatch = $("#btnMismatch");
+  const nbackPane = $("#nbackPane"), nbackDigit = $("#nbackDigit"), btnTarget = $("#btnTarget");
+
+  const resultCard = $("#resultCard");
+  const lightDot = $("#lightDot"), lightLabel=$("#lightLabel"), readinessPct=$("#readinessPct");
+  const driverText=$("#driverText"), guidanceText=$("#guidanceText");
+  const metricToday=$("#metricToday"), metricBase=$("#metricBase");
+  const againBtn=$("#againBtn"), shareBtn=$("#shareBtn");
+
+  const baselineCard=$("#baselineCard"), baselineList=$("#baselineList");
+  const deleteBaselineBtn=$("#deleteBaselineBtn"), closeBaselineBtn=$("#closeBaselineBtn");
+
+  let baselineSessions = loadBaseline();
+  let sessionResult = null;
+
+  function show(el){ el.classList.remove("hide"); }
+  function hide(el){ el.classList.add("hide"); }
+  function setProgress(p){ progressBar.style.width = (p*100).toFixed(1)+"%"; }
+
+  // ---------- Test Orchestrator ----------
+  const DUR = { warmup: 5, srt:20, stroop:30, nback:30 };
+  let abortFlag = false;
+
+  async function runTest(){
+    abortFlag = false;
+    sessionResult = null;
+    addBaselineBtn.disabled = true;
+    addBaselineBtn2.disabled = true;
+
+    hide(resultCard); hide(baselineCard);
+    show(testCard);
+
+    // Warmup
+    await sectionTimer("Warm-up", DUR.warmup, async (tleft,p)=>{
+      countdown.textContent = Math.ceil(tleft)+"s";
+      setProgress(p);
+      srtTarget.textContent = "WAIT";
+      srtTarget.className = "tapTarget ready";
+      show(srtPane); hide(stroopPane); hide(nbackPane);
+    });
+
+    // SRT
+    const srt = await runSRT(DUR.srt);
+    if(abortFlag) return;
+
+    // STROOP
+    const stro = await runStroop(DUR.stroop);
+    if(abortFlag) return;
+
+    // NBACK
+    const nb = await runNBack(DUR.nback);
+    if(abortFlag) return;
+
+    // Score & show
+    sessionResult = computeScoring(srt, stro, nb, baselineSessions);
+    renderResults(sessionResult, srt, stro, nb, baselineSessions);
+  }
+
+  function sectionTimer(name, seconds, tickFn){
+    stepName.textContent = name;
+    const t0 = now(), total = seconds*1000;
+    return new Promise(res=>{
+      function frame(){
+        const t = now()-t0;
+        if(abortFlag){ return res(); }
+        const remaining = Math.max(0, total - t);
+        const p = clamp(t/total,0,1);
+        tickFn(remaining/1000, p);
+        if(t<total){ requestAnimationFrame(frame); } else { res(); }
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
+  // ---------- Simple Reaction Time ----------
+  async function runSRT(seconds){
+    show(srtPane); hide(stroopPane); hide(nbackPane);
+    let rts=[], falseStarts=0, lapses=0;
+    let waiting = true, goTime = 0, lastChange=0;
+    let endAt = now() + seconds*1000;
+
+    function scheduleNext(){
+      waiting = true;
+      const delay = 800 + Math.random()*1000; // 800–1800 ms
+      lastChange = now() + delay;
+      srtTarget.textContent = "WAIT";
+      srtTarget.className = "tapTarget ready";
+      setTimeout(()=>{
+        if(now()>endAt) return;
+        srtTarget.textContent = "TAP";
+        srtTarget.className = "tapTarget go";
+        waiting=false;
+        goTime = now();
+      }, delay);
+    }
+
+    srtTarget.onclick = ()=>{
+      if(now()>endAt) return;
+      if(waiting){
+        falseStarts++;
+        // brief shake?
+      } else {
+        const rt = now() - goTime;
+        if(rt>1500){ lapses++; } // >1.5s counts as lapse, not added to median
+        else if(rt>=100) rts.push(rt); // ignore <100ms anticipations
+        scheduleNext();
+      }
+    };
+
+    await sectionTimer("Reaction", seconds, (tleft,p)=>{
+      countdown.textContent = Math.ceil(tleft)+"s";
+      setProgress((DUR.warmup + (DUR.srt - tleft))/ (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback));
+      if(!goTime && now() < (now()+1)){} // noop
+    });
+    srtTarget.onclick = null;
+
+    // Ensure at least a few measurements
+    if(rts.length<5 && falseStarts>0){ /* ok */ }
+    const medianRT = rts.length ? rts.slice().sort((a,b)=>a-b)[Math.floor(rts.length/2)] : 999;
+    return {medianRT, lapses, falseStarts, n:rts.length};
+  }
+
+  // ---------- Stroop ----------
+  async function runStroop(seconds){
+    show(stroopPane); hide(srtPane); hide(nbackPane);
+    const words=["RED","GREEN"]; const colors={RED:"#ff4444", GREEN:"#1dd75f"};
+    let trials=[]; let current=null; let tStim=0; let awaiting=true;
+    const isi = 1500; // ms
+    const endAt = now()+seconds*1000;
+
+    function newTrial(){
+      const word = words[Math.floor(Math.random()*2)];
+      const colorName = words[Math.floor(Math.random()*2)];
+      current = {word, colorName, congruent: word===colorName};
+      stroopWord.textContent = word;
+      stroopWord.style.color = colors[colorName];
+      tStim = now(); awaiting=true;
+    }
+
+    function respond(type){
+      if(!awaiting) return;
+      awaiting=false;
+      const rt = now()-tStim;
+      const correct = (current.word===current.colorName && type==="MATCH") ||
+                      (current.word!==current.colorName && type==="MISMATCH");
+      trials.push({rt, correct, congruent: current.congruent});
+    }
+
+    btnMatch.onclick = ()=> respond("MATCH");
+    btnMismatch.onclick = ()=> respond("MISMATCH");
+
+    // loop
+    let tNext = 0;
+    await sectionTimer("Color-Word", seconds, (tleft,p)=>{
+      countdown.textContent = Math.ceil(tleft)+"s";
+      const progressed = (DUR.warmup + DUR.srt + (DUR.stroop - tleft)) /
+                         (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback);
+      setProgress(progressed);
+      if(now()>=tNext){
+        newTrial();
+        tNext = now()+isi;
+      }
+    });
+    btnMatch.onclick = btnMismatch.onclick = null;
+
+    const corrects = trials.filter(t=>t.correct);
+    const acc = trials.length? (corrects.length / trials.length)*100 : 0;
+    const cong = trials.filter(t=>t.congruent && t.correct).map(t=>t.rt);
+    const incong = trials.filter(t=>!t.congruent && t.correct).map(t=>t.rt);
+    const rtCon = cong.length? mean(cong): NaN;
+    const rtIncon = incong.length? mean(incong): NaN;
+    const congruencyCost = (isFinite(rtIncon) && isFinite(rtCon)) ? (rtIncon - rtCon) : NaN;
+    const meanRTCorrect = corrects.length? mean(corrects.map(t=>t.rt)) : NaN;
+    return {acc, meanRTCorrect, congruencyCost, n:trials.length};
+  }
+
+  // ---------- 1-back ----------
+  async function runNBack(seconds){
+    show(nbackPane); hide(srtPane); hide(stroopPane);
+    let last=null; let current=null; let tStim=0; let awaiting=false;
+    let hits=0, fas=0, miss=0; let hitRTs=[];
+    const endAt = now()+seconds*1000;
+    const isi = 1500; // ms
+    // Generate targets at ~30%
+    function nextDigit(){
+      let d;
+      if(last!==null && Math.random()<0.30){ d = last; } else {
+        do{ d = Math.floor(1+Math.random()*9); } while(d===last);
+      }
+      current = d;
+      nbackDigit.textContent = String(d);
+      tStim = now(); awaiting=true;
+    }
+    btnTarget.onclick = ()=>{
+      if(!awaiting) return;
+      const rt = now()-tStim;
+      if(current===last){ hits++; if(rt>=100 && rt<=2000) hitRTs.push(rt); }
+      else { fas++; }
+      awaiting=false;
+    };
+
+    let tNext = 0;
+    await sectionTimer("1-back", seconds, (tleft,p)=>{
+      countdown.textContent = Math.ceil(tleft)+"s";
+      const progressed = (DUR.warmup + DUR.srt + DUR.stroop + (DUR.nback - tleft)) /
+                         (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback);
+      setProgress(progressed);
+      if(now()>=tNext){
+        if(awaiting && last===current){ // time passed without response on a target
+          miss++;
+        }
+        nextDigit();
+        tNext = now()+isi;
+        last = current;
+      }
+    });
+    btnTarget.onclick = null;
+
+    const N = hits + fas + miss;
+    const hitRate = (hits / Math.max(1, hits+miss))*100;
+    const faRate = (fas / Math.max(1, N - (hits+miss)))*100; // rough
+    const dprime = dPrimeApprox(hitRate/100, faRate/100);
+    const meanHitRT = hitRTs.length? mean(hitRTs): NaN;
+    return {hitRate, faRate, dprime, meanHitRT, counts:{hits, fas, miss}};
+  }
+
+  function dPrimeApprox(H, F){
+    // clip
+    const eps=1e-4; H=clamp(H,eps,1-eps); F=clamp(F,eps,1-eps);
+    // inverse normal CDF approx (Acklam)
+    function invNorm(p){
+      const a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924];
+      const b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857];
+      const c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878];
+      const d=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742];
+      const pl=0.02425, ph=1-pl;
+      let q, r;
+      if(p<pl){ q=Math.sqrt(-2*Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/
+                                                      ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+      if(p>ph){ q=Math.sqrt(-2*Math.log(1-p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/
+                                                       ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+      q=p-0.5; r=q*q;
+      return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/
+             (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+    }
+    return invNorm(H)-invNorm(F);
+  }
+
+  // ---------- Scoring ----------
+  function computeScoring(srt, stro, nb, baseline){
+    // Today metrics
+    const today = {
+      srt_median: srt.medianRT,
+      srt_lapses: srt.lapses,
+      srt_false: srt.falseStarts,
+      stro_acc: stro.acc,
+      stro_mean_rt: stro.meanRTCorrect,
+      stro_cost: stro.congruencyCost,
+      nb_hit: nb.hitRate,
+      nb_fa: nb.faRate,
+      nb_d: nb.dprime,
+      nb_hit_rt: nb.meanHitRT
+    };
+
+    // Baseline stats (mean & sd) from prior sessions
+    const baseStats = computeBaselineStats(baseline);
+
+    // z-scores (positive = worse)
+    function zLowerBetter(key){ // e.g., RT
+      const m=baseStats.mean[key], s=baseStats.sd[key];
+      if(!isFinite(m) || s===0 || !isFinite(today[key])) return NaN;
+      return (today[key]-m)/s;
+    }
+    function zHigherBetter(key){ // e.g., accuracy, d'
+      const m=baseStats.mean[key], s=baseStats.sd[key];
+      if(!isFinite(m) || s===0 || !isFinite(today[key])) return NaN;
+      return (m - today[key])/s;
+    }
+    const z = {
+      speed_median: zLowerBetter("srt_median"),
+      speed_lapses: zLowerBetter("srt_lapses"),
+      speed_false: zLowerBetter("srt_false"),
+      stro_cost: zLowerBetter("stro_cost"),
+      stro_acc: zHigherBetter("stro_acc"),
+      stro_rt: zLowerBetter("stro_mean_rt"),
+      nb_d: zLowerBetter("nb_d"), // lower d' is worse
+      nb_hit_rt: zLowerBetter("nb_hit_rt"),
+      nb_fa: zLowerBetter("nb_fa") // higher FA worse
+    };
+
+    function comp(domainKeys){
+      const vals = domainKeys.map(k=>z[k]).filter(Number.isFinite);
+      if(!vals.length) return NaN;
+      // trimmed mean
+      const sorted = vals.slice().sort((a,b)=>a-b);
+      const trim = Math.max(0, Math.floor(sorted.length*0.1));
+      const trimmed = sorted.slice(trim, sorted.length-trim || undefined);
+      return mean(trimmed);
+    }
+    const zSpeed = comp(["speed_median","speed_lapses","speed_false"]);
+    const zStroop = comp(["stro_cost","stro_acc","stro_rt"]);
+    const zNback = comp(["nb_d","nb_hit_rt","nb_fa"]);
+
+    const maxZ = Math.max(zSpeed||0, zStroop||0, zNback||0);
+    let readiness = 100 - clamp(12 * maxZ, 0, 60);
+    readiness = Math.round(readiness);
+
+    // Stoplight
+    let light="amber", label="Caution", guidance="Delay 15–30 minutes, hydrate/snack, then re-test. Consider a safety pilot or deferring non-essential legs.";
+    if((maxZ<1.0) && readiness>=85){ light="green"; label="Fit"; guidance="Proceed if all other IM SAFE items are satisfied."; }
+    else if(maxZ>=2.0 || readiness<70){ light="red"; label="No-Go"; guidance="Do not act as PIC. Address sleep/stress/alcohol/meds and re-test later."; }
+
+    // Auto No-Go guards
+    if(srt.lapses>=2 || (isFinite(stro.acc) && stro.acc<85)){
+      light="red"; label="No-Go";
+      guidance="Do not act as PIC. Significant attention/alertness degradation detected (excess lapses or low accuracy).";
+      readiness = Math.min(readiness, 69);
+    }
+
+    // Driver text
+    const drivers=[];
+    if(Number.isFinite(zSpeed) && zSpeed>=1) drivers.push("slower reaction & vigilance");
+    if(Number.isFinite(zStroop) && zStroop>=1) drivers.push("reduced attention control");
+    if(Number.isFinite(zNback) && zNback>=1) drivers.push("weaker working memory/sustained attention");
+    const driver = drivers.length? ("Top driver: " + drivers.join(" + ")) : "Near baseline across domains.";
+
+    return {today, baseStats, z: {speed:zSpeed, stroop:zStroop, nback:zNback, max:maxZ}, readiness, light, label, guidance, driver};
+  }
+
+  function computeBaselineStats(baseline){
+    const keys = ["srt_median","srt_lapses","srt_false","stro_acc","stro_mean_rt","stro_cost","nb_hit","nb_fa","nb_d","nb_hit_rt"];
+    const meanObj={}, sdObj={};
+    keys.forEach(k=>{
+      const arr = baseline.map(s=>s[k]).filter(x=>Number.isFinite(x));
+      meanObj[k] = arr.length? mean(arr): NaN;
+      sdObj[k] = arr.length>1? sd(arr): 0;
+    });
+    return {mean: meanObj, sd: sdObj, n: baseline.length};
+  }
+
+  function renderResults(res, srt, stro, nb, baseline){
+    hide(testCard); show(resultCard);
+    readinessPct.textContent = res.readiness + "%";
+    lightDot.className = "dot " + (res.light==="green"?"green":res.light==="red"?"red":"");
+    lightLabel.textContent = res.label;
+    driverText.textContent = res.driver;
+    guidanceText.textContent = res.guidance;
+
+    // Enable add to baseline only if "good state-ish"
+    const canAdd = (res.light==="green" && res.readiness>=90);
+    addBaselineBtn.disabled = !canAdd;
+    addBaselineBtn2.disabled = !canAdd;
+
+    // Today metrics
+    metricToday.innerHTML = [
+      `Reaction median: <b>${fmt(srt.medianRT)} ms</b>`,
+      `Lapses (>1500 ms): <b>${srt.lapses}</b>`,
+      `False starts: <b>${srt.falseStarts}</b>`,
+      `Stroop accuracy: <b>${fmt(stro.acc)}%</b>`,
+      `Stroop mean RT: <b>${fmt(stro.meanRTCorrect)} ms</b>`,
+      `Stroop cost: <b>${isFinite(stro.congruencyCost)?fmt(stro.congruencyCost):"—"} ms</b>`,
+      `1-back d′: <b>${isFinite(nb.dprime)?fmt(nb.dprime):"—"}</b>`,
+      `1-back hit RT: <b>${isFinite(nb.meanHitRT)?fmt(nb.meanHitRT):"—"} ms</b>`,
+      `1-back hits / FA / miss: <b>${nb.counts.hits}/${nb.counts.fas}/${nb.counts.miss}</b>`
+    ].map(x=>`<div>${x}</div>`).join("");
+
+    // Baseline metrics
+    const b = res.baseStats;
+    function baseLine(label, key, unit=""){
+      const m=b.mean[key], s=b.sd[key];
+      return `<div>${label}: <b>${isFinite(m)?fmt(m):"—"}${unit}</b> <span class="muted">± ${isFinite(s)?fmt(s):"—"}</span></div>`;
+    }
+    metricBase.innerHTML = [
+      baseLine("Reaction median","srt_median"," ms"),
+      baseLine("Lapses","srt_lapses"),
+      baseLine("False starts","srt_false"),
+      baseLine("Stroop accuracy","stro_acc","%"),
+      baseLine("Stroop mean RT","stro_mean_rt"," ms"),
+      baseLine("Stroop cost","stro_cost"," ms"),
+      baseLine("1-back d′","nb_d",""),
+      baseLine("1-back hit RT","nb_hit_rt"," ms"),
+    ].join("");
+
+    // Keep last session payload for export/add-baseline
+    resultCard.dataset.payload = JSON.stringify(res.today);
+  }
+
+  // ---------- Events ----------
+  startBtn.onclick = runTest;
+  againBtn.onclick = runTest;
+
+  function addCurrentToBaseline(){
+    if(!resultCard.dataset.payload) return;
+    const today = JSON.parse(resultCard.dataset.payload);
+    baselineSessions.push(today);
+    saveBaseline(baselineSessions);
+    addBaselineBtn.disabled = true;
+    addBaselineBtn2.disabled = true;
+    alert("Added to baseline. Do this on multiple well-rested, sober days for best accuracy.");
+  }
+  addBaselineBtn.onclick = addCurrentToBaseline;
+  addBaselineBtn2.onclick = addCurrentToBaseline;
+
+  resetBaselineBtn.onclick = ()=>{
+    updateBaselineList();
+    hide(resultCard); hide(testCard); show(baselineCard);
+  };
+  closeBaselineBtn.onclick = ()=>{ hide(baselineCard); };
+  deleteBaselineBtn.onclick = ()=>{
+    if(confirm("Delete ALL baseline sessions from this device?")){
+      baselineSessions = [];
+      saveBaseline(baselineSessions);
+      updateBaselineList();
+    }
+  };
+
+  shareBtn.onclick = ()=>{
+    const payload = {
+      when: new Date().toISOString(),
+      today: sessionResult?.today||null,
+      baseline_count: baselineSessions.length
+    };
+    const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "imsafe-readiness-session.json";
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  function updateBaselineList(){
+    const b=baselineSessions;
+    if(!b.length){ baselineList.textContent = "No baseline yet."; return; }
+    baselineList.innerHTML = b.map((s,i)=>(
+      `<div class="chip">#${i+1} • medRT ${fmt(s.srt_median)} ms • lapses ${s.srt_lapses} • Stroop acc ${fmt(s.stro_acc)}% • d′ ${fmt(s.nb_d)}</div>`
+    )).join("<br/>");
+  }
+  updateBaselineList();
+
+  // Warn user about leaving mid-test
+  window.addEventListener("beforeunload", (e)=>{
+    if(!testCard.classList.contains("hide")){ e.preventDefault(); e.returnValue=""; }
+  });
+})();
+</script>
+</body>
+</html>
