@@ -10,6 +10,7 @@
   .wrap{max-width:720px;margin:0 auto;padding:20px}
   .card{background:var(--card);border-radius:16px;padding:18px 18px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin:14px 0}
   h1{font-size:1.5rem;margin:.2rem 0 .6rem} h2{font-size:1.15rem;margin:.2rem 0 .4rem}
+  .btn.active { transform: translateY(1px) scale(0.98); opacity: .85; }
   .row{display:flex;gap:10px;flex-wrap:wrap}
   .btn{appearance:none;border:0;border-radius:14px;padding:14px 18px;font-weight:600;color:#0b0f14;background:var(--accent);cursor:pointer;min-width:120px}
   .btn:disabled{opacity:.6;cursor:not-allowed}
@@ -248,6 +249,19 @@
       requestAnimationFrame(frame);
     });
   }
+  
+  
+// Cross-platform tap helper (mouse + touch). Returns a cleanup function.
+function onTap(el, handler){
+  const h = (ev)=>{ ev.preventDefault(); handler(ev); };
+  el.addEventListener('pointerdown', h, {passive:false});
+  el.addEventListener('click', h, {passive:false});
+  return ()=> {
+    el.removeEventListener('pointerdown', h, {passive:false});
+    el.removeEventListener('click', h, {passive:false});
+  };
+}
+
 
   // ---------- Simple Reaction Time ----------
  async function runSRT(seconds){
@@ -299,33 +313,62 @@
 }
 
   // ---------- Stroop ----------
-  async function runStroop(seconds){
-    show(stroopPane); hide(srtPane); hide(nbackPane);
-    const words=["RED","GREEN"]; const colors={RED:"#ff4444", GREEN:"#1dd75f"};
-    let trials=[]; let current=null; let tStim=0; let awaiting=true;
-    const isi = 1500; // ms
-    const endAt = now()+seconds*1000;
+async function runStroop(seconds){
+  show(stroopPane); hide(srtPane); hide(nbackPane);
+  const words=["RED","GREEN"]; const colors={RED:"#ff4444", GREEN:"#1dd75f"};
+  let trials=[]; let current=null; let tStim=0; let awaiting=true;
+  const endAt = now()+seconds*1000;
 
-    function newTrial(){
-      const word = words[Math.floor(Math.random()*2)];
-      const colorName = words[Math.floor(Math.random()*2)];
-      current = {word, colorName, congruent: word===colorName};
-      stroopWord.textContent = word;
-      stroopWord.style.color = colors[colorName];
-      tStim = now(); awaiting=true;
-    }
+  function newTrial(){
+    const word = words[Math.floor(Math.random()*2)];
+    const colorName = words[Math.floor(Math.random()*2)];
+    current = {word, colorName, congruent: word===colorName};
+    stroopWord.textContent = word;
+    stroopWord.style.color = colors[colorName];
+    tStim = now(); awaiting=true;
+    btnMatch.classList.remove('active');
+    btnMismatch.classList.remove('active');
+  }
 
-    function respond(type){
-      if(!awaiting) return;
-      awaiting=false;
-      const rt = now()-tStim;
-      const correct = (current.word===current.colorName && type==="MATCH") ||
-                      (current.word!==current.colorName && type==="MISMATCH");
-      trials.push({rt, correct, congruent: current.congruent});
-    }
+  function respond(which){
+    if(!awaiting) return;
+    awaiting=false;
+    const rt = now()-tStim;
+    const correct = (current.word===current.colorName && which==="MATCH") ||
+                    (current.word!==current.colorName && which==="MISMATCH");
+    trials.push({rt, correct, congruent: current.congruent});
+    (which==="MATCH"?btnMatch:btnMismatch).classList.add('active');
+    setTimeout(()=>{ if(now()<endAt) newTrial(); }, 50);
+  }
 
-    btnMatch.onclick = ()=> respond("MATCH");
-    btnMismatch.onclick = ()=> respond("MISMATCH");
+  // wire handlers (and keep cleanup fns)
+  const offMatch = onTap(btnMatch, ()=>respond("MATCH"));
+  const offMismatch = onTap(btnMismatch, ()=>respond("MISMATCH"));
+
+  newTrial();
+
+  await sectionTimer("Color-Word", seconds, (tleft,p)=>{
+    countdown.textContent = Math.ceil(tleft)+"s";
+    const progressed = (DUR.warmup + DUR.srt + (DUR.stroop - tleft)) /
+                       (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback);
+    setProgress(progressed);
+  });
+
+  // clean up listeners (don’t replace nodes)
+  offMatch(); offMismatch();
+
+  const corrects = trials.filter(t=>t.correct);
+  const acc = trials.length? (corrects.length / trials.length)*100 : 0;
+  const cong = trials.filter(t=>t.congruent && t.correct).map(t=>t.rt);
+  const incong = trials.filter(t=>!t.congruent && t.correct).map(t=>t.rt);
+  const rtCon = cong.length? mean(cong): NaN;
+  const rtIncon = incong.length? mean(incong): NaN;
+  // keep cost non-negative for interpretability
+  const rawCost = (isFinite(rtIncon) && isFinite(rtCon)) ? (rtIncon - rtCon) : NaN;
+  const congruencyCost = isFinite(rawCost) ? Math.max(0, rawCost) : NaN;
+  const meanRTCorrect = corrects.length? mean(corrects.map(t=>t.rt)) : NaN;
+  return {acc, meanRTCorrect, congruencyCost, n:trials.length};
+}
 
     // loop
     let tNext = 0;
@@ -353,76 +396,64 @@
   }
 
   // ---------- 1-back ----------
-  async function runNBack(seconds){
-    show(nbackPane); hide(srtPane); hide(stroopPane);
-    let last=null; let current=null; let tStim=0; let awaiting=false;
-    let hits=0, fas=0, miss=0; let hitRTs=[];
-    const endAt = now()+seconds*1000;
-    const isi = 1500; // ms
-    // Generate targets at ~30%
-    function nextDigit(){
-      let d;
-      if(last!==null && Math.random()<0.30){ d = last; } else {
-        do{ d = Math.floor(1+Math.random()*9); } while(d===last);
-      }
-      current = d;
-      nbackDigit.textContent = String(d);
-      tStim = now(); awaiting=true;
+async function runNBack(seconds){
+  show(nbackPane); hide(srtPane); hide(stroopPane);
+  let last=null; let current=null; let tStim=0; let awaiting=false;
+  let hits=0, fas=0, miss=0; let hitRTs=[];
+  const endAt = now()+seconds*1000;
+  const isi = 1500; // ms
+
+  function nextDigit(){
+    let d;
+    if(last!==null && Math.random()<0.30){ d = last; } else {
+      do{ d = Math.floor(1+Math.random()*9); } while(d===last);
     }
-    btnTarget.onclick = ()=>{
-      if(!awaiting) return;
-      const rt = now()-tStim;
-      if(current===last){ hits++; if(rt>=100 && rt<=2000) hitRTs.push(rt); }
-      else { fas++; }
-      awaiting=false;
-    };
-
-    let tNext = 0;
-    await sectionTimer("1-back", seconds, (tleft,p)=>{
-      countdown.textContent = Math.ceil(tleft)+"s";
-      const progressed = (DUR.warmup + DUR.srt + DUR.stroop + (DUR.nback - tleft)) /
-                         (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback);
-      setProgress(progressed);
-      if(now()>=tNext){
-        if(awaiting && last===current){ // time passed without response on a target
-          miss++;
-        }
-        nextDigit();
-        tNext = now()+isi;
-        last = current;
-      }
-    });
-    btnTarget.onclick = null;
-
-    const N = hits + fas + miss;
-    const hitRate = (hits / Math.max(1, hits+miss))*100;
-    const faRate = (fas / Math.max(1, N - (hits+miss)))*100; // rough
-    const dprime = dPrimeApprox(hitRate/100, faRate/100);
-    const meanHitRT = hitRTs.length? mean(hitRTs): NaN;
-    return {hitRate, faRate, dprime, meanHitRT, counts:{hits, fas, miss}};
+    current = d;
+    nbackDigit.textContent = String(d);
+    tStim = now(); awaiting=true;
+    btnTarget.classList.remove('active');
   }
 
-  function dPrimeApprox(H, F){
-    // clip
-    const eps=1e-4; H=clamp(H,eps,1-eps); F=clamp(F,eps,1-eps);
-    // inverse normal CDF approx (Acklam)
-    function invNorm(p){
-      const a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924];
-      const b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857];
-      const c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878];
-      const d=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742];
-      const pl=0.02425, ph=1-pl;
-      let q, r;
-      if(p<pl){ q=Math.sqrt(-2*Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/
-                                                      ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
-      if(p>ph){ q=Math.sqrt(-2*Math.log(1-p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/
-                                                       ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
-      q=p-0.5; r=q*q;
-      return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/
-             (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+  function pressTarget(){
+    if(!awaiting) return;
+    const rt = now()-tStim;
+    if(current===last){
+      hits++; if(rt>=100 && rt<=2000) hitRTs.push(rt);
+    } else {
+      fas++;
     }
-    return invNorm(H)-invNorm(F);
+    awaiting=false;
+    btnTarget.classList.add('active');
   }
+
+  const offTarget = onTap(btnTarget, pressTarget);
+
+  nextDigit();
+
+  await sectionTimer("1-back", seconds, (tleft,p)=>{
+    countdown.textContent = Math.ceil(tleft)+"s";
+    const progressed = (DUR.warmup + DUR.srt + DUR.stroop + (DUR.nback - tleft)) /
+                       (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback);
+    setProgress(progressed);
+
+    // advance at fixed ISI; count a miss if a target expired without response
+    if(now() >= tStim + isi){
+      if(awaiting && current===last){ miss++; }
+      last = current;
+      nextDigit();
+    }
+  });
+
+  // cleanup
+  offTarget();
+
+  const N = hits + fas + miss;
+  const hitRate = (hits / Math.max(1, hits+miss))*100;
+  const faRate = (fas / Math.max(1, N - (hits+miss)))*100;
+  const dprime = dPrimeApprox(hitRate/100, faRate/100);
+  const meanHitRT = hitRTs.length? mean(hitRTs): NaN;
+  return {hitRate, faRate, dprime, meanHitRT, counts:{hits, fas, miss}};
+}
 
   // ---------- Scoring ----------
   function computeScoring(srt, stro, nb, baseline){
