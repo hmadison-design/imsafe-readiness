@@ -250,52 +250,53 @@
   }
 
   // ---------- Simple Reaction Time ----------
-  async function runSRT(seconds){
-    show(srtPane); hide(stroopPane); hide(nbackPane);
-    let rts=[], falseStarts=0, lapses=0;
-    let waiting = true, goTime = 0, lastChange=0;
-    let endAt = now() + seconds*1000;
+ async function runSRT(seconds){
+  show(srtPane); hide(stroopPane); hide(nbackPane);
+  let rts=[], falseStarts=0, lapses=0;
+  let waiting = true, goTime = 0, lastChange=0;
+  let endAt = now() + seconds*1000;
 
-    function scheduleNext(){
-      waiting = true;
-      const delay = 800 + Math.random()*1000; // 800–1800 ms
-      lastChange = now() + delay;
-      srtTarget.textContent = "WAIT";
-      srtTarget.className = "tapTarget ready";
-      setTimeout(()=>{
-        if(now()>endAt) return;
-        srtTarget.textContent = "TAP";
-        srtTarget.className = "tapTarget go";
-        waiting=false;
-        goTime = now();
-      }, delay);
-    }
-
-    srtTarget.onclick = ()=>{
+  function scheduleNext(){
+    waiting = true;
+    const delay = 800 + Math.random()*1000; // 800–1800 ms
+    lastChange = now() + delay;
+    srtTarget.textContent = "WAIT";
+    srtTarget.className = "tapTarget ready";
+    setTimeout(()=>{
       if(now()>endAt) return;
-      if(waiting){
-        falseStarts++;
-        // brief shake?
-      } else {
-        const rt = now() - goTime;
-        if(rt>1500){ lapses++; } // >1.5s counts as lapse, not added to median
-        else if(rt>=100) rts.push(rt); // ignore <100ms anticipations
-        scheduleNext();
-      }
-    };
-
-    await sectionTimer("Reaction", seconds, (tleft,p)=>{
-      countdown.textContent = Math.ceil(tleft)+"s";
-      setProgress((DUR.warmup + (DUR.srt - tleft))/ (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback));
-      if(!goTime && now() < (now()+1)){} // noop
-    });
-    srtTarget.onclick = null;
-
-    // Ensure at least a few measurements
-    if(rts.length<5 && falseStarts>0){ /* ok */ }
-    const medianRT = rts.length ? rts.slice().sort((a,b)=>a-b)[Math.floor(rts.length/2)] : 999;
-    return {medianRT, lapses, falseStarts, n:rts.length};
+      srtTarget.textContent = "TAP";
+      srtTarget.className = "tapTarget go";
+      waiting=false;
+      goTime = now();
+    }, delay);
   }
+
+  srtTarget.onclick = ()=>{
+    if(now()>endAt) return;
+    if(waiting){
+      falseStarts++;
+      // optional: add a quick visual nudge here
+    } else {
+      const rt = now() - goTime;
+      if(rt>1500){ lapses++; }          // lapse (don’t include in median)
+      else if(rt>=100) rts.push(rt);     // ignore anticipations <100 ms
+      scheduleNext();                    // schedule the next stimulus
+    }
+  };
+
+  // start the first stimulus immediately
+  scheduleNext();
+
+  await sectionTimer("Reaction", seconds, (tleft,p)=>{
+    countdown.textContent = Math.ceil(tleft)+"s";
+    setProgress((DUR.warmup + (DUR.srt - tleft)) / (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback));
+  });
+
+  srtTarget.onclick = null;
+
+  const medianRT = rts.length ? rts.slice().sort((a,b)=>a-b)[Math.floor(rts.length/2)] : 999;
+  return {medianRT, lapses, falseStarts, n:rts.length};
+}
 
   // ---------- Stroop ----------
   async function runStroop(seconds){
