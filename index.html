@@ -5,16 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>IM SAFE — Two-Minute Drill (Readiness Check)</title>
 <style>
-  :root{
-    --bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;--accent:#4da3ff;
-    --good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b
-  }
+  :root{ --bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;--accent:#4da3ff;--good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
   .wrap{max-width:760px;margin:0 auto;padding:20px}
-  .card{background:var(--card);border-radius:16px;padding:18px 18px 22px;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);margin:14px 0}
+  .card{background:var(--card);border-radius:16px;padding:18px 18px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin:14px 0}
   h1{font-size:1.55rem;margin:.2rem 0 .6rem}
   h2{font-size:1.15rem;margin:.2rem 0 .4rem}
   h3{font-size:1rem;margin:.2rem 0 .4rem}
@@ -25,61 +20,45 @@
   .muted{color:var(--muted)}
   .big{font-size:2.2rem;font-weight:700}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace}
-
-  .btn{appearance:none;border:0;border-radius:14px;padding:14px 18px;font-weight:700;
-    color:#0b0f14;background:var(--accent);cursor:pointer;min-width:150px;user-select:none}
+  .btn{appearance:none;border:0;border-radius:14px;padding:14px 18px;font-weight:700;color:#0b0f14;background:var(--accent);cursor:pointer;min-width:150px;user-select:none}
   .btn:disabled{opacity:.6;cursor:not-allowed}
   .btn-ghost{background:transparent;color:var(--ink);border:2px solid #8795a3}
-  .btn-wide{width:100%}
   .btn.active{transform:translateY(1px) scale(.98);opacity:.85;filter:saturate(120%)}
-
   .kbd{display:inline-block;padding:.2rem .45rem;border-radius:.4rem;border:1px solid #2a3850;background:#0c121a;font-weight:700}
   .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:#0e141c;border:1px solid #223042;color:var(--muted);font-size:.9rem}
   .hr{height:1px;background:#213043;margin:12px 0}
-  .tag{display:inline-block;padding:4px 8px;border-radius:8px;background:#0f1622;color:var(--muted);border:1px solid #223042;font-size:.85rem}
   .chip{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid #223042;background:#101826}
-
-  .tapTarget{
-    width:240px;height:240px;border-radius:999px;background:#3a485c;
-    display:flex;align-items:center;justify-content:center;font-weight:800;
-    font-size:1.1rem;user-select:none;cursor:pointer; /* whole circle clickable */
-  }
-  .tapTarget.ready{background:#6a7688}
-  .tapTarget.go{background:#3aa657}
-
   .bar{height:10px;border-radius:999px;background:#1a2330;overflow:hidden}
   .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4da3ff,#13c27a)}
-
-  .scoreLight{display:flex;gap:8px;align-items:center}
-  .dot{width:12px;height:12px;border-radius:999px;background:var(--muted)}
-  .dot.green{background:var(--good)} .dot.amber{background:var(--warn)} .dot.red{background:var(--bad)}
-
+  .tapTarget{width:240px;height:240px;border-radius:999px;background:#3a485c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;user-select:none;cursor:pointer}
+  .tapTarget.ready{background:#6a7688}
+  .tapTarget.go{background:#3aa657}
   .wordBox{font-weight:900;font-size:2.6rem;letter-spacing:.02em;padding:.2rem .6rem;border-radius:.5rem;background:#0e1520;min-width:8ch}
   .hide{display:none}
-
-  /* Larger hit areas */
   #btnMatch,#btnMismatch{min-width:160px}
   #btnTarget,#btnNotTarget{min-width:200px}
+  .dot{width:12px;height:12px;border-radius:999px;background:var(--muted)}
+  .dot.green{background:var(--good)} .dot.amber{background:var(--warn)} .dot.red{background:var(--bad)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="card">
     <h1>IM SAFE — Two-Minute Drill</h1>
-    <div class="muted">A 120-second, baseline-referenced snapshot of cognitive speed, attention control, and working memory. <span class="tag">Local &amp; private</span></div>
+    <div class="muted">A 120-second, baseline-referenced snapshot of cognitive speed, attention control, and working memory. <span class="pill">Local &amp; private</span></div>
     <div class="hr"></div>
     <div class="grid grid-2">
       <div>
         <h2>How it works</h2>
         <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
           <li>Reaction (30s) • Color-Word (45s) • 2-back (5 groups)</li>
-          <li>Compare today to your personal baseline (T-scores for Stroop)</li>
+          <li>Compare to your baseline (T-scores for Stroop)</li>
           <li>Result: <b>Fit</b> / <b>Caution</b> / <b>No-Go</b> + Readiness %</li>
         </ul>
       </div>
       <div>
         <h2>Baseline days</h2>
-        <div class="muted">Rested, sober (≥48h alcohol-free), low stress, well-fed/hydrated. Add ≥3 baseline sessions to enable fitness assessment.</div>
+        <div class="muted">Rested, sober (≥48h alcohol-free), low stress, well-fed/hydrated. Add ≥3 baseline sessions to enable assessment.</div>
       </div>
     </div>
     <div class="hr"></div>
@@ -92,7 +71,6 @@
     <div class="muted" style="margin-top:6px">Tip: Put your phone in <span class="kbd">Airplane Mode</span> so notifications don’t interrupt timing.</div>
   </header>
 
-  <!-- Test Card -->
   <section id="testCard" class="card hide">
     <div class="row" style="justify-content:space-between;align-items:center">
       <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
@@ -100,7 +78,7 @@
     </div>
     <div class="bar" style="margin:10px 0 14px"><i id="progressBar"></i></div>
 
-    <!-- Simple Reaction -->
+    <!-- SRT -->
     <div id="srtPane" class="center" style="min-height:260px">
       <div id="srtTarget" class="tapTarget" role="button" aria-label="Tap when it turns green">WAIT</div>
     </div>
@@ -114,7 +92,9 @@
         <button id="btnMatch" class="btn">MATCH</button>
         <button id="btnMismatch" class="btn btn-ghost">MISMATCH</button>
       </div>
-      <div class="muted center" style="margin-top:6px">Keyboard: <span class="kbd">F</span> = MATCH, <span class="kbd">J</span> = MISMATCH</div>
+      <div class="muted center" style="margin-top:6px">
+        Keyboard: <span class="kbd">F</span>=MATCH, <span class="kbd">J</span>=MISMATCH
+      </div>
     </div>
 
     <!-- 2-back -->
@@ -131,11 +111,10 @@
           <button id="btnNotTarget" class="btn btn-ghost">NOT TARGET</button>
         </div>
       </div>
-      <div class="muted center" style="margin-top:6px">Each group: flash 3 digits, then respond. Keyboard: <span class="kbd">Space</span> = TARGET, <span class="kbd">N</span> = NOT TARGET.</div>
+      <div class="muted center" style="margin-top:6px">Each group: flash 2 digits, then show the 3rd and respond. Keyboard: <span class="kbd">Space</span>=TARGET, <span class="kbd">N</span>=NOT TARGET.</div>
     </div>
   </section>
 
-  <!-- Results -->
   <section id="resultCard" class="card hide">
     <h2>Result</h2>
     <div class="row" style="align-items:center;gap:14px">
@@ -162,11 +141,10 @@
       <button id="addBaselineBtn2" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
     </div>
     <div class="muted" style="margin-top:8px">
-      This tool supports—but does not replace—your obligations under 14 CFR 91.17 and the full IM SAFE self-assessment.
+      This tool supports—but does not replace—14 CFR 91.17 and the full IM SAFE self-assessment.
     </div>
   </section>
 
-  <!-- Baseline Manager -->
   <section id="baselineCard" class="card hide">
     <h2>Baseline Sessions</h2>
     <div id="baselineList" class="muted">No baseline yet.</div>
@@ -179,373 +157,234 @@
 
 <script>
 (function(){
-  // ---------- Utilities ----------
-  const $ = sel => document.querySelector(sel);
-  const fmt = n => (typeof n === "number" && isFinite(n) ? Math.round(n*10)/10 : n);
-  const clamp = (v, lo, hi)=> Math.max(lo, Math.min(hi, v));
-  const mean = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
-  const sd = arr => { if(arr.length<2) return 0; const m=mean(arr); return Math.sqrt(mean(arr.map(x=>(x-m)*(x-m)))); };
-  const now = ()=> performance.now();
+  const $ = s=>document.querySelector(s);
+  const fmt = n=>(typeof n==="number"&&isFinite(n)?Math.round(n*10)/10:n);
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+  const sd=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));};
+  const now=()=>performance.now();
 
-  // Top-level button press helper (OK to allow click for accessibility)
-  function onTap(el, handler){
-    const down = (ev)=>{ ev.preventDefault(); el.classList.add('active'); handler(ev); };
-    const up = ()=> el.classList.remove('active');
-    el.addEventListener('pointerdown', down, {passive:false});
-    el.addEventListener('click', down, {passive:false});
-    el.addEventListener('pointerup', up, {passive:true});
-    el.addEventListener('pointercancel', up, {passive:true});
-    el.addEventListener('mouseleave', up, {passive:true});
-    return ()=> {
-      el.removeEventListener('pointerdown', down, {passive:false});
-      el.removeEventListener('click', down, {passive:false});
-      el.removeEventListener('pointerup', up, {passive:true});
-      el.removeEventListener('pointercancel', up, {passive:true});
-      el.removeEventListener('mouseleave', up, {passive:true});
-    };
+  // Top-level buttons
+  function onTap(el, fn){
+    const down=e=>{e.preventDefault();el.classList.add('active');fn(e);};
+    const up=()=>el.classList.remove('active');
+    el.addEventListener('pointerdown',down,{passive:false});
+    el.addEventListener('click',down,{passive:false});
+    el.addEventListener('pointerup',up,{passive:true});
+    el.addEventListener('pointercancel',up,{passive:true});
+    el.addEventListener('mouseleave',up,{passive:true});
+    return()=>{el.removeEventListener('pointerdown',down);el.removeEventListener('click',down);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);el.removeEventListener('mouseleave',up);};
   }
-
-  // Test control press helper: POINTERDOWN ONLY + debounce (prevents iPad double counts)
-  const lastPress = new WeakMap();
-  function onPressPointer(el, handler, debounceMs=200){
-    function down(ev){
-      ev.preventDefault();
-      const t = now();
-      const last = lastPress.get(el) || 0;
-      if(t - last < debounceMs) return; // debounce
-      lastPress.set(el, t);
-      el.classList.add('active');
-      handler(ev);
+  // Test controls: pointerdown-only + debounce
+  const lastPress=new WeakMap();
+  function onPressPointer(el,fn,db=200){
+    function down(e){
+      e.preventDefault();
+      const t=now(), last=lastPress.get(el)||0;
+      if(t-last<db) return;
+      lastPress.set(el,t);
+      el.classList.add('active'); fn(e);
     }
-    function up(){ el.classList.remove('active'); }
-    el.addEventListener('pointerdown', down, {passive:false});
-    el.addEventListener('pointerup', up, {passive:true});
-    el.addEventListener('pointercancel', up, {passive:true});
-    el.addEventListener('mouseleave', up, {passive:true});
-    return ()=> {
-      el.removeEventListener('pointerdown', down, {passive:false});
-      el.removeEventListener('pointerup', up, {passive:true});
-      el.removeEventListener('pointercancel', up, {passive:true});
-      el.removeEventListener('mouseleave', up, {passive:true});
-    };
+    const up=()=>el.classList.remove('active');
+    el.addEventListener('pointerdown',down,{passive:false});
+    el.addEventListener('pointerup',up,{passive:true});
+    el.addEventListener('pointercancel',up,{passive:true});
+    el.addEventListener('mouseleave',up,{passive:true});
+    return()=>{el.removeEventListener('pointerdown',down);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);el.removeEventListener('mouseleave',up);};
   }
 
-  const storeKey = "flyingm_imsafe_baseline_v2";
-  const loadBaseline = ()=> { try{ return JSON.parse(localStorage.getItem(storeKey)||"[]"); }catch{ return []; } };
-  const saveBaseline = (s)=> localStorage.setItem(storeKey, JSON.stringify(s||[]));
+  const storeKey="flyingm_imsafe_baseline_v2";
+  const loadBaseline=()=>{try{return JSON.parse(localStorage.getItem(storeKey)||"[]");}catch{return[];}};
+  const saveBaseline=s=>localStorage.setItem(storeKey,JSON.stringify(s||[]));
 
-  // ---------- DOM refs ----------
-  const startBtn = $("#startBtn");
-  const addBaselineBtn = $("#addBaselineBtn");
-  const addBaselineBtn2 = $("#addBaselineBtn2");
-  const resetBaselineBtn = $("#resetBaselineBtn");
-  const exportBtn = $("#exportBtn");
+  // Refs
+  const startBtn=$("#startBtn"), addBaselineBtn=$("#addBaselineBtn"), addBaselineBtn2=$("#addBaselineBtn2");
+  const resetBaselineBtn=$("#resetBaselineBtn"), exportBtn=$("#exportBtn");
+  const testCard=$("#testCard"), stepName=$("#stepName"), countdown=$("#countdown"), progressBar=$("#progressBar");
+  const srtPane=$("#srtPane"), srtTarget=$("#srtTarget");
+  const stroopPane=$("#stroopPane"), stroopWord=$("#stroopWord"), btnMatch=$("#btnMatch"), btnMismatch=$("#btnMismatch");
+  const nbackPane=$("#nbackPane"), nbackDigit=$("#nbackDigit"), btnTarget=$("#btnTarget"), btnNotTarget=$("#btnNotTarget"), twoBackButtons=$("#twoBackButtons"), groupLabel=$("#groupLabel");
+  const resultCard=$("#resultCard"), lightDot=$("#lightDot"), lightLabel=$("#lightLabel"), readinessPct=$("#readinessPct"), driverText=$("#driverText"), guidanceText=$("#guidanceText"), metricToday=$("#metricToday"), metricBase=$("#metricBase"), againBtn=$("#againBtn");
+  const baselineCard=$("#baselineCard"), baselineList=$("#baselineList"), deleteBaselineBtn=$("#deleteBaselineBtn"), closeBaselineBtn=$("#closeBaselineBtn");
 
-  const testCard = $("#testCard");
-  const stepName = $("#stepName");
-  const countdown = $("#countdown");
-  const progressBar = $("#progressBar");
+  let baselineSessions=loadBaseline();
+  let sessionResult=null;
 
-  const srtPane = $("#srtPane"), srtTarget = $("#srtTarget");
-  const stroopPane = $("#stroopPane"), stroopWord = $("#stroopWord");
-  const btnMatch = $("#btnMatch"), btnMismatch = $("#btnMismatch");
-  const nbackPane = $("#nbackPane"), nbackDigit = $("#nbackDigit");
-  const btnTarget = $("#btnTarget"), btnNotTarget = $("#btnNotTarget");
-  const twoBackButtons = $("#twoBackButtons"), groupLabel=$("#groupLabel");
+  function show(el){el.classList.remove("hide");}
+  function hide(el){el.classList.add("hide");}
+  function setProgress(p){progressBar.style.width=(p*100).toFixed(1)+"%";}
 
-  const resultCard = $("#resultCard");
-  const lightDot = $("#lightDot"), lightLabel=$("#lightLabel"), readinessPct=$("#readinessPct");
-  const driverText=$("#driverText"), guidanceText=$("#guidanceText");
-  const metricToday=$("#metricToday"), metricBase=$("#metricBase");
-  const againBtn=$("#againBtn");
+  [startBtn,addBaselineBtn,addBaselineBtn2,resetBaselineBtn,exportBtn,againBtn,deleteBaselineBtn,closeBaselineBtn].forEach(b=>b&&onTap(b,()=>{}));
 
-  const baselineCard=$("#baselineCard"), baselineList=$("#baselineList");
-  const deleteBaselineBtn=$("#deleteBaselineBtn"), closeBaselineBtn=$("#closeBaselineBtn");
-
-  let baselineSessions = loadBaseline();
-  let sessionResult = null;
-
-  function show(el){ el.classList.remove("hide"); }
-  function hide(el){ el.classList.add("hide"); }
-  function setProgress(p){ progressBar.style.width = (p*100).toFixed(1)+"%"; }
-
-  // Press feedback on top-level controls
-  [startBtn, addBaselineBtn, addBaselineBtn2, resetBaselineBtn, exportBtn, againBtn,
-   deleteBaselineBtn, closeBaselineBtn].forEach(b=>{ if(b) onTap(b, ()=>{}); });
-
-  // ---------- Test Orchestrator ----------
-  const DUR = { warmup: 5, srt:30, stroop:45, nbackGroups:5 }; // 120s flow; 2-back is groups
-  const BASELINE_MIN = 3; // must have >=3 sessions before fitness assessment
-  let abortFlag = false;
+  const DUR={warmup:5,srt:30,stroop:45,nbackGroups:5};
+  const BASELINE_MIN=3;
+  let abortFlag=false;
 
   async function runTest(){
-    abortFlag = false;
-    sessionResult = null;
-    addBaselineBtn.disabled = true;
-    addBaselineBtn2.disabled = true;
+    abortFlag=false; sessionResult=null; addBaselineBtn.disabled=true; addBaselineBtn2.disabled=true;
+    hide(resultCard); hide(baselineCard); show(testCard);
 
-    hide(resultCard); hide(baselineCard);
-    show(testCard);
-
-    // Warm-up
-    await sectionTimer("Warm-up", DUR.warmup, (tleft,p)=>{
-      countdown.textContent = Math.ceil(tleft)+"s";
-      setProgress(p);
-      srtTarget.textContent = "WAIT";
-      srtTarget.className = "tapTarget ready";
-      show(srtPane); hide(stroopPane); hide(nbackPane);
-    });
-
-    // SRT
-    const srt = await runSRT(DUR.srt);
-    if(abortFlag) return;
-
-    // STROOP (fixed 45s)
-    const stro = await runStroop(DUR.stroop);
-    if(abortFlag) return;
-
-    // 2-BACK (5 groups)
-    const nb = await runTwoBack(DUR.nbackGroups);
-    if(abortFlag) return;
-
-    // Score & show
-    sessionResult = computeScoring(srt, stro, nb, baselineSessions);
-    renderResults(sessionResult, srt, stro, nb, baselineSessions);
+    await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{countdown.textContent=Math.ceil(t)+"s";setProgress(p);srtTarget.textContent="WAIT";srtTarget.className="tapTarget ready";show(srtPane);hide(stroopPane);hide(nbackPane);});
+    const srt=await runSRT(DUR.srt); if(abortFlag) return;
+    const stro=await runStroop(DUR.stroop); if(abortFlag) return;
+    const nb=await runTwoBack(DUR.nbackGroups); if(abortFlag) return;
+    sessionResult=computeScoring(srt,stro,nb,baselineSessions);
+    renderResults(sessionResult,srt,stro,nb,baselineSessions);
   }
 
-  function sectionTimer(name, seconds, tickFn){
-    stepName.textContent = name;
-    const t0 = now(), total = seconds*1000;
-    return new Promise(res=>{
-      function frame(){
-        const t = now()-t0;
-        if(abortFlag){ return res(); }
-        const remaining = Math.max(0, total - t);
-        const p = clamp(t/total,0,1);
-        tickFn(remaining/1000, p);
-        if(t<total){ requestAnimationFrame(frame); } else { res(); }
-      }
-      requestAnimationFrame(frame);
-    });
+  function sectionTimer(name,sec,tick){
+    stepName.textContent=name; const t0=now(), total=sec*1000;
+    return new Promise(res=>{function frame(){const t=now()-t0; if(abortFlag) return res(); const rem=Math.max(0,total-t); const p=clamp(t/total,0,1); tick(rem/1000,p); if(t<total) requestAnimationFrame(frame); else res();} requestAnimationFrame(frame);});
   }
 
-  // ---------- Simple Reaction Time (whole circle reactive; lapses > 500ms) ----------
-  async function runSRT(seconds){
+  // SRT
+  async function runSRT(sec){
     show(srtPane); hide(stroopPane); hide(nbackPane);
-    let rts=[], falseStarts=0, lapses=0;
-    let waiting = true, goTime = 0;
-    let endAt = now() + seconds*1000;
+    let rts=[], falseStarts=0, lapses=0, waiting=true, goTime=0; const endAt=now()+sec*1000;
 
     function scheduleNext(){
-      waiting = true;
-      const delay = 1200 + Math.random()*1300; // 1200–2500 ms
-      srtTarget.textContent = "WAIT";
-      srtTarget.className = "tapTarget ready";
-      setTimeout(()=>{
-        if(now()>endAt) return;
-        srtTarget.textContent = "TAP";
-        srtTarget.className = "tapTarget go";
-        waiting=false;
-        goTime = now();
-      }, delay);
+      waiting=true; const delay=1200+Math.random()*1300;
+      srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
+      setTimeout(()=>{ if(now()>endAt) return; srtTarget.textContent="TAP"; srtTarget.className="tapTarget go"; waiting=false; goTime=now(); },delay);
     }
-
-    const offSrt = onPressPointer(srtTarget, ()=>{
+    const off=onPressPointer(srtTarget,()=>{
       if(now()>endAt) return;
-      if(waiting){
-        falseStarts++;
-      } else {
-        const rt = now() - goTime;
-        if(rt>500){ lapses++; }             // lapses now > 500 ms
-        else if(rt>=100) rts.push(rt);      // ignore <100 ms anticipations
+      if(waiting){ falseStarts++; }
+      else{
+        const rt=now()-goTime;
+        if(rt>500) lapses++;
+        else if(rt>=100) rts.push(rt);
         scheduleNext();
       }
     });
-
     scheduleNext();
-    await sectionTimer("Reaction", seconds, (tleft,p)=>{
-      countdown.textContent = Math.ceil(tleft)+"s";
-      // progress includes warmup + srt
-      setProgress((DUR.warmup + (DUR.srt - tleft))/ (DUR.warmup + DUR.srt + DUR.stroop + 15));
-    });
-    offSrt();
-
-    const medianRT = rts.length ? rts.slice().sort((a,b)=>a-b)[Math.floor(rts.length/2)] : 999;
-    return {medianRT, lapses, falseStarts, n:rts.length};
+    await sectionTimer("Reaction",sec,(tleft,p)=>{countdown.textContent=Math.ceil(tleft)+"s"; setProgress((DUR.warmup+(DUR.srt-tleft))/(DUR.warmup+DUR.srt+DUR.stroop+15));});
+    off();
+    const medianRT=rts.length?rts.slice().sort((a,b)=>a-b)[Math.floor(rts.length/2)]:999;
+    return {medianRT,lapses,falseStarts,n:rts.length};
   }
 
-  // ---------- Stroop (4 colors, 45s, 400ms blank, no immediate repeats) ----------
-  async function runStroop(seconds){
+  // Stroop (balanced; 400 ms ISI; no immediate repeats)
+  async function runStroop(sec){
     show(stroopPane); hide(srtPane); hide(nbackPane);
-    const words=["RED","GREEN","BLUE","YELLOW"];
-    const colors={RED:"#ff4d4d", GREEN:"#18d96e", BLUE:"#4da3ff", YELLOW:"#ffd633"};
+    const names=["RED","GREEN","BLUE","YELLOW"];
+    const colors={RED:"#ff4d4d",GREEN:"#18d96e",BLUE:"#4da3ff",YELLOW:"#ffd633"};
+    let trials=[], tStim=0, awaiting=false, prevWord=null, prevColor=null;
+    const endAt=now()+sec*1000, gap=400;
 
-    let trials=[]; let current=null; let tStim=0; let awaiting=false;
-    const endAt = now()+seconds*1000;
-    const interBlank = 400; // ms between trials
-    let prevWord=null, prevColor=null;
-
-    function chooseNext(){
-      let word, colorName;
-      do{ word = words[Math.floor(Math.random()*words.length)]; } while(word===prevWord);
-      do{ colorName = words[Math.floor(Math.random()*words.length)]; } while(colorName===prevColor);
-      prevWord = word; prevColor = colorName;
-      return {word, colorName};
+    function nextPair(){
+      const wantCong = Math.random()<0.5;
+      let word; do{word=names[Math.floor(Math.random()*names.length)];}while(word===prevWord);
+      let colorName;
+      if(wantCong){
+        colorName=word;
+        if(colorName===prevColor){ const others=names.filter(n=>n!==word && n!==prevWord); word=others[Math.floor(Math.random()*others.length)]; colorName=word; }
+      }else{
+        do{ colorName=names[Math.floor(Math.random()*names.length)]; } while(colorName===word || colorName===prevColor);
+      }
+      prevWord=word; prevColor=colorName;
+      return {word,colorName,congruent:(word===colorName)};
     }
 
-    function newTrial(){
-      const pair = chooseNext();
-      current = {word: pair.word, colorName: pair.colorName, congruent: pair.word===pair.colorName};
-      stroopWord.textContent = current.word;
-      stroopWord.style.color = colors[current.colorName];
-      stroopWord.style.visibility = "visible";
-      tStim = now(); awaiting=true;
-      btnMatch.classList.remove('active'); btnMismatch.classList.remove('active');
+    let current=null;
+    function showTrial(){
+      const p=nextPair();
+      current=p; stroopWord.textContent=p.word; stroopWord.style.color=colors[p.colorName]; stroopWord.style.visibility="visible";
+      tStim=now(); awaiting=true; btnMatch.classList.remove('active'); btnMismatch.classList.remove('active');
     }
-
-    function endAndQueue(){
-      stroopWord.style.visibility = "hidden";
-      setTimeout(()=>{ if(now()<endAt) newTrial(); }, interBlank);
-    }
-
+    function queueNext(){ stroopWord.style.visibility="hidden"; setTimeout(()=>{ if(now()<endAt) showTrial(); },gap); }
     function respond(which){
-      if(!awaiting) return;
-      awaiting=false;
-      const rt = now()-tStim;
-      const correct = (current.word===current.colorName && which==="MATCH") ||
-                      (current.word!==current.colorName && which==="MISMATCH");
-      trials.push({rt, correct, congruent: current.congruent});
+      if(!awaiting) return; awaiting=false;
+      const rt=now()-tStim;
+      const correct=(current.word===current.colorName && which==="MATCH") || (current.word!==current.colorName && which==="MISMATCH");
+      trials.push({rt,correct,congruent:current.congruent});
       (which==="MATCH"?btnMatch:btnMismatch).classList.add('active');
-      endAndQueue();
+      queueNext();
     }
 
-    const offMatch = onPressPointer(btnMatch, ()=>respond("MATCH"));
-    const offMismatch = onPressPointer(btnMismatch, ()=>respond("MISMATCH"));
+    const offM=onPressPointer(btnMatch,()=>respond("MATCH"));
+    const offMM=onPressPointer(btnMismatch,()=>respond("MISMATCH"));
+    function key(e){const k=e.key?.toLowerCase(); if(k==='f') respond("MATCH"); if(k==='j') respond("MISMATCH");}
+    window.addEventListener('keydown',key);
 
-    function keyStroop(e){
-      const k = e.key.toLowerCase();
-      if(k==='f') respond("MATCH");
-      if(k==='j') respond("MISMATCH");
-    }
-    window.addEventListener('keydown', keyStroop);
+    showTrial();
+    await sectionTimer("Color-Word",sec,(tleft,p)=>{countdown.textContent=Math.ceil(tleft)+"s"; const prog=(DUR.warmup+DUR.srt+(DUR.stroop-tleft))/(DUR.warmup+DUR.srt+DUR.stroop+15); setProgress(prog);});
+    offM(); offMM(); window.removeEventListener('keydown',key);
 
-    newTrial();
-
-    await sectionTimer("Color-Word", seconds, (tleft,p)=>{
-      countdown.textContent = Math.ceil(tleft)+"s";
-      const progressed = (DUR.warmup + DUR.srt + (DUR.stroop - tleft)) /
-                         (DUR.warmup + DUR.srt + DUR.stroop + 15);
-      setProgress(progressed);
-      if(now()>=endAt && awaiting){ awaiting=false; }
-    });
-
-    offMatch(); offMismatch();
-    window.removeEventListener('keydown', keyStroop);
-
-    const corrects = trials.filter(t=>t.correct);
-    const acc = trials.length? (corrects.length / trials.length)*100 : 0;
-    const cong = trials.filter(t=>t.congruent && t.correct).map(t=>t.rt);
-    const incong = trials.filter(t=>!t.congruent && t.correct).map(t=>t.rt);
-    const rtCon = cong.length? mean(cong): NaN;
-    const rtIncon = incong.length? mean(incong): NaN;
-    const rawCost = (isFinite(rtIncon) && isFinite(rtCon)) ? (rtIncon - rtCon) : NaN;
-    const congruencyCost = isFinite(rawCost) ? Math.max(0, rawCost) : NaN;
-    const meanRTCorrect = corrects.length? mean(corrects.map(t=>t.rt)) : NaN;
-    const stroopScore = acc; // for T-score
-    return {acc, meanRTCorrect, congruencyCost, n:trials.length, stroopScore};
+    const corrects=trials.filter(t=>t.correct);
+    const acc=trials.length?(corrects.length/trials.length)*100:0;
+    const cong=trials.filter(t=>t.congruent && t.correct).map(t=>t.rt);
+    const incong=trials.filter(t=>!t.congruent && t.correct).map(t=>t.rt);
+    const rtCon=cong.length?mean(cong):NaN, rtIncon=incong.length?mean(incong):NaN;
+    const raw=(isFinite(rtIncon)&&isFinite(rtCon))?(rtIncon-rtCon):NaN;
+    const congruencyCost=isFinite(raw)?Math.max(0,raw):NaN;
+    const meanRTCorrect=corrects.length?mean(corrects.map(t=>t.rt)):NaN;
+    const stroopScore=acc;
+    return {acc,meanRTCorrect,congruencyCost,n:trials.length,stroopScore, nCong:cong.length, nIncong:incong.length};
   }
 
-  // ---------- 2-back (5 sessions: 3 flashes then respond) ----------
+  // 2-back (A and B flash; C appears ONCE and PERSISTS with buttons active)
   async function runTwoBack(groups){
     show(nbackPane); hide(srtPane); hide(stroopPane);
-    let group=1;
-    let hits=0, fas=0, miss=0; let hitRTs=[];
-    const VISIBLE_MS = 250, GAP_MS = 100;
-    let tStim=0;
-    twoBackButtons.style.visibility = "hidden";
+    let group=1, hits=0, fas=0, miss=0, hitRTs=[];
+    const VIS=250, GAP=100; let tStim=0; twoBackButtons.style.visibility="hidden";
 
-    function setDigit(d, vis){
-      nbackDigit.textContent = String(d);
-      nbackDigit.style.visibility = vis?"visible":"hidden";
-    }
-    function randDigit(except){
-      let d; do{ d = Math.floor(1+Math.random()*9); } while(d===except);
-      return d;
-    }
+    function setDigit(d,vis){ nbackDigit.textContent=String(d); nbackDigit.style.visibility=vis?"visible":"hidden"; }
+    function rDigit(except){ let d; do{ d=Math.floor(1+Math.random()*9); }while(d===except); return d; }
 
     function doGroup(){
-      if(group>groups){ return Promise.resolve(); }
-      groupLabel.textContent = `Group ${group}`;
-      twoBackButtons.style.visibility = "hidden";
-      const a = randDigit(null);
-      const b = randDigit(null);
-      const makeTarget = Math.random()<0.5;
-      const c = makeTarget ? a : randDigit(a);
-      const seq = [a,b,c];
-      let idx=0;
+      if(group>groups) return Promise.resolve();
+      groupLabel.textContent=`Group ${group}`; twoBackButtons.style.visibility="hidden";
+      const a=rDigit(null), b=rDigit(null), target=Math.random()<0.5, c=target?a:rDigit(a);
 
       return new Promise(res=>{
-        function showNext(){
-          if(idx<3){
-            setDigit(seq[idx], true);
-            if(idx===2){ tStim = now(); } // time from 3rd onset
-            setTimeout(()=>{ setDigit(seq[idx], false); idx++;
-              setTimeout(showNext, GAP_MS);
-            }, VISIBLE_MS);
-          } else {
-            // after third disappears, show 3rd again & enable buttons
-            setDigit(c, true);
-            twoBackButtons.style.visibility = "visible";
-            awaiting = true;
-          }
+        // Play A then B (flash), then SHOW C and KEEP it visible while awaiting response
+        function showA(){
+          setDigit(a,true);
+          setTimeout(()=>{ setDigit(a,false); setTimeout(showB,GAP); },VIS);
         }
-        let awaiting=false;
+        function showB(){
+          setDigit(b,true);
+          setTimeout(()=>{ setDigit(b,false); setTimeout(showC,GAP); },VIS);
+        }
+        function showC(){
+          setDigit(c,true);
+          twoBackButtons.style.visibility="visible";
+          awaiting=true;
+          tStim=now(); // RT starts when C appears and stays visible
+        }
 
-        function evaluate(choiceIsTarget){
+        let awaiting=false;
+        function evalResp(isTarget){
           if(!awaiting) return;
           awaiting=false;
-          const rt = now()-tStim;
-          const correctTarget = (c===a);
-          if(choiceIsTarget){
-            if(correctTarget){ hits++; if(rt>=100 && rt<=3000) hitRTs.push(rt); }
-            else { fas++; }
-          } else {
-            if(correctTarget){ miss++; }
-          }
-          setDigit(c, false);
-          twoBackButtons.style.visibility = "hidden";
-          offTarget(); offNotTarget(); offKey();
-          group++; res();
+          const rt=now()-tStim, correctTarget=(c===a);
+          if(isTarget){ if(correctTarget){ hits++; if(rt>=100 && rt<=3000) hitRTs.push(rt); } else { fas++; } }
+          else { if(correctTarget){ miss++; } }
+          setDigit(c,false); twoBackButtons.style.visibility="hidden";
+          offT(); offNT(); offKey(); group++; res();
         }
+        const offT=onPressPointer(btnTarget,()=>evalResp(true));
+        const offNT=onPressPointer(btnNotTarget,()=>evalResp(false));
+        function key(e){ if(e.code==='Space'){e.preventDefault();evalResp(true);} if(e.key && e.key.toLowerCase()==='n'){e.preventDefault();evalResp(false);} }
+        function offKey(){ window.removeEventListener('keydown',key); }
+        window.addEventListener('keydown',key);
 
-        const offTarget = onPressPointer(btnTarget, ()=>evaluate(true));
-        const offNotTarget = onPressPointer(btnNotTarget, ()=>evaluate(false));
-        function keyTwoBack(e){
-          if(e.code==='Space'){ e.preventDefault(); evaluate(true); }
-          if(e.key && e.key.toLowerCase()==='n'){ e.preventDefault(); evaluate(false); }
-        }
-        function offKey(){ window.removeEventListener('keydown', keyTwoBack); }
-        window.addEventListener('keydown', keyTwoBack);
-
-        showNext();
+        // kick off A
+        showA();
       }).then(()=>doGroup());
     }
 
     await doGroup();
 
-    // Corrected rates: totalTrials = groups; targets = hits+miss; nonTargets = totalTrials - targets
-    const totalTrials = groups;
-    const targets = Math.max(1, hits + miss);
-    const nonTargets = Math.max(1, totalTrials - (hits + miss));
-    const hitRate = (hits / targets)*100;
-    const faRate = (fas / nonTargets)*100;
-
-    const dprime = dPrimeApprox(hitRate/100, faRate/100);
-    const meanHitRT = hitRTs.length? mean(hitRTs): NaN;
-    return {hitRate, faRate, dprime, meanHitRT, counts:{hits, fas, miss}, groups: totalTrials};
+    const total=groups, targets=Math.max(1, hits+miss), nonTargets=Math.max(1, total-(hits+miss));
+    const hitRate=(hits/targets)*100, faRate=(fas/nonTargets)*100;
+    const dprime=dPrimeApprox(hitRate/100, faRate/100);
+    const meanHitRT=hitRTs.length?mean(hitRTs):NaN;
+    return {hitRate,faRate,dprime,meanHitRT,counts:{hits,fas,miss},groups:total};
   }
 
-  function dPrimeApprox(H, F){
+  function dPrimeApprox(H,F){
     const eps=1e-4; H=clamp(H,eps,1-eps); F=clamp(F,eps,1-eps);
     function invNorm(p){
       const a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924];
@@ -553,131 +392,85 @@
       const c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878];
       const d=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742];
       const pl=0.02425, ph=1-pl; let q,r;
-      if(p<pl){ q=Math.sqrt(-2*Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/
-                                                      ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
-      if(p>ph){ q=Math.sqrt(-2*Math.log(1-p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/
-                                                       ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+      if(p<pl){ q=Math.sqrt(-2*Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/(((((d[0]*q+d[1])*q+d[2])*q+d[3])*q)+1); }
+      if(p>ph){ q=Math.sqrt(-2*Math.log(1-p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/(((((d[0]*q+d[1])*q+d[2])*q+d[3])*q)+1); }
       q=p-0.5; r=q*q;
-      return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/
-             (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+      return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
     }
     return invNorm(H)-invNorm(F);
   }
 
-  // ---------- Scoring & Baseline ----------
-  function computeScoring(srt, stro, nb, baseline){
-    const today = {
-      srt_median: srt.medianRT, srt_lapses: srt.lapses, srt_false: srt.falseStarts,
-      stro_acc: stro.acc, stro_mean_rt: stro.meanRTCorrect, stro_cost: stro.congruencyCost,
-      stro_score: stro.stroopScore,
-      nb_hit: nb.hitRate, nb_fa: nb.faRate, nb_d: nb.dprime, nb_hit_rt: nb.meanHitRT
-    };
-    const baseStats = computeBaselineStats(baseline);
+  function computeScoring(srt,stro,nb,baseline){
+    const today={ srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
+      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
+      nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT };
 
-    function zLowerBetter(key){ const m=baseStats.mean[key], s=baseStats.sd[key];
-      if(!isFinite(m) || s===0 || !isFinite(today[key])) return NaN; return (today[key]-m)/s; }
-    function zHigherBetter(key){ const m=baseStats.mean[key], s=baseStats.sd[key];
-      if(!isFinite(m) || s===0 || !isFinite(today[key])) return NaN; return (m - today[key])/s; }
+    const base=computeBaselineStats(baseline);
+    function zLower(key){ const m=base.mean[key], s=base.sd[key]; if(!isFinite(m)||s===0||!isFinite(today[key])) return NaN; return (today[key]-m)/s; }
+    function zHigher(key){ const m=base.mean[key], s=base.sd[key]; if(!isFinite(m)||s===0||!isFinite(today[key])) return NaN; return (m-today[key])/s; }
+    const z={ speed_median:zLower("srt_median"), speed_lapses:zLower("srt_lapses"), speed_false:zLower("srt_false"),
+      stro_cost:zLower("stro_cost"), stro_acc:zHigher("stro_acc"), stro_rt:zLower("stro_mean_rt"),
+      nb_d:zLower("nb_d"), nb_hit_rt:zLower("nb_hit_rt"), nb_fa:zLower("nb_fa") };
+    function comp(keys){ const vals=keys.map(k=>z[k]).filter(Number.isFinite); if(!vals.length) return NaN; const srt=vals.slice().sort((a,b)=>a-b); const trim=Math.max(0,Math.floor(srt.length*0.1)); return mean(srt.slice(trim, srt.length-trim||undefined)); }
+    const zSpeed=comp(["speed_median","speed_lapses","speed_false"]);
+    const zStroop=comp(["stro_cost","stro_acc","stro_rt"]);
+    const zNback=comp(["nb_d","nb_hit_rt","nb_fa"]);
+    const maxZ=Math.max(zSpeed||0,zStroop||0,zNback||0);
+    let readiness=Math.round(100-clamp(12*maxZ,0,60));
 
-    const z = {
-      speed_median: zLowerBetter("srt_median"),
-      speed_lapses: zLowerBetter("srt_lapses"),
-      speed_false: zLowerBetter("srt_false"),
-      stro_cost: zLowerBetter("stro_cost"),
-      stro_acc: zHigherBetter("stro_acc"),
-      stro_rt: zLowerBetter("stro_mean_rt"),
-      nb_d: zLowerBetter("nb_d"),
-      nb_hit_rt: zLowerBetter("nb_hit_rt"),
-      nb_fa: zLowerBetter("nb_fa")
-    };
-    function comp(keys){
-      const vals = keys.map(k=>z[k]).filter(Number.isFinite);
-      if(!vals.length) return NaN;
-      const sorted=vals.slice().sort((a,b)=>a-b);
-      const trim=Math.max(0, Math.floor(sorted.length*0.1));
-      const trimmed=sorted.slice(trim, sorted.length-trim || undefined);
-      return mean(trimmed);
-    }
-    const zSpeed = comp(["speed_median","speed_lapses","speed_false"]);
-    const zStroop = comp(["stro_cost","stro_acc","stro_rt"]);
-    const zNback = comp(["nb_d","nb_hit_rt","nb_fa"]);
-    const maxZ = Math.max(zSpeed||0, zStroop||0, zNback||0);
-    let readiness = 100 - clamp(12 * maxZ, 0, 60);
-    readiness = Math.round(readiness);
-
-    const hasBaseline = baseline.length >= BASELINE_MIN;
-
+    const hasBaseline=baseline.length>=BASELINE_MIN;
     let light="amber", label="Caution", guidance="Delay 15–30 minutes, hydrate/snack, then re-test. Consider a safety pilot or deferring non-essential legs.";
-    if((maxZ<1.0) && readiness>=85){ light="green"; label="Fit"; guidance="Proceed if all other IM SAFE items are satisfied."; }
+    if((maxZ<1.0)&&readiness>=85){ light="green"; label="Fit"; guidance="Proceed if all other IM SAFE items are satisfied."; }
     else if(maxZ>=2.0 || readiness<70){ light="red"; label="No-Go"; guidance="Do not act as PIC. Address sleep/stress/alcohol/meds and re-test later."; }
-    if(srt.lapses>=2 || (isFinite(stro.acc) && stro.acc<85)){
-      light="red"; label="No-Go";
-      guidance="Do not act as PIC. Significant attention/alertness degradation detected.";
-      readiness = Math.min(readiness, 69);
-    }
+    if(srt.lapses>=2 || (isFinite(stro.acc)&&stro.acc<85)){ light="red"; label="No-Go"; guidance="Do not act as PIC. Significant attention/alertness degradation detected."; readiness=Math.min(readiness,69); }
 
-    // Stroop T-Score vs baseline (baseline mean=>50, SD=>10 by definition)
-    let stroopTScore = NaN, stroopMessage = "—";
-    if(isFinite(today.stro_score) && isFinite(baseStats.mean.stro_score) && baseStats.sd.stro_score>0){
-      const zSt = (today.stro_score - baseStats.mean.stro_score)/baseStats.sd.stro_score;
-      stroopTScore = 50 + 10*zSt;
-      const pctDrop = (50 - stroopTScore)/50; // positive if lower than baseline
-      if(pctDrop <= 0.10){
-        stroopMessage = "No significant decline in executive function compared to baseline score.";
-      }else if(pctDrop > 0.10 && pctDrop <= 0.15000){
-        stroopMessage = "Small executive function deficit detected compared to baseline score.";
-      }else if(pctDrop > 0.15001 && pctDrop <= 0.20){
-        stroopMessage = "Significant executive function deficit detected compared to baseline score. Reconsider performing a flight.";
-      }else if(pctDrop > 0.20){
-        stroopMessage = "Substantial executive function deficit detected compared to baseline score. You are strongly encouraged to scrub your flight.";
-      }
+    // T-score (baseline mean 50, SD 10)
+    let stroopTScore=NaN, stroopMessage="—";
+    if(isFinite(today.stro_score)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
+      const zSt=(today.stro_score-base.mean.stro_score)/base.sd.stro_score;
+      stroopTScore=50+10*zSt;
+      const drop=(50-stroopTScore)/50;
+      if(drop<=0.10) stroopMessage="No significant decline in executive function compared to baseline score.";
+      else if(drop>0.10 && drop<=0.15000) stroopMessage="Small executive function deficit detected compared to baseline score.";
+      else if(drop>0.15001 && drop<=0.20) stroopMessage="Significant executive function deficit detected compared to baseline score. Reconsider performing a flight.";
+      else if(drop>0.20) stroopMessage="Substantial executive function deficit detected compared to baseline score. You are strongly encouraged to scrub your flight.";
     } else {
-      stroopMessage = "Collect at least 3 baseline sessions to enable T-score comparison.";
+      stroopMessage="Collect at least 3 baseline sessions to enable T-score comparison.";
     }
 
-    if(!hasBaseline){
-      light="amber"; label="Baseline required";
-      guidance="Establish your personal baseline (≥3 sessions on good days). Until then, do not use this tool for go/no-go decisions.";
-    }
+    if(!hasBaseline){ light="amber"; label="Baseline required"; guidance="Establish your personal baseline (≥3 sessions on good days). Until then, do not use this tool for go/no-go decisions."; }
 
     const drivers=[];
-    if(Number.isFinite(zSpeed) && zSpeed>=1) drivers.push("slower reaction & vigilance");
-    if(Number.isFinite(zStroop) && zStroop>=1) drivers.push("reduced attention control");
-    if(Number.isFinite(zNback) && zNback>=1) drivers.push("weaker working memory");
-    const driver = !hasBaseline ? "Baseline not established." :
-                   (drivers.length? ("Top driver: " + drivers.join(" + ")) : "Near baseline across domains.");
+    if(Number.isFinite(zSpeed)&&zSpeed>=1) drivers.push("slower reaction & vigilance");
+    if(Number.isFinite(zStroop)&&zStroop>=1) drivers.push("reduced attention control");
+    if(Number.isFinite(zNback)&&zNback>=1) drivers.push("weaker working memory");
+    const driver=!hasBaseline? "Baseline not established." : (drivers.length?("Top driver: "+drivers.join(" + ")):"Near baseline across domains.");
 
-    return {today, baseStats, z: {speed:zSpeed, stroop:zStroop, nback:zNback, max:maxZ},
-            readiness, light, label, guidance, driver, hasBaseline, stroopTScore, stroopMessage};
+    const nbackNote = (DUR.nbackGroups<=5) ? "Note: 2-back d′ is based on 5 trials and may be unstable; consider optional 10–20 groups for research-grade stability." : "";
+
+    return {today,baseStats:base,z:{speed:zSpeed,stroop:zStroop,nback:zNback,max:maxZ},
+            readiness,light,label,guidance,driver,hasBaseline,stroopTScore,stroopMessage,nbackNote, stroopCounts:{cong:0,incong:0}};
   }
 
-  function computeBaselineStats(baseline){
-    const keys = ["srt_median","srt_lapses","srt_false","stro_acc","stro_mean_rt","stro_cost","stro_score","nb_hit","nb_fa","nb_d","nb_hit_rt"];
-    const meanObj={}, sdObj={};
-    keys.forEach(k=>{
-      const arr = baseline.map(s=>s[k]).filter(x=>Number.isFinite(x));
-      meanObj[k] = arr.length? mean(arr): NaN;
-      sdObj[k] = arr.length>1? sd(arr): 0;
-    });
-    return {mean: meanObj, sd: sdObj, n: baseline.length};
+  function computeBaselineStats(b){
+    const keys=["srt_median","srt_lapses","srt_false","stro_acc","stro_mean_rt","stro_cost","stro_score","nb_hit","nb_fa","nb_d","nb_hit_rt"];
+    const meanObj={}, sdObj={}; keys.forEach(k=>{const arr=b.map(s=>s[k]).filter(x=>Number.isFinite(x)); meanObj[k]=arr.length?mean(arr):NaN; sdObj[k]=arr.length>1?sd(arr):0;});
+    return {mean:meanObj, sd:sdObj, n:b.length};
   }
 
-  function renderResults(res, srt, stro, nb, baseline){
+  function renderResults(res,srt,stro,nb){
     hide(testCard); show(resultCard);
-    readinessPct.textContent = res.hasBaseline ? (res.readiness + "%") : "—";
-    lightDot.className = "dot " + (res.hasBaseline ? (res.light==="green"?"green":res.light==="red"?"red":"amber") : "amber");
-    lightLabel.textContent = res.hasBaseline ? res.label : "Baseline required";
-    driverText.textContent = res.driver;
-    guidanceText.textContent = res.guidance;
+    readinessPct.textContent=res.hasBaseline? (res.readiness+"%"):"—";
+    lightDot.className="dot "+(res.hasBaseline?(res.light==="green"?"green":res.light==="red"?"red":"amber"):"amber");
+    lightLabel.textContent=res.hasBaseline? res.label:"Baseline required";
+    driverText.textContent=res.driver;
+    guidanceText.textContent=res.guidance;
 
-    // enable add-to-baseline always (pilot decides if today is a “good day”)
-    addBaselineBtn.disabled = false;
-    addBaselineBtn2.disabled = false;
+    addBaselineBtn.disabled=false; addBaselineBtn2.disabled=false;
 
-    const totalPresses = srt.falseStarts + srt.n;
-    const fsRate = totalPresses ? (100 * srt.falseStarts / totalPresses) : 0;
+    const totalPresses=srt.falseStarts+srt.n, fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
 
-    metricToday.innerHTML = [
+    metricToday.innerHTML=[
       `Reaction median: <b>${fmt(srt.medianRT)} ms</b>`,
       `Lapses (&gt;500 ms): <b>${srt.lapses}</b>`,
       `False starts: <b>${srt.falseStarts}</b>`,
@@ -685,18 +478,14 @@
       `Stroop accuracy: <b>${fmt(stro.acc)}%</b>`,
       `Stroop mean RT: <b>${fmt(stro.meanRTCorrect)} ms</b>`,
       `Stroop cost: <b>${isFinite(stro.congruencyCost)?fmt(stro.congruencyCost):"—"} ms</b>`,
-      `Stroop T-Score: <b>${isFinite(res.stroopTScore)?fmt(res.stroopTScore):"—"}</b>`,
-      `<i>${res.stroopMessage}</i>`,
       `2-back d′: <b>${isFinite(nb.dprime)?fmt(nb.dprime):"—"}</b>`,
-      `2-back hits / FA / miss: <b>${nb.counts.hits}/${nb.counts.fas}/${nb.counts.miss}</b>`
+      `2-back hits / FA / miss: <b>${nb.counts.hits}/${nb.counts.fas}/${nb.counts.miss}</b>`,
+      res.nbackNote? `<span class="muted">${res.nbackNote}</span>` : ``
     ].map(x=>`<div>${x}</div>`).join("");
 
-    const b = res.baseStats;
-    function baseLine(label, key, unit=""){
-      const m=b.mean[key], s=b.sd[key];
-      return `<div>${label}: <b>${isFinite(m)?fmt(m):"—"}${unit}</b> <span class="muted">± ${isFinite(s)?fmt(s):"—"}</span></div>`;
-    }
-    metricBase.innerHTML = [
+    const b=res.baseStats;
+    function baseLine(label,key,unit=""){const m=b.mean[key], s=b.sd[key]; return `<div>${label}: <b>${isFinite(m)?fmt(m):"—"}${unit}</b> <span class="muted">± ${isFinite(s)?fmt(s):"—"}</span></div>`;}
+    metricBase.innerHTML=[
       baseLine("Reaction median","srt_median"," ms"),
       baseLine("Lapses","srt_lapses"),
       baseLine("False starts","srt_false"),
@@ -707,76 +496,45 @@
       baseLine("2-back d′","nb_d",""),
     ].join("");
 
-    resultCard.dataset.payload = JSON.stringify({srt, stro, nb, res});
+    resultCard.dataset.payload=JSON.stringify({srt,stro,nb,res});
   }
 
-  // ---------- Events ----------
-  onTap(startBtn, runTest);
-  onTap(againBtn, runTest);
+  onTap(startBtn,runTest); onTap(againBtn,runTest);
 
   function addCurrentToBaseline(){
-    const payload = resultCard.dataset.payload ? JSON.parse(resultCard.dataset.payload) : null;
-    if(!payload) return;
-    const {srt, stro, nb} = payload;
-    const today = {
-      srt_median: srt.medianRT, srt_lapses: srt.lapses, srt_false: srt.falseStarts,
-      stro_acc: stro.acc, stro_mean_rt: stro.meanRTCorrect, stro_cost: stro.congruencyCost,
-      stro_score: stro.stroopScore,
-      nb_hit: nb.hitRate, nb_fa: nb.faRate, nb_d: nb.dprime, nb_hit_rt: nb.meanHitRT
-    };
-    baselineSessions.push(today);
-    saveBaseline(baselineSessions);
+    const payload=resultCard.dataset.payload?JSON.parse(resultCard.dataset.payload):null; if(!payload) return;
+    const {srt,stro,nb}=payload;
+    const today={ srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
+      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
+      nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT };
+    baselineSessions.push(today); saveBaseline(baselineSessions);
     alert("Added to baseline. Collect at least 3 baseline sessions on good days to enable assessment.");
   }
-  onTap(addBaselineBtn, addCurrentToBaseline);
-  onTap(addBaselineBtn2, addCurrentToBaseline);
+  onTap(addBaselineBtn,addCurrentToBaseline); onTap(addBaselineBtn2,addCurrentToBaseline);
 
-  onTap(resetBaselineBtn, ()=>{
-    updateBaselineList(); hide(resultCard); hide(testCard); show(baselineCard);
-  });
-  onTap(closeBaselineBtn, ()=> hide(baselineCard));
-  onTap(deleteBaselineBtn, ()=>{
-    if(confirm("Delete ALL baseline sessions from this device?")){
-      baselineSessions = []; saveBaseline(baselineSessions); updateBaselineList();
-    }
-  });
+  onTap(resetBaselineBtn,()=>{updateBaselineList(); hide(resultCard); hide(testCard); show(baselineCard);});
+  onTap(closeBaselineBtn,()=>hide(baselineCard));
+  onTap(deleteBaselineBtn,()=>{ if(confirm("Delete ALL baseline sessions on this device?")){ baselineSessions=[]; saveBaseline(baselineSessions); updateBaselineList(); } });
 
-  // Export PDF (formatted print view)
-  onTap(exportBtn, ()=>{
-    const payload = resultCard.dataset.payload ? JSON.parse(resultCard.dataset.payload) : null;
-    const bcount = baselineSessions.length;
-    const when = new Date().toLocaleString();
-    let html = `
-      <html><head><title>IM SAFE — Two-Minute Drill Summary</title>
-      <style>
-        body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
-        h1{font-size:20px;margin:0 0 6px}
-        h2{font-size:16px;margin:18px 0 6px}
-        .muted{color:#555}
-        .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-        .box{border:1px solid #ddd;border-radius:8px;padding:12px}
-        .mono{font-family:ui-monospace,Menlo,Monaco,Consolas}
-      </style>
-      </head><body>
+  onTap(exportBtn,()=>{
+    const payload=resultCard.dataset.payload?JSON.parse(resultCard.dataset.payload):null;
+    const bcount=baselineSessions.length; const when=new Date().toLocaleString();
+    let html=`<html><head><title>IM SAFE — Two-Minute Drill Summary</title>
+      <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
+      h1{font-size:20px;margin:0 0 6px} h2{font-size:16px;margin:18px 0 6px}
+      .muted{color:#555}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{border:1px solid #ddd;border-radius:8px;padding:12px}
+      .mono{font-family:ui-monospace,Menlo,Monaco,Consolas}</style></head><body>
       <h1>IM SAFE — Two-Minute Drill (Summary)</h1>
-      <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount}</div>
-    `;
-    if(!payload){
-      html += `<p>No recent test run to export.</p></body></html>`;
-      const w = window.open("", "_blank"); w.document.write(html); w.print(); return;
-    }
-    const {srt, stro, nb, res} = payload;
-    const totalPresses = srt.falseStarts + srt.n;
-    const fsRate = totalPresses ? (100 * srt.falseStarts / totalPresses) : 0;
-
-    html += `
+      <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount}</div>`;
+    if(!payload){ html+=`<p>No recent test run to export.</p></body></html>`; const w=window.open("","_blank"); w.document.write(html); w.print(); return; }
+    const {srt,stro,nb,res}=payload; const totalPresses=srt.falseStarts+srt.n; const fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
+    html+=`
       <h2>Overall</h2>
       <div class="box">
-        <div><b>Assessment:</b> ${res.hasBaseline ? res.label : "Baseline required"} ${res.hasBaseline ? "• Readiness " + res.readiness + "%" : ""}</div>
+        <div><b>Assessment:</b> ${res.hasBaseline?res.label:"Baseline required"} ${res.hasBaseline?("• Readiness "+res.readiness+"%"):""}</div>
         <div><b>Guidance:</b> ${res.guidance}</div>
         <div><b>Driver:</b> ${res.driver}</div>
       </div>
-
       <div class="grid" style="margin-top:10px">
         <div class="box">
           <h2>Reaction</h2>
@@ -794,13 +552,12 @@
           <div><i>${res.stroopMessage}</i></div>
         </div>
       </div>
-
       <div class="box" style="margin-top:10px">
         <h2>2-back (Working Memory)</h2>
         <div>d′: <b>${isFinite(nb.dprime)?fmt(nb.dprime):"—"}</b></div>
-        <div>Hits / False Alarms / Misses: <b>${nb.counts.hits}/${nb.counts.fas}/${nb.counts.miss}</b> (5 groups)</div>
+        <div>Hits / False Alarms / Misses: <b>${nb.counts.hits}/${nb.counts.fas}/${nb.counts.miss}</b> (${nb.groups} groups)</div>
+        ${res.nbackNote?`<div class="muted">${res.nbackNote}</div>`:""}
       </div>
-
       <h2>Baseline (mean ± SD)</h2>
       <div class="box mono">
         Reaction median: ${fmt(res.baseStats.mean.srt_median)} ms ± ${fmt(res.baseStats.sd.srt_median)}<br/>
@@ -811,27 +568,18 @@
         Stroop cost: ${fmt(res.baseStats.mean.stro_cost)} ms ± ${fmt(res.baseStats.sd.stro_cost)}<br/>
         Stroop score (acc): ${fmt(res.baseStats.mean.stro_score)} ± ${fmt(res.baseStats.sd.stro_score)}<br/>
         2-back d′: ${fmt(res.baseStats.mean.nb_d)} ± ${fmt(res.baseStats.sd.nb_d)}
-      </div>
-
-      </body></html>
-    `;
-    const w = window.open("", "_blank");
-    w.document.open(); w.document.write(html); w.document.close();
-    w.focus(); w.print();
+      </div></body></html>`;
+    const w=window.open("","_blank"); w.document.open(); w.document.write(html); w.document.close(); w.focus(); w.print();
   });
 
   function updateBaselineList(){
     const b=baselineSessions;
-    if(!b.length){ baselineList.textContent = "No baseline yet."; return; }
-    baselineList.innerHTML = b.map((s,i)=>(
-      `<div class="chip">#${i+1} • medRT ${fmt(s.srt_median)} ms • lapses ${s.srt_lapses} • Stroop acc ${fmt(s.stro_acc)}% • 2-back d′ ${fmt(s.nb_d)}</div>`
-    )).join("<br/>");
+    if(!b.length){ baselineList.textContent="No baseline yet."; return; }
+    baselineList.innerHTML=b.map((s,i)=>`<div class="chip">#${i+1} • medRT ${fmt(s.srt_median)} ms • lapses ${s.srt_lapses} • Stroop acc ${fmt(s.stro_acc)}% • 2-back d′ ${fmt(s.nb_d)}</div>`).join("<br/>");
   }
   updateBaselineList();
 
-  window.addEventListener("beforeunload", (e)=>{
-    if(!testCard.classList.contains("hide")){ e.preventDefault(); e.returnValue=""; }
-  });
+  window.addEventListener("beforeunload",e=>{ if(!testCard.classList.contains("hide")){e.preventDefault(); e.returnValue="";} });
 })();
 </script>
 </body>
