@@ -73,7 +73,7 @@
         <h2>How it works</h2>
         <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
           <li>Reaction (30s) • Color-Word (45s) • 2-back (5 groups)</li>
-          <li>Compare today to your personal baseline (T-Scores for Stroop)</li>
+          <li>Compare today to your personal baseline (T-scores for Stroop)</li>
           <li>Result: <b>Fit</b> / <b>Caution</b> / <b>No-Go</b> + Readiness %</li>
         </ul>
       </div>
@@ -187,6 +187,7 @@
   const sd = arr => { if(arr.length<2) return 0; const m=mean(arr); return Math.sqrt(mean(arr.map(x=>(x-m)*(x-m)))); };
   const now = ()=> performance.now();
 
+  // Top-level button press helper (OK to allow click for accessibility)
   function onTap(el, handler){
     const down = (ev)=>{ ev.preventDefault(); el.classList.add('active'); handler(ev); };
     const up = ()=> el.classList.remove('active');
@@ -198,6 +199,31 @@
     return ()=> {
       el.removeEventListener('pointerdown', down, {passive:false});
       el.removeEventListener('click', down, {passive:false});
+      el.removeEventListener('pointerup', up, {passive:true});
+      el.removeEventListener('pointercancel', up, {passive:true});
+      el.removeEventListener('mouseleave', up, {passive:true});
+    };
+  }
+
+  // Test control press helper: POINTERDOWN ONLY + debounce (prevents iPad double counts)
+  const lastPress = new WeakMap();
+  function onPressPointer(el, handler, debounceMs=200){
+    function down(ev){
+      ev.preventDefault();
+      const t = now();
+      const last = lastPress.get(el) || 0;
+      if(t - last < debounceMs) return; // debounce
+      lastPress.set(el, t);
+      el.classList.add('active');
+      handler(ev);
+    }
+    function up(){ el.classList.remove('active'); }
+    el.addEventListener('pointerdown', down, {passive:false});
+    el.addEventListener('pointerup', up, {passive:true});
+    el.addEventListener('pointercancel', up, {passive:true});
+    el.addEventListener('mouseleave', up, {passive:true});
+    return ()=> {
+      el.removeEventListener('pointerdown', down, {passive:false});
       el.removeEventListener('pointerup', up, {passive:true});
       el.removeEventListener('pointercancel', up, {passive:true});
       el.removeEventListener('mouseleave', up, {passive:true});
@@ -324,14 +350,14 @@
       }, delay);
     }
 
-    const offSrt = onTap(srtTarget, ()=>{
+    const offSrt = onPressPointer(srtTarget, ()=>{
       if(now()>endAt) return;
       if(waiting){
         falseStarts++;
       } else {
         const rt = now() - goTime;
         if(rt>500){ lapses++; }             // lapses now > 500 ms
-        else if(rt>=100) rts.push(rt);      // ignore anticipations <100 ms
+        else if(rt>=100) rts.push(rt);      // ignore <100 ms anticipations
         scheduleNext();
       }
     });
@@ -340,7 +366,7 @@
     await sectionTimer("Reaction", seconds, (tleft,p)=>{
       countdown.textContent = Math.ceil(tleft)+"s";
       // progress includes warmup + srt
-      setProgress((DUR.warmup + (DUR.srt - tleft))/ (DUR.warmup + DUR.srt + DUR.stroop + 15)); // +15 nominal for 2-back groups
+      setProgress((DUR.warmup + (DUR.srt - tleft))/ (DUR.warmup + DUR.srt + DUR.stroop + 15));
     });
     offSrt();
 
@@ -348,7 +374,7 @@
     return {medianRT, lapses, falseStarts, n:rts.length};
   }
 
-  // ---------- Stroop (4 colors, 45s, 400ms blank between, no immediate repeats) ----------
+  // ---------- Stroop (4 colors, 45s, 400ms blank, no immediate repeats) ----------
   async function runStroop(seconds){
     show(stroopPane); hide(srtPane); hide(nbackPane);
     const words=["RED","GREEN","BLUE","YELLOW"];
@@ -360,14 +386,9 @@
     let prevWord=null, prevColor=null;
 
     function chooseNext(){
-      // enforce: new word != prevWord AND new color != prevColor
       let word, colorName;
-      do{
-        word = words[Math.floor(Math.random()*words.length)];
-      } while(word===prevWord);
-      do{
-        colorName = words[Math.floor(Math.random()*words.length)];
-      } while(colorName===prevColor);
+      do{ word = words[Math.floor(Math.random()*words.length)]; } while(word===prevWord);
+      do{ colorName = words[Math.floor(Math.random()*words.length)]; } while(colorName===prevColor);
       prevWord = word; prevColor = colorName;
       return {word, colorName};
     }
@@ -383,7 +404,6 @@
     }
 
     function endAndQueue(){
-      // hide word, then after 400ms start next (if time remains)
       stroopWord.style.visibility = "hidden";
       setTimeout(()=>{ if(now()<endAt) newTrial(); }, interBlank);
     }
@@ -399,8 +419,8 @@
       endAndQueue();
     }
 
-    const offMatch = onTap(btnMatch, ()=>respond("MATCH"));
-    const offMismatch = onTap(btnMismatch, ()=>respond("MISMATCH"));
+    const offMatch = onPressPointer(btnMatch, ()=>respond("MATCH"));
+    const offMismatch = onPressPointer(btnMismatch, ()=>respond("MISMATCH"));
 
     function keyStroop(e){
       const k = e.key.toLowerCase();
@@ -429,10 +449,9 @@
     const rtCon = cong.length? mean(cong): NaN;
     const rtIncon = incong.length? mean(incong): NaN;
     const rawCost = (isFinite(rtIncon) && isFinite(rtCon)) ? (rtIncon - rtCon) : NaN;
-    const congruencyCost = isFinite(rawCost) ? Math.max(0, rawCost) : NaN; // clamp ≥ 0
+    const congruencyCost = isFinite(rawCost) ? Math.max(0, rawCost) : NaN;
     const meanRTCorrect = corrects.length? mean(corrects.map(t=>t.rt)) : NaN;
-    // define Stroop score for T-Score: use accuracy (%) as primary executive control marker
-    const stroopScore = acc; // higher is better
+    const stroopScore = acc; // for T-score
     return {acc, meanRTCorrect, congruencyCost, n:trials.length, stroopScore};
   }
 
@@ -441,7 +460,7 @@
     show(nbackPane); hide(srtPane); hide(stroopPane);
     let group=1;
     let hits=0, fas=0, miss=0; let hitRTs=[];
-    const VISIBLE_MS = 250, GAP_MS = 100; // per your spec
+    const VISIBLE_MS = 250, GAP_MS = 100;
     let tStim=0;
     twoBackButtons.style.visibility = "hidden";
 
@@ -449,7 +468,6 @@
       nbackDigit.textContent = String(d);
       nbackDigit.style.visibility = vis?"visible":"hidden";
     }
-
     function randDigit(except){
       let d; do{ d = Math.floor(1+Math.random()*9); } while(d===except);
       return d;
@@ -459,10 +477,8 @@
       if(group>groups){ return Promise.resolve(); }
       groupLabel.textContent = `Group ${group}`;
       twoBackButtons.style.visibility = "hidden";
-      // choose sequence a, b, c
       const a = randDigit(null);
       const b = randDigit(null);
-      // 50/50 target or not
       const makeTarget = Math.random()<0.5;
       const c = makeTarget ? a : randDigit(a);
       const seq = [a,b,c];
@@ -472,12 +488,12 @@
         function showNext(){
           if(idx<3){
             setDigit(seq[idx], true);
-            tStim = now();
-            setTimeout(()=>{ setDigit(seq[idx], false); idx++; 
+            if(idx===2){ tStim = now(); } // time from 3rd onset
+            setTimeout(()=>{ setDigit(seq[idx], false); idx++;
               setTimeout(showNext, GAP_MS);
             }, VISIBLE_MS);
           } else {
-            // after third disappears, show third again & enable buttons for response
+            // after third disappears, show 3rd again & enable buttons
             setDigit(c, true);
             twoBackButtons.style.visibility = "visible";
             awaiting = true;
@@ -488,29 +504,28 @@
         function evaluate(choiceIsTarget){
           if(!awaiting) return;
           awaiting=false;
-          const rt = now()-tStim; // from 3rd digit onset (visible again)
+          const rt = now()-tStim;
           const correctTarget = (c===a);
           if(choiceIsTarget){
             if(correctTarget){ hits++; if(rt>=100 && rt<=3000) hitRTs.push(rt); }
             else { fas++; }
           } else {
             if(correctTarget){ miss++; }
-            // else correct rejection (no count needed)
           }
-          // clean up this group
           setDigit(c, false);
           twoBackButtons.style.visibility = "hidden";
           offTarget(); offNotTarget(); offKey();
           group++; res();
         }
 
-        const offTarget = onTap(btnTarget, ()=>evaluate(true));
-        const offNotTarget = onTap(btnNotTarget, ()=>evaluate(false));
+        const offTarget = onPressPointer(btnTarget, ()=>evaluate(true));
+        const offNotTarget = onPressPointer(btnNotTarget, ()=>evaluate(false));
         function keyTwoBack(e){
           if(e.code==='Space'){ e.preventDefault(); evaluate(true); }
-          if(e.key.toLowerCase()==='n'){ e.preventDefault(); evaluate(false); }
+          if(e.key && e.key.toLowerCase()==='n'){ e.preventDefault(); evaluate(false); }
         }
-        const offKey = (()=>{ window.addEventListener('keydown', keyTwoBack); return ()=>window.removeEventListener('keydown', keyTwoBack); })();
+        function offKey(){ window.removeEventListener('keydown', keyTwoBack); }
+        window.addEventListener('keydown', keyTwoBack);
 
         showNext();
       }).then(()=>doGroup());
@@ -518,12 +533,16 @@
 
     await doGroup();
 
-    const N = hits + fas + miss; // 5 trials
-    const hitRate = (hits / Math.max(1, hits+miss))*100;
-    const faRate = (fas / Math.max(1, N - (hits+miss)))*100;
+    // Corrected rates: totalTrials = groups; targets = hits+miss; nonTargets = totalTrials - targets
+    const totalTrials = groups;
+    const targets = Math.max(1, hits + miss);
+    const nonTargets = Math.max(1, totalTrials - (hits + miss));
+    const hitRate = (hits / targets)*100;
+    const faRate = (fas / nonTargets)*100;
+
     const dprime = dPrimeApprox(hitRate/100, faRate/100);
     const meanHitRT = hitRTs.length? mean(hitRTs): NaN;
-    return {hitRate, faRate, dprime, meanHitRT, counts:{hits, fas, miss}, groups};
+    return {hitRate, faRate, dprime, meanHitRT, counts:{hits, fas, miss}, groups: totalTrials};
   }
 
   function dPrimeApprox(H, F){
@@ -550,12 +569,11 @@
     const today = {
       srt_median: srt.medianRT, srt_lapses: srt.lapses, srt_false: srt.falseStarts,
       stro_acc: stro.acc, stro_mean_rt: stro.meanRTCorrect, stro_cost: stro.congruencyCost,
-      stro_score: stro.stroopScore, // for T-Score
+      stro_score: stro.stroopScore,
       nb_hit: nb.hitRate, nb_fa: nb.faRate, nb_d: nb.dprime, nb_hit_rt: nb.meanHitRT
     };
     const baseStats = computeBaselineStats(baseline);
 
-    // composite readiness (gated by baseline)
     function zLowerBetter(key){ const m=baseStats.mean[key], s=baseStats.sd[key];
       if(!isFinite(m) || s===0 || !isFinite(today[key])) return NaN; return (today[key]-m)/s; }
     function zHigherBetter(key){ const m=baseStats.mean[key], s=baseStats.sd[key];
@@ -587,10 +605,8 @@
     let readiness = 100 - clamp(12 * maxZ, 0, 60);
     readiness = Math.round(readiness);
 
-    // Baseline gating
     const hasBaseline = baseline.length >= BASELINE_MIN;
 
-    // default light/guidance; will be overridden if baseline missing
     let light="amber", label="Caution", guidance="Delay 15–30 minutes, hydrate/snack, then re-test. Consider a safety pilot or deferring non-essential legs.";
     if((maxZ<1.0) && readiness>=85){ light="green"; label="Fit"; guidance="Proceed if all other IM SAFE items are satisfied."; }
     else if(maxZ>=2.0 || readiness<70){ light="red"; label="No-Go"; guidance="Do not act as PIC. Address sleep/stress/alcohol/meds and re-test later."; }
@@ -600,12 +616,11 @@
       readiness = Math.min(readiness, 69);
     }
 
-    // Stroop T-Score vs baseline
+    // Stroop T-Score vs baseline (baseline mean=>50, SD=>10 by definition)
     let stroopTScore = NaN, stroopMessage = "—";
     if(isFinite(today.stro_score) && isFinite(baseStats.mean.stro_score) && baseStats.sd.stro_score>0){
       const zSt = (today.stro_score - baseStats.mean.stro_score)/baseStats.sd.stro_score;
       stroopTScore = 50 + 10*zSt;
-      // percent delta relative to baseline score on T-scale (baseline is 50)
       const pctDrop = (50 - stroopTScore)/50; // positive if lower than baseline
       if(pctDrop <= 0.10){
         stroopMessage = "No significant decline in executive function compared to baseline score.";
@@ -617,10 +632,9 @@
         stroopMessage = "Substantial executive function deficit detected compared to baseline score. You are strongly encouraged to scrub your flight.";
       }
     } else {
-      stroopMessage = "Collect at least 3 baseline sessions to enable T-Score comparison.";
+      stroopMessage = "Collect at least 3 baseline sessions to enable T-score comparison.";
     }
 
-    // If no baseline yet, force gate result to “Baseline Required”
     if(!hasBaseline){
       light="amber"; label="Baseline required";
       guidance="Establish your personal baseline (≥3 sessions on good days). Until then, do not use this tool for go/no-go decisions.";
@@ -660,10 +674,14 @@
     addBaselineBtn.disabled = false;
     addBaselineBtn2.disabled = false;
 
+    const totalPresses = srt.falseStarts + srt.n;
+    const fsRate = totalPresses ? (100 * srt.falseStarts / totalPresses) : 0;
+
     metricToday.innerHTML = [
       `Reaction median: <b>${fmt(srt.medianRT)} ms</b>`,
-      `Lapses (>500 ms): <b>${srt.lapses}</b>`,
+      `Lapses (&gt;500 ms): <b>${srt.lapses}</b>`,
       `False starts: <b>${srt.falseStarts}</b>`,
+      `<span class="muted">Diagnostics — SRT trials: <b>${srt.n}</b>; presses: <b>${totalPresses}</b>; false-start rate: <b>${fmt(fsRate)}%</b></span>`,
       `Stroop accuracy: <b>${fmt(stro.acc)}%</b>`,
       `Stroop mean RT: <b>${fmt(stro.meanRTCorrect)} ms</b>`,
       `Stroop cost: <b>${isFinite(stro.congruencyCost)?fmt(stro.congruencyCost):"—"} ms</b>`,
@@ -723,7 +741,7 @@
     }
   });
 
-  // Export PDF (opens a formatted print view; choose “Save as PDF”)
+  // Export PDF (formatted print view)
   onTap(exportBtn, ()=>{
     const payload = resultCard.dataset.payload ? JSON.parse(resultCard.dataset.payload) : null;
     const bcount = baselineSessions.length;
@@ -748,6 +766,9 @@
       const w = window.open("", "_blank"); w.document.write(html); w.print(); return;
     }
     const {srt, stro, nb, res} = payload;
+    const totalPresses = srt.falseStarts + srt.n;
+    const fsRate = totalPresses ? (100 * srt.falseStarts / totalPresses) : 0;
+
     html += `
       <h2>Overall</h2>
       <div class="box">
@@ -762,12 +783,13 @@
           <div>Median RT: <b>${fmt(srt.medianRT)} ms</b></div>
           <div>Lapses (&gt;500 ms): <b>${srt.lapses}</b></div>
           <div>False starts: <b>${srt.falseStarts}</b></div>
+          <div class="muted">Diagnostics — trials: <b>${srt.n}</b>; presses: <b>${totalPresses}</b>; false-start rate: <b>${fmt(fsRate)}%</b></div>
         </div>
         <div class="box">
           <h2>Stroop (Executive Function)</h2>
           <div>Accuracy: <b>${fmt(stro.acc)}%</b></div>
           <div>Mean RT (correct): <b>${fmt(stro.meanRTCorrect)} ms</b></div>
-          <div>Cost (incong - cong): <b>${isFinite(stro.congruencyCost)?fmt(stro.congruencyCost):"—"} ms</b></div>
+          <div>Cost (incong − cong): <b>${isFinite(stro.congruencyCost)?fmt(stro.congruencyCost):"—"} ms</b></div>
           <div>T-Score vs baseline: <b>${isFinite(res.stroopTScore)?fmt(res.stroopTScore):"—"}</b></div>
           <div><i>${res.stroopMessage}</i></div>
         </div>
@@ -795,7 +817,7 @@
     `;
     const w = window.open("", "_blank");
     w.document.open(); w.document.write(html); w.document.close();
-    w.focus(); w.print(); // user chooses "Save as PDF"
+    w.focus(); w.print();
   });
 
   function updateBaselineList(){
