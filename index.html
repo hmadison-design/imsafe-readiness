@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>IM SAFE Readiness Check — Flying M</title>
+<title>IM SAFE — Two-Minute Drill (Readiness Check)</title>
 <style>
   :root{
     --bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;--accent:#4da3ff;
-    --good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b;--ink-strong:#ffffff
+    --good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);
@@ -29,16 +29,17 @@
   .btn{appearance:none;border:0;border-radius:14px;padding:14px 18px;font-weight:700;
     color:#0b0f14;background:var(--accent);cursor:pointer;min-width:150px;user-select:none}
   .btn:disabled{opacity:.6;cursor:not-allowed}
-  .btn-ghost{background:transparent;color:var(--ink);border:2px solid var(--muted)}
+  .btn-ghost{background:transparent;color:var(--ink);border:2px solid #8795a3}
   .btn-wide{width:100%}
   .btn.active{transform:translateY(1px) scale(.98);opacity:.85;filter:saturate(120%)}
+
   .kbd{display:inline-block;padding:.2rem .45rem;border-radius:.4rem;border:1px solid #2a3850;background:#0c121a;font-weight:700}
   .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:#0e141c;border:1px solid #223042;color:var(--muted);font-size:.9rem}
   .hr{height:1px;background:#213043;margin:12px 0}
   .tag{display:inline-block;padding:4px 8px;border-radius:8px;background:#0f1622;color:var(--muted);border:1px solid #223042;font-size:.85rem}
   .chip{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid #223042;background:#101826}
 
-  .tapTarget{width:200px;height:200px;border-radius:999px;background:#3a485c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;user-select:none}
+  .tapTarget{width:220px;height:220px;border-radius:999px;background:#3a485c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;user-select:none}
   .tapTarget.ready{background:#6a7688}
   .tapTarget.go{background:#3aa657}
 
@@ -52,7 +53,7 @@
   .wordBox{font-weight:900;font-size:2.4rem;letter-spacing:.02em;padding:.2rem .6rem;border-radius:.5rem;background:#0e1520}
   .hide{display:none}
 
-  /* Bigger hit areas for comfort */
+  /* Larger hit areas */
   #btnMatch,#btnMismatch{min-width:160px}
   #btnTarget{min-width:240px}
 </style>
@@ -60,14 +61,14 @@
 <body>
 <div class="wrap">
   <header class="card">
-    <h1>IM SAFE Readiness Check</h1>
-    <div class="muted">A ~90-second, baseline-referenced snapshot of cognitive speed, attention control, and working memory. <span class="tag">Local &amp; private</span></div>
+    <h1>IM SAFE — Two-Minute Drill</h1>
+    <div class="muted">A 120-second, baseline-referenced snapshot of cognitive speed, attention control, and working memory. <span class="tag">Local &amp; private</span></div>
     <div class="hr"></div>
     <div class="grid grid-2">
       <div>
         <h2>How it works</h2>
         <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
-          <li>Reaction (20s) • Color-Word (30s) • 1-back (30s)</li>
+          <li>Reaction (30s) • Color-Word (45s) • 1-back (45s)</li>
           <li>Compare today vs. your personal baseline</li>
           <li>Result: <b>Fit</b> / <b>Caution</b> / <b>No-Go</b> + Readiness %</li>
         </ul>
@@ -79,7 +80,7 @@
     </div>
     <div class="hr"></div>
     <div class="row">
-      <button id="startBtn" class="btn">Start 90-second Check</button>
+      <button id="startBtn" class="btn">Start Two-Minute Drill</button>
       <button id="addBaselineBtn" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
       <button id="resetBaselineBtn" class="btn btn-ghost">Manage Baseline</button>
     </div>
@@ -119,7 +120,7 @@
       <div class="center">
         <button id="btnTarget" class="btn">TARGET (Same as previous)</button>
       </div>
-      <div class="muted center" style="margin-top:6px">Digit flashes ~250 ms, then blank ~1000 ms. Tap only while the digit is visible. Keyboard: <span class="kbd">Space</span>.</div>
+      <div class="muted center" style="margin-top:6px">Digit visible ~250 ms, then blank ~1000 ms. Tap only while the digit is visible. Keyboard: <span class="kbd">Space</span>.</div>
     </div>
   </section>
 
@@ -173,10 +174,7 @@
   const fmt = n => (typeof n === "number" && isFinite(n) ? Math.round(n*10)/10 : n);
   const clamp = (v, lo, hi)=> Math.max(lo, Math.min(hi, v));
   const mean = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
-  const sd = arr => {
-    if(arr.length<2) return 0;
-    const m=mean(arr); return Math.sqrt(mean(arr.map(x=>(x-m)*(x-m))));
-  };
+  const sd = arr => { if(arr.length<2) return 0; const m=mean(arr); return Math.sqrt(mean(arr.map(x=>(x-m)*(x-m)))); };
   const now = ()=> performance.now();
 
   // Cross-platform tap helper with visual press; returns cleanup fn.
@@ -233,14 +231,13 @@
   function hide(el){ el.classList.add("hide"); }
   function setProgress(p){ progressBar.style.width = (p*100).toFixed(1)+"%"; }
 
-  // add press feedback to top-level buttons too
+  // Press feedback on top-level controls
   [startBtn, addBaselineBtn, addBaselineBtn2, resetBaselineBtn, againBtn, shareBtn,
-   deleteBaselineBtn, closeBaselineBtn, btnMatch, btnMismatch, btnTarget].forEach(b=>{
-    if(b) onTap(b, ()=>{ /* no-op handler here; task-specific handlers below */ });
-  });
+   deleteBaselineBtn, closeBaselineBtn].forEach(b=>{ if(b) onTap(b, ()=>{}); });
 
   // ---------- Test Orchestrator ----------
-  const DUR = { warmup: 5, srt:20, stroop:30, nback:30 };
+  // Two-Minute Drill = 120 s total
+  const DUR = { warmup: 5, srt:30, stroop:45, nback:45 };
   let abortFlag = false;
 
   async function runTest(){
@@ -252,7 +249,7 @@
     hide(resultCard); hide(baselineCard);
     show(testCard);
 
-    // Warmup
+    // Warm-up
     await sectionTimer("Warm-up", DUR.warmup, (tleft,p)=>{
       countdown.textContent = Math.ceil(tleft)+"s";
       setProgress(p);
@@ -294,7 +291,7 @@
     });
   }
 
-  // ---------- Simple Reaction Time ----------
+  // ---------- Simple Reaction Time (longer gaps) ----------
   async function runSRT(seconds){
     show(srtPane); hide(stroopPane); hide(nbackPane);
     let rts=[], falseStarts=0, lapses=0;
@@ -303,7 +300,7 @@
 
     function scheduleNext(){
       waiting = true;
-      const delay = 800 + Math.random()*1000; // 800–1800 ms
+      const delay = 1200 + Math.random()*1300; // 1200–2500 ms
       srtTarget.textContent = "WAIT";
       srtTarget.className = "tapTarget ready";
       setTimeout(()=>{
@@ -327,9 +324,7 @@
       }
     };
 
-    // start first stimulus
     scheduleNext();
-
     await sectionTimer("Reaction", seconds, (tleft,p)=>{
       countdown.textContent = Math.ceil(tleft)+"s";
       setProgress((DUR.warmup + (DUR.srt - tleft))/ (DUR.warmup + DUR.srt + DUR.stroop + DUR.nback));
@@ -348,8 +343,7 @@
 
     let trials=[]; let current=null; let tStim=0; let awaiting=true;
     const endAt = now()+seconds*1000;
-    // aim ~2 trials/sec
-    const isi = 500; // interval between presenting trials; we immediately queue next on response to keep pace
+    const isi = 500; // delay before next trial
 
     function newTrial(){
       const word = words[Math.floor(Math.random()*words.length)];
@@ -375,7 +369,6 @@
     const offMatch = onTap(btnMatch, ()=>respond("MATCH"));
     const offMismatch = onTap(btnMismatch, ()=>respond("MISMATCH"));
 
-    // keyboard shortcuts for desktop
     function keyStroop(e){
       const k = e.key.toLowerCase();
       if(k==='f') respond("MATCH");
@@ -402,7 +395,7 @@
     const rtCon = cong.length? mean(cong): NaN;
     const rtIncon = incong.length? mean(incong): NaN;
     const rawCost = (isFinite(rtIncon) && isFinite(rtCon)) ? (rtIncon - rtCon) : NaN;
-    const congruencyCost = isFinite(rawCost) ? Math.max(0, rawCost) : NaN; // clamp to >=0
+    const congruencyCost = isFinite(rawCost) ? Math.max(0, rawCost) : NaN; // clamp ≥ 0
     const meanRTCorrect = corrects.length? mean(corrects.map(t=>t.rt)) : NaN;
     return {acc, meanRTCorrect, congruencyCost, n:trials.length};
   }
@@ -435,14 +428,11 @@
       btnTarget.classList.remove('active');
       awaiting=true;
       showDigit(d);
-      // hide after 250ms
       setTimeout(()=>{
-        // if it was a target and still awaiting at hide time → miss
         if(awaiting && current===last){ miss++; }
-        awaiting=false; // cannot respond while blank
+        awaiting=false;
         hideDigit();
       }, VISIBLE_MS);
-      // schedule next in 1250ms total
       setTimeout(()=>{
         last = current;
         if(now() < endAt){ nextDigit(); }
@@ -457,7 +447,7 @@
       } else {
         fas++;
       }
-      awaiting=false; // single response window
+      awaiting=false;
       btnTarget.classList.add('active');
     }
 
@@ -468,7 +458,6 @@
     }
     window.addEventListener('keydown', keyNback);
 
-    // start immediately
     nextDigit();
 
     await sectionTimer("1-back", seconds, (tleft,p)=>{
@@ -586,7 +575,6 @@
     driverText.textContent = res.driver;
     guidanceText.textContent = res.guidance;
 
-    // enable add-to-baseline at >=85% (tweak as desired)
     const canAdd = (res.readiness>=85);
     addBaselineBtn.disabled = !canAdd;
     addBaselineBtn2.disabled = !canAdd;
@@ -657,7 +645,7 @@
     const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = "imsafe-readiness-session.json";
+    a.href = url; a.download = "imsafe-two-minute-drill-session.json";
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   });
