@@ -46,7 +46,11 @@
 <div class="wrap">
   <header class="card">
     <h1>IM SAFE — Two-Minute Drill</h1>
-    <div class="muted">A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory. <span class="pill">Local &amp; private</span></div>
+    <div class="muted">
+      A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory.
+      <span class="pill">Local &amp; private</span>
+      <span class="pill">v0.4 experimental</span>
+    </div>
     <div class="hr"></div>
     <div class="grid grid-2">
       <div>
@@ -78,8 +82,9 @@
       <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
     </div>
     <div class="bar" style="margin:10px 0 8px"><i id="progressBar"></i></div>
-    <div id="transitionNotice" class="center muted hide" style="margin-bottom:8px;">
-      <span id="transitionText"></span>
+
+    <div id="transitionNotice" class="center hide" style="min-height:40px;margin-bottom:8px;">
+      <div id="transitionText" style="font-size:1.2rem;font-weight:600;"></div>
     </div>
 
     <!-- SRT -->
@@ -168,7 +173,7 @@
   const sd=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));};
   const now=()=>performance.now();
 
-  // Test controls: pointerdown-only + debounce (tap feedback)
+  // Tap handling
   const lastPress=new WeakMap();
   function onPressPointer(el,fn,db=200){
     function down(e){
@@ -209,7 +214,7 @@
   function hide(el){el.classList.add("hide");}
   function setProgress(p){progressBar.style.width=(p*100).toFixed(1)+"%";}
 
-  // Top-level click bindings
+  // Buttons
   startBtn.addEventListener('click', runTest);
   againBtn.addEventListener('click', runTest);
   addBaselineBtn.addEventListener('click', addCurrentToBaseline);
@@ -223,32 +228,32 @@
   });
   exportBtn.addEventListener('click', exportPDF);
 
-  const DUR={warmup:5,srt:30,stroop:45,nbackGroups:5,transition:3};
-  const TOTAL_TIME = DUR.warmup + DUR.srt + DUR.stroop + DUR.transition + 15; // 15s ~ n-back block
+  const DUR={warmup:5,srt:30,stroop:45,transition:3,nbackGroups:5};
+  const TOTAL_TIME = DUR.warmup + DUR.srt + DUR.stroop + DUR.transition + 15;
   const BASELINE_MIN=3;
   let abortFlag=false;
 
   async function runTest(){
     abortFlag=false; sessionResult=null; addBaselineBtn.disabled=true; addBaselineBtn2.disabled=true;
     hide(resultCard); hide(baselineCard); show(testCard); hide(transitionNotice);
-
     await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{
       countdown.textContent=Math.ceil(t)+"s";
-      setProgress(p*DUR.warmup/TOTAL_TIME);
+      setProgress((DUR.warmup - t)/TOTAL_TIME);
       srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
       show(srtPane); hide(stroopPane); hide(nbackPane);
     });
+
     const srt=await runSRT(DUR.srt); if(abortFlag) return;
     const stro=await runStroop(DUR.stroop); if(abortFlag) return;
 
-    // 3-second transition before 2-back
-    show(transitionNotice);
+    // Transition countdown before 2-back
+    show(transitionNotice); hide(srtPane); hide(stroopPane); hide(nbackPane);
     await sectionTimer("Prepare: 2-back",DUR.transition,(tleft,p)=>{
-      countdown.textContent=Math.ceil(tleft)+"s";
-      transitionText.textContent="2-back (working memory) begins in " + Math.ceil(tleft) + "…";
+      const secs=Math.ceil(tleft);
+      countdown.textContent=secs+"s";
+      transitionText.textContent="2-back (working memory) starts in " + secs + "…";
       const elapsed = DUR.warmup + DUR.srt + DUR.stroop + (DUR.transition - tleft);
       setProgress(elapsed / TOTAL_TIME);
-      hide(srtPane); hide(stroopPane); hide(nbackPane);
     });
     hide(transitionNotice);
 
@@ -270,10 +275,8 @@
     });
   }
 
-  // ------------ Simple Reaction Time (1.0–5.5 s gaps) ------------
-  function randomGap(){
-    return 1000 + Math.random()*4500; // 1.0–5.5 s
-  }
+  // SRT with 1.0–5.5 s gaps
+  function randomGap(){ return 1000 + Math.random()*4500; }
 
   async function runSRT(sec){
     show(srtPane); hide(stroopPane); hide(nbackPane);
@@ -310,7 +313,7 @@
     return {medianRT,lapses,falseStarts,n:rts.length};
   }
 
-  // ------------ Stroop (true 50/50, no immediate repeats) ------------
+  // Stroop
   async function runStroop(sec){
     show(stroopPane); hide(srtPane); hide(nbackPane);
     const names=["RED","GREEN","BLUE","YELLOW"];
@@ -319,30 +322,24 @@
     const endAt=now()+sec*1000, gap=400;
 
     function nextPair(){
-      const wantCong = Math.random()<0.5; // 50/50
-
+      const wantCong = Math.random()<0.5;
       let wordChoices = names.filter(w=>w!==prevWord);
       if(!wordChoices.length) wordChoices = names.slice();
       let word = wordChoices[Math.floor(Math.random()*wordChoices.length)];
-
       let colorChoices = names.filter(c=>c!==prevColor);
       if(!colorChoices.length) colorChoices = names.slice();
 
       if(wantCong){
         if(word === prevColor){
-          const otherWords = wordChoices.filter(w=>w!==prevColor);
-          if(otherWords.length){
-            word = otherWords[Math.floor(Math.random()*otherWords.length)];
-          }
+          const other = wordChoices.filter(w=>w!==prevColor);
+          if(other.length) word = other[Math.floor(Math.random()*other.length)];
         }
         const colorName = word;
         prevWord = word; prevColor = colorName;
         return {word,colorName,congruent:true};
       } else {
         let incongChoices = colorChoices.filter(c=>c!==word);
-        if(!incongChoices.length){
-          incongChoices = names.filter(c=>c!==word);
-        }
+        if(!incongChoices.length) incongChoices = names.filter(c=>c!==word);
         const colorName = incongChoices[Math.floor(Math.random()*incongChoices.length)];
         prevWord = word; prevColor = colorName;
         return {word,colorName,congruent:false};
@@ -390,7 +387,7 @@
     return {acc,meanRTCorrect,congruencyCost,n:trials.length,stroopScore, nCong:cong.length, nIncong:incong.length};
   }
 
-  // ------------ 2-back (grouped, C persists; small-sample d′ scaling) ------------
+  // 2-back
   async function runTwoBack(groups){
     show(nbackPane); hide(srtPane); hide(stroopPane);
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
@@ -468,7 +465,7 @@
     return invNorm(H)-invNorm(F);
   }
 
-  // ------------ Scoring & Baseline ------------
+  // Scoring
   function computeScoring(srt,stro,nb,baseline){
     const today={ srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
       stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
@@ -478,9 +475,9 @@
 
     function sdEff(key, raw){
       let min=0;
-      if(key==="srt_median") min=25;       // ms floor for reaction median
-      else if(key==="stro_mean_rt") min=40;
-      else if(key==="stro_cost") min=20;
+      if(key==="srt_median") min=30;        // ms
+      else if(key==="stro_mean_rt") min=50; // ms
+      else if(key==="stro_cost") min=25;    // ms
       if(!isFinite(raw) || raw<=0) return min || 1;
       return Math.max(raw, min || raw);
     }
@@ -520,14 +517,15 @@
     const zStroop=comp(["stro_cost","stro_acc","stro_rt"]);
     const zNback=comp(["nb_d","nb_hit_rt","nb_fa"]);
     const maxZ=Math.max(zSpeed||0,zStroop||0,zNback||0);
-    let readiness=Math.round(100-clamp(12*maxZ,0,60));
+
+    let readiness=Math.round(100-clamp(10*maxZ,0,50));
 
     const hasBaseline=baseline.length>=BASELINE_MIN;
     let light="amber", label="Caution", guidance="Delay 15–30 minutes, hydrate/snack, then re-test. Consider a safety pilot or deferring non-essential legs.";
     if((maxZ<1.0)&&readiness>=85){ light="green"; label="Fit"; guidance="Proceed if all other IM SAFE items are satisfied."; }
     else if(maxZ>=2.0 || readiness<70){ light="red"; label="No-Go"; guidance="Do not act as PIC. Address sleep/stress/alcohol/meds and re-test later."; }
 
-    // Softer lapse rule: only hard No-Go if lapses very elevated
+    // Softer lapse rule
     const baseLaps = base.mean.srt_lapses;
     const lapseThreshold = (isFinite(baseLaps) ? baseLaps + 3 : 4);
     if( (srt.lapses >= 4) || (isFinite(baseLaps) && srt.lapses >= lapseThreshold) ){
@@ -536,7 +534,7 @@
       readiness=Math.min(readiness,69);
     }
 
-    // T-score for Stroop
+    // T-score for Stroop acc
     let stroopTScore=NaN, stroopMessage="—";
     if(isFinite(today.stro_score)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
       const zSt=(today.stro_score-base.mean.stro_score)/base.sd.stro_score;
@@ -641,7 +639,7 @@
       .muted{color:#555}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{border:1px solid #ddd;border-radius:8px;padding:12px}
       .mono{font-family:ui-monospace,Menlo,Monaco,Consolas}</style></head><body>
       <h1>IM SAFE — Two-Minute Drill (Summary)</h1>
-      <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount}</div>`;
+      <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount} • Version: v0.4 experimental</div>`;
     if(!payload){
       html+=`<p>No recent test run to export.</p></body></html>`;
       const w=window.open("","_blank"); w.document.write(html); w.print(); return;
