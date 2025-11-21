@@ -49,7 +49,7 @@
     <div class="muted">
       A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory.
       <span class="pill">Local &amp; private</span>
-      <span class="pill">v0.4 experimental</span>
+      <span class="pill">v0.6 experimental</span>
     </div>
     <div class="hr"></div>
     <div class="grid grid-2">
@@ -58,7 +58,7 @@
         <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
           <li>Reaction (30s) • Color-Word (45s) • 2-back (5 groups)</li>
           <li>Compare to your baseline (T-scores for Stroop)</li>
-          <li>Result: <b>Fit</b> / <b>Caution</b> / <b>No-Go</b> + Readiness %</li>
+          <li>Qualitative status: Near / Below / Well below baseline</li>
         </ul>
       </div>
       <div>
@@ -83,10 +83,6 @@
     </div>
     <div class="bar" style="margin:10px 0 8px"><i id="progressBar"></i></div>
 
-    <div id="transitionNotice" class="center hide" style="min-height:40px;margin-bottom:8px;">
-      <div id="transitionText" style="font-size:1.2rem;font-weight:600;"></div>
-    </div>
-
     <!-- SRT -->
     <div id="srtPane" class="center" style="min-height:260px">
       <div id="srtTarget" class="tapTarget" role="button" aria-label="Tap when it turns green">WAIT</div>
@@ -104,6 +100,13 @@
       <div class="muted center" style="margin-top:6px">
         Keyboard: <span class="kbd">F</span>=MATCH, <span class="kbd">J</span>=MISMATCH
       </div>
+    </div>
+
+    <!-- Pre 2-back start -->
+    <div id="preNbackPane" class="center hide" style="min-height:120px;margin-top:10px;flex-direction:column;gap:8px;">
+      <div class="muted">When you’re ready, start the working-memory segment.</div>
+      <button id="startNbackBtn" type="button" class="btn">Tap to begin 2-Back Test</button>
+      <div class="muted" id="preNbackHint"></div>
     </div>
 
     <!-- 2-back -->
@@ -127,8 +130,8 @@
   <section id="resultCard" class="card hide">
     <h2>Result</h2>
     <div class="row" style="align-items:center;gap:14px">
-      <div class="scoreLight"><span id="lightDot" class="dot"></span><b id="lightLabel">—</b></div>
-      <div class="big" id="readinessPct">—%</div>
+      <div class="scoreLight"><span id="lightDot" class="dot"></span><b id="lightLabel">Overall status</b></div>
+      <div class="big" id="statusText">—</div>
     </div>
     <div class="muted" id="driverText" style="margin-top:6px"></div>
     <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
@@ -150,7 +153,7 @@
       <button id="addBaselineBtn2" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
     </div>
     <div class="muted" style="margin-top:8px">
-      This tool supports—but does not replace—14 CFR 91.17 and the full IM SAFE self-assessment.
+      This tool supports—but does not replace—your own judgment and the full IM SAFE self-assessment.
     </div>
   </section>
 
@@ -200,11 +203,11 @@
   const startBtn=$("#startBtn"), addBaselineBtn=$("#addBaselineBtn"), addBaselineBtn2=$("#addBaselineBtn2");
   const resetBaselineBtn=$("#resetBaselineBtn"), exportBtn=$("#exportBtn");
   const testCard=$("#testCard"), stepName=$("#stepName"), countdown=$("#countdown"), progressBar=$("#progressBar");
-  const transitionNotice=$("#transitionNotice"), transitionText=$("#transitionText");
   const srtPane=$("#srtPane"), srtTarget=$("#srtTarget");
   const stroopPane=$("#stroopPane"), stroopWord=$("#stroopWord"), btnMatch=$("#btnMatch"), btnMismatch=$("#btnMismatch");
+  const preNbackPane=$("#preNbackPane"), startNbackBtn=$("#startNbackBtn"), preNbackHint=$("#preNbackHint");
   const nbackPane=$("#nbackPane"), nbackDigit=$("#nbackDigit"), btnTarget=$("#btnTarget"), btnNotTarget=$("#btnNotTarget"), twoBackButtons=$("#twoBackButtons"), groupLabel=$("#groupLabel");
-  const resultCard=$("#resultCard"), lightDot=$("#lightDot"), lightLabel=$("#lightLabel"), readinessPct=$("#readinessPct"), driverText=$("#driverText"), guidanceText=$("#guidanceText"), metricToday=$("#metricToday"), metricBase=$("#metricBase"), againBtn=$("#againBtn");
+  const resultCard=$("#resultCard"), lightDot=$("#lightDot"), lightLabel=$("#lightLabel"), statusText=$("#statusText"), driverText=$("#driverText"), guidanceText=$("#guidanceText"), metricToday=$("#metricToday"), metricBase=$("#metricBase"), againBtn=$("#againBtn");
   const baselineCard=$("#baselineCard"), baselineList=$("#baselineList"), deleteBaselineBtn=$("#deleteBaselineBtn"), closeBaselineBtn=$("#closeBaselineBtn");
 
   let baselineSessions=loadBaseline();
@@ -228,14 +231,16 @@
   });
   exportBtn.addEventListener('click', exportPDF);
 
-  const DUR={warmup:5,srt:30,stroop:45,transition:3,nbackGroups:5};
-  const TOTAL_TIME = DUR.warmup + DUR.srt + DUR.stroop + DUR.transition + 15;
+  const DUR={warmup:5,srt:30,stroop:45,nbackGroups:5};
+  const TOTAL_TIME = DUR.warmup + DUR.srt + DUR.stroop + 15; // ~15s budget for 2-back block
   const BASELINE_MIN=3;
   let abortFlag=false;
 
   async function runTest(){
     abortFlag=false; sessionResult=null; addBaselineBtn.disabled=true; addBaselineBtn2.disabled=true;
-    hide(resultCard); hide(baselineCard); show(testCard); hide(transitionNotice);
+    hide(resultCard); hide(baselineCard); show(testCard); hide(preNbackPane);
+    stepName.textContent="Warm-up";
+
     await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{
       countdown.textContent=Math.ceil(t)+"s";
       setProgress((DUR.warmup - t)/TOTAL_TIME);
@@ -246,16 +251,14 @@
     const srt=await runSRT(DUR.srt); if(abortFlag) return;
     const stro=await runStroop(DUR.stroop); if(abortFlag) return;
 
-    // Transition countdown before 2-back
-    show(transitionNotice); hide(srtPane); hide(stroopPane); hide(nbackPane);
-    await sectionTimer("Prepare: 2-back",DUR.transition,(tleft,p)=>{
-      const secs=Math.ceil(tleft);
-      countdown.textContent=secs+"s";
-      transitionText.textContent="2-back (working memory) starts in " + secs + "…";
-      const elapsed = DUR.warmup + DUR.srt + DUR.stroop + (DUR.transition - tleft);
-      setProgress(elapsed / TOTAL_TIME);
-    });
-    hide(transitionNotice);
+    // Pre 2-back interactive start with 10s timeout
+    const started = await waitForNbackStart(10000);
+    hide(preNbackPane);
+    if(!started){
+      hide(testCard);
+      alert("2-back segment was not started within 10 seconds. The Two-Minute Drill has been cancelled. Please run the drill again for valid results.");
+      return;
+    }
 
     const nb=await runTwoBack(DUR.nbackGroups); if(abortFlag) return;
     sessionResult=computeScoring(srt,stro,nb,baselineSessions);
@@ -272,6 +275,31 @@
         if(t<total) requestAnimationFrame(frame); else res();
       }
       requestAnimationFrame(frame);
+    });
+  }
+
+  // Wait for "Tap to begin 2-Back Test" with timeout
+  function waitForNbackStart(timeoutMs){
+    show(preNbackPane); hide(srtPane); hide(stroopPane); hide(nbackPane);
+    preNbackHint.textContent="If you don’t start within about 10 seconds, this drill will be cancelled.";
+    countdown.textContent="—";
+    stepName.textContent="Prepare: 2-back";
+
+    return new Promise(res=>{
+      let done=false;
+      function finish(ok){
+        if(done) return;
+        done=true;
+        startNbackBtn.removeEventListener('click', onClick);
+        clearTimeout(to);
+        res(ok);
+      }
+      function onClick(){
+        finish(true);
+      }
+      startNbackBtn.disabled=false;
+      startNbackBtn.addEventListener('click', onClick);
+      const to=setTimeout(()=>finish(false), timeoutMs);
     });
   }
 
@@ -475,9 +503,9 @@
 
     function sdEff(key, raw){
       let min=0;
-      if(key==="srt_median") min=30;        // ms
-      else if(key==="stro_mean_rt") min=50; // ms
-      else if(key==="stro_cost") min=25;    // ms
+      if(key==="srt_median") min=30;        // ms floor for med RT
+      else if(key==="stro_mean_rt") min=50; // ms floor for Stroop RT
+      else if(key==="stro_cost") min=25;    // ms floor for cost
       if(!isFinite(raw) || raw<=0) return min || 1;
       return Math.max(raw, min || raw);
     }
@@ -500,7 +528,7 @@
       stro_cost:zLower("stro_cost"),
       stro_acc:zHigher("stro_acc"),
       stro_rt:zLower("stro_mean_rt"),
-      nb_d:zLower("nb_d"),
+      nb_d:zHigher("nb_d"),            // higher d′ = better
       nb_hit_rt:zLower("nb_hit_rt"),
       nb_fa:zLower("nb_fa")
     };
@@ -518,21 +546,15 @@
     const zNback=comp(["nb_d","nb_hit_rt","nb_fa"]);
     const maxZ=Math.max(zSpeed||0,zStroop||0,zNback||0);
 
-    let readiness=Math.round(100-clamp(10*maxZ,0,50));
+    // Internal readiness index (not shown to user)
+    const readiness=Math.round(100-clamp(10*maxZ,0,50));
 
     const hasBaseline=baseline.length>=BASELINE_MIN;
-    let light="amber", label="Caution", guidance="Delay 15–30 minutes, hydrate/snack, then re-test. Consider a safety pilot or deferring non-essential legs.";
-    if((maxZ<1.0)&&readiness>=85){ light="green"; label="Fit"; guidance="Proceed if all other IM SAFE items are satisfied."; }
-    else if(maxZ>=2.0 || readiness<70){ light="red"; label="No-Go"; guidance="Do not act as PIC. Address sleep/stress/alcohol/meds and re-test later."; }
 
     // Softer lapse rule
     const baseLaps = base.mean.srt_lapses;
     const lapseThreshold = (isFinite(baseLaps) ? baseLaps + 3 : 4);
-    if( (srt.lapses >= 4) || (isFinite(baseLaps) && srt.lapses >= lapseThreshold) ){
-      light="red"; label="No-Go";
-      guidance="Do not act as PIC. Frequent lapses in vigilance detected; address fatigue, stress, or impairment and re-test later.";
-      readiness=Math.min(readiness,69);
-    }
+    let lapseFlag = ( (srt.lapses >= 4) || (isFinite(baseLaps) && srt.lapses >= lapseThreshold) );
 
     // T-score for Stroop acc
     let stroopTScore=NaN, stroopMessage="—";
@@ -540,29 +562,65 @@
       const zSt=(today.stro_score-base.mean.stro_score)/base.sd.stro_score;
       stroopTScore=50+10*zSt;
       const drop=(50-stroopTScore)/50;
-      if(drop<=0.10) stroopMessage="No significant decline in executive function compared to baseline score.";
-      else if(drop>0.10 && drop<=0.15000) stroopMessage="Small executive function deficit detected compared to baseline score.";
-      else if(drop>0.15001 && drop<=0.20) stroopMessage="Significant executive function deficit detected compared to baseline score. Reconsider performing a flight.";
-      else if(drop>0.20) stroopMessage="Substantial executive function deficit detected compared to baseline score. You are strongly encouraged to scrub your flight.";
+      if(drop<=0.10) stroopMessage="No meaningful decline in executive function compared to your baseline.";
+      else if(drop>0.10 && drop<=0.15000) stroopMessage="Small executive function dip relative to baseline—worth noticing.";
+      else if(drop>0.15001 && drop<=0.20) stroopMessage="Noticeable executive function deficit compared to baseline. Pause and reflect before taking on demanding tasks.";
+      else if(drop>0.20) stroopMessage="Substantial executive function deficit vs baseline. If your device seems fine, assume you’re having an off day.";
     } else {
       stroopMessage="Collect at least 3 baseline sessions to enable T-score comparison.";
     }
 
+    // Qualitative status label
+    let statusLabel="Baseline needed", light="amber", qualitativeLevel="baseline";
+    if(hasBaseline){
+      if(maxZ < 0.75){
+        statusLabel="Near baseline";
+        light="green"; qualitativeLevel="near";
+      } else if(maxZ < 1.5){
+        statusLabel="Mildly below baseline";
+        light="amber"; qualitativeLevel="mild";
+      } else if(maxZ < 2.5){
+        statusLabel="Moderately below baseline";
+        light="amber"; qualitativeLevel="moderate";
+      } else {
+        statusLabel="Well below baseline";
+        light="red"; qualitativeLevel="high";
+      }
+    }
+
+    // If lapses are significantly elevated, bump concern
+    if(hasBaseline && lapseFlag){
+      statusLabel="Well below baseline";
+      light="red"; qualitativeLevel="high";
+    }
+
+    // Narrative guidance
+    let guidance="";
     if(!hasBaseline){
-      light="amber"; label="Baseline required";
-      guidance="Establish your personal baseline (≥3 sessions on good days). Until then, do not use this tool for go/no-go decisions.";
+      guidance="You need several good-days’ worth of baseline sessions on this device before these scores mean much. Use this as practice only for now.";
+    } else {
+      if(qualitativeLevel==="near"){
+        guidance="Today’s performance is close to your personal baseline on this device. If your phone or tablet seems to be behaving normally, this looks like a typical day for you.";
+      } else if(qualitativeLevel==="mild"){
+        guidance="You’re a bit below your usual baseline. Consider food, hydration, or a short break, then re-run the drill if you’re planning a cognitively demanding task.";
+      } else if(qualitativeLevel==="moderate"){
+        guidance="You’re noticeably below your typical scores. If your device seems to be working normally, treat this as a real yellow flag and think carefully about workload, conditions, and alternatives.";
+      } else { // high
+        guidance="You’re well below your usual performance. If your phone or tablet appears to be working fine, assume attention or working memory may be degraded today and make a very conservative plan.";
+      }
     }
 
     const drivers=[];
-    if(Number.isFinite(zSpeed)&&zSpeed>=1) drivers.push("slower reaction & vigilance");
-    if(Number.isFinite(zStroop)&&zStroop>=1) drivers.push("reduced attention control");
-    if(Number.isFinite(zNback)&&zNback>=1) drivers.push("weaker working memory");
-    const driver=!hasBaseline? "Baseline not established." : (drivers.length?("Top driver: "+drivers.join(" + ")):"Near baseline across domains.");
+    if(Number.isFinite(zSpeed)&&zSpeed>=1) drivers.push("slower reaction / more lapses");
+    if(Number.isFinite(zStroop)&&zStroop>=1) drivers.push("weaker color–word control");
+    if(Number.isFinite(zNback)&&zNback>=1) drivers.push("reduced 2-back working memory");
+    const driver=!hasBaseline? "Baseline not established yet; this run is best treated as practice." :
+      (drivers.length?("Most of the difference from baseline seems to come from: "+drivers.join(" + ")+"."):"Nothing stands far from your baseline; differences are small and spread across domains.");
 
-    const nbackNote = (DUR.nbackGroups<=5) ? "Note: 2-back d′ is based on 5 groups and scaled for small-sample stability; consider optional 10–20 groups for research-grade work." : "";
+    const nbackNote = (DUR.nbackGroups<=5) ? "Note: 2-back d′ is based on 5 groups and scaled for small-sample stability; for research-level work you’d want 10–20 groups." : "";
 
     return {today,baseStats:base,z:{speed:zSpeed,stroop:zStroop,nback:zNback,max:maxZ},
-            readiness,light,label,guidance,driver,hasBaseline,stroopTScore,stroopMessage,nbackNote};
+            readiness,light,statusLabel,guidance,driver,hasBaseline,stroopTScore,stroopMessage,nbackNote};
   }
 
   function computeBaselineStats(b){
@@ -578,9 +636,8 @@
 
   function renderResults(res,srt,stro,nb){
     hide(testCard); show(resultCard);
-    readinessPct.textContent=res.hasBaseline? (res.readiness+"%"):"—";
     lightDot.className="dot "+(res.hasBaseline?(res.light==="green"?"green":res.light==="red"?"red":"amber"):"amber");
-    lightLabel.textContent=res.hasBaseline? res.label:"Baseline required";
+    statusText.textContent=res.hasBaseline? res.statusLabel:"Baseline needed";
     driverText.textContent=res.driver;
     guidanceText.textContent=res.guidance;
 
@@ -627,7 +684,7 @@
     const {res}=payload;
     const today=res.today;
     baselineSessions.push(today); saveBaseline(baselineSessions);
-    alert("Added to baseline. Collect at least 3 baseline sessions on good days to enable assessment.");
+    alert("Added to baseline. Collect at least 3 baseline sessions on good days to make the comparisons meaningful.");
   }
 
   function exportPDF(){
@@ -639,7 +696,7 @@
       .muted{color:#555}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{border:1px solid #ddd;border-radius:8px;padding:12px}
       .mono{font-family:ui-monospace,Menlo,Monaco,Consolas}</style></head><body>
       <h1>IM SAFE — Two-Minute Drill (Summary)</h1>
-      <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount} • Version: v0.4 experimental</div>`;
+      <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount} • Version: v0.6 experimental</div>`;
     if(!payload){
       html+=`<p>No recent test run to export.</p></body></html>`;
       const w=window.open("","_blank"); w.document.write(html); w.print(); return;
@@ -649,9 +706,9 @@
     html+=`
       <h2>Overall</h2>
       <div class="box">
-        <div><b>Assessment:</b> ${res.hasBaseline?res.label:"Baseline required"} ${res.hasBaseline?("• Readiness "+res.readiness+"%"):""}</div>
-        <div><b>Guidance:</b> ${res.guidance}</div>
-        <div><b>Driver:</b> ${res.driver}</div>
+        <div><b>Status:</b> ${res.statusLabel}${res.hasBaseline?" (baseline-referenced)":" (baseline not yet established)"}</div>
+        <div><b>Qualitative guidance:</b> ${res.guidance}</div>
+        <div><b>What seems to be driving the difference:</b> ${res.driver}</div>
       </div>
       <div class="grid" style="margin-top:10px">
         <div class="box">
@@ -666,7 +723,7 @@
           <div>Accuracy: <b>${fmt(stro.acc)}%</b></div>
           <div>Mean RT (correct): <b>${fmt(stro.meanRTCorrect)} ms</b></div>
           <div>Cost (incong − cong): <b>${isFinite(stro.congruencyCost)?fmt(stro.congruencyCost):"—"} ms</b></div>
-          <div>T-Score vs baseline: <b>${isFinite(res.stroopTScore)?fmt(res.stroopTScore):"—"}</b></div>
+          <div>T-score vs baseline (accuracy): <b>${isFinite(res.stroopTScore)?fmt(res.stroopTScore):"—"}</b></div>
           <div><i>${res.stroopMessage}</i></div>
         </div>
       </div>
