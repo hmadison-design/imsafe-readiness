@@ -30,9 +30,10 @@
   .chip{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid #223042;background:#101826}
   .bar{height:10px;border-radius:999px;background:#1a2330;overflow:hidden}
   .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4da3ff,#13c27a)}
-  .tapTarget{width:240px;height:240px;border-radius:999px;background:#3a485c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;user-select:none;cursor:pointer}
+  .tapTarget{width:240px;height:240px;border-radius:999px;background:#3a485c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;user-select:none;cursor:pointer;transition:background .1s,transform .05s}
   .tapTarget.ready{background:#6a7688}
   .tapTarget.go{background:#3aa657}
+  .tapTarget.active{transform:scale(.97);filter:brightness(1.05)}
   .wordBox{font-weight:900;font-size:2.6rem;letter-spacing:.02em;padding:.2rem .6rem;border-radius:.5rem;background:#0e1520;min-width:8ch}
   .hide{display:none}
   #btnMatch,#btnMismatch{min-width:160px}
@@ -45,7 +46,7 @@
 <div class="wrap">
   <header class="card">
     <h1>IM SAFE — Two-Minute Drill</h1>
-    <div class="muted">A 120-second, baseline-referenced snapshot of cognitive speed, attention control, and working memory. <span class="pill">Local &amp; private</span></div>
+    <div class="muted">A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory. <span class="pill">Local &amp; private</span></div>
     <div class="hr"></div>
     <div class="grid grid-2">
       <div>
@@ -164,7 +165,7 @@
   const sd=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));};
   const now=()=>performance.now();
 
-  // Test controls: pointerdown-only + debounce
+  // Test controls: pointerdown-only + debounce (tap feedback)
   const lastPress=new WeakMap();
   function onPressPointer(el,fn,db=200){
     function down(e){
@@ -172,7 +173,8 @@
       const t=now(), last=lastPress.get(el)||0;
       if(t-last<db) return;
       lastPress.set(el,t);
-      el.classList.add('active'); fn(e);
+      el.classList.add('active');
+      fn(e);
     }
     const up=()=>el.classList.remove('active');
     el.addEventListener('pointerdown',down,{passive:false});
@@ -203,7 +205,7 @@
   function hide(el){el.classList.add("hide");}
   function setProgress(p){progressBar.style.width=(p*100).toFixed(1)+"%";}
 
-  // Bind TOP-LEVEL buttons with plain click
+  // Top-level click bindings
   startBtn.addEventListener('click', runTest);
   againBtn.addEventListener('click', runTest);
   addBaselineBtn.addEventListener('click', addCurrentToBaseline);
@@ -238,13 +240,19 @@
     return new Promise(res=>{function frame(){const t=now()-t0; if(abortFlag) return res(); const rem=Math.max(0,total-t); const p=clamp(t/total,0,1); tick(rem/1000,p); if(t<total) requestAnimationFrame(frame); else res();} requestAnimationFrame(frame);});
   }
 
-  // SRT (lapse > 500 ms)
+  // ------------ Simple Reaction Time (1.5–4.0 s gaps, more variability) ------------
+  function randomGap(){
+    // Option C: conservative variability, 1500–4000 ms, uniform
+    return 1500 + Math.random()*2500;
+  }
+
   async function runSRT(sec){
     show(srtPane); hide(stroopPane); hide(nbackPane);
     let rts=[], falseStarts=0, lapses=0, waiting=true, goTime=0; const endAt=now()+sec*1000;
 
     function scheduleNext(){
-      waiting=true; const delay=1200+Math.random()*1300;
+      waiting=true;
+      const delay=randomGap();
       srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
       setTimeout(()=>{ if(now()>endAt) return; srtTarget.textContent="TAP"; srtTarget.className="tapTarget go"; waiting=false; goTime=now(); },delay);
     }
@@ -265,7 +273,7 @@
     return {medianRT,lapses,falseStarts,n:rts.length};
   }
 
-  // Stroop (balanced; 400 ms ISI; no immediate repeats; 4 colors)
+  // ------------ Stroop (true 50/50, no immediate repeats) ------------
   async function runStroop(sec){
     show(stroopPane); hide(srtPane); hide(nbackPane);
     const names=["RED","GREEN","BLUE","YELLOW"];
@@ -274,17 +282,38 @@
     const endAt=now()+sec*1000, gap=400;
 
     function nextPair(){
-      const wantCong = Math.random()<0.5;
-      let word; do{word=names[Math.floor(Math.random()*names.length)];}while(word===prevWord);
-      let colorName;
+      const wantCong = Math.random()<0.5; // target 50/50
+
+      // allowed words (no immediate word repeat)
+      let wordChoices = names.filter(w=>w!==prevWord);
+      if(!wordChoices.length) wordChoices = names.slice();
+      let word = wordChoices[Math.floor(Math.random()*wordChoices.length)];
+
+      // allowed colors (no immediate color repeat)
+      let colorChoices = names.filter(c=>c!==prevColor);
+      if(!colorChoices.length) colorChoices = names.slice();
+
       if(wantCong){
-        colorName=word;
-        if(colorName===prevColor){ const others=names.filter(n=>n!==word && n!==prevWord); word=others[Math.floor(Math.random()*others.length)]; colorName=word; }
-      }else{
-        do{ colorName=names[Math.floor(Math.random()*names.length)]; } while(colorName===word || colorName===prevColor);
+        // congruent: color = word, but also avoid repeating previous color if possible
+        if(word === prevColor){
+          const otherWords = wordChoices.filter(w=>w!==prevColor);
+          if(otherWords.length){
+            word = otherWords[Math.floor(Math.random()*otherWords.length)];
+          }
+        }
+        const colorName = word;
+        prevWord = word; prevColor = colorName;
+        return {word,colorName,congruent:true};
+      } else {
+        // incongruent: color != word
+        let incongChoices = colorChoices.filter(c=>c!==word);
+        if(!incongChoices.length){
+          incongChoices = names.filter(c=>c!==word);
+        }
+        const colorName = incongChoices[Math.floor(Math.random()*incongChoices.length)];
+        prevWord = word; prevColor = colorName;
+        return {word,colorName,congruent:false};
       }
-      prevWord=word; prevColor=colorName;
-      return {word,colorName,congruent:(word===colorName)};
     }
 
     let current=null;
@@ -324,7 +353,7 @@
     return {acc,meanRTCorrect,congruencyCost,n:trials.length,stroopScore, nCong:cong.length, nIncong:incong.length};
   }
 
-  // 2-back (A,B flash; C appears once and persists)
+  // ------------ 2-back (grouped, C persists; small-sample d′ scaling) ------------
   async function runTwoBack(groups){
     show(nbackPane); hide(srtPane); hide(stroopPane);
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
@@ -365,11 +394,18 @@
 
     await doGroup();
 
-    const total=groups, targets=Math.max(1, hits+miss), nonTargets=Math.max(1, total-(hits+miss));
+    const total=groups;
+    const targets=Math.max(1, hits+miss);
+    const nonTargets=Math.max(1, total-(hits+miss));
     const hitRate=(hits/targets)*100, faRate=(fas/nonTargets)*100;
-    const dprime=dPrimeApprox(hitRate/100, faRate/100);
+    const rawD=dPrimeApprox(hitRate/100, faRate/100);
+    let scaledD = rawD;
+    if(isFinite(rawD)){
+      if(total<=5) scaledD = rawD*0.4;     // shrink exaggerated d' with small N
+      else if(total<=10) scaledD = rawD*0.7;
+    }
     const meanHitRT=hitRTs.length?mean(hitRTs):NaN;
-    return {hitRate,faRate,dprime,meanHitRT,counts:{hits,fas,miss},groups:total};
+    return {hitRate,faRate,dprime:scaledD,rawDprime:rawD,meanHitRT,counts:{hits,fas,miss},groups:total};
   }
 
   function dPrimeApprox(H,F){
@@ -395,8 +431,9 @@
     return invNorm(H)-invNorm(F);
   }
 
-  // Scoring & Baseline
+  // ------------ Scoring & Baseline ------------
   function computeScoring(srt,stro,nb,baseline){
+    // apply small-sample scaled d' in stats
     const today={ srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
       stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
       nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT };
@@ -420,7 +457,7 @@
     else if(maxZ>=2.0 || readiness<70){ light="red"; label="No-Go"; guidance="Do not act as PIC. Address sleep/stress/alcohol/meds and re-test later."; }
     if(srt.lapses>=2 || (isFinite(stro.acc)&&stro.acc<85)){ light="red"; label="No-Go"; guidance="Do not act as PIC. Significant attention/alertness degradation detected."; readiness=Math.min(readiness,69); }
 
-    // T-score
+    // T-score for Stroop
     let stroopTScore=NaN, stroopMessage="—";
     if(isFinite(today.stro_score)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
       const zSt=(today.stro_score-base.mean.stro_score)/base.sd.stro_score;
@@ -442,7 +479,7 @@
     if(Number.isFinite(zNback)&&zNback>=1) drivers.push("weaker working memory");
     const driver=!hasBaseline? "Baseline not established." : (drivers.length?("Top driver: "+drivers.join(" + ")):"Near baseline across domains.");
 
-    const nbackNote = (DUR.nbackGroups<=5) ? "Note: 2-back d′ is based on 5 trials and may be unstable; consider optional 10–20 groups for research-grade stability." : "";
+    const nbackNote = (DUR.nbackGroups<=5) ? "Note: 2-back d′ is based on 5 groups and scaled for small-sample stability; consider optional 10–20 groups for research-grade work." : "";
 
     return {today,baseStats:base,z:{speed:zSpeed,stroop:zStroop,nback:zNback,max:maxZ},
             readiness,light,label,guidance,driver,hasBaseline,stroopTScore,stroopMessage,nbackNote};
@@ -465,6 +502,7 @@
     addBaselineBtn.disabled=false; addBaselineBtn2.disabled=false;
 
     const totalPresses=srt.falseStarts+srt.n, fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
+    const shownNbD = res.today.nb_d;
 
     metricToday.innerHTML=[
       `Reaction median: <b>${fmt(srt.medianRT)} ms</b>`,
@@ -474,7 +512,7 @@
       `Stroop accuracy: <b>${fmt(stro.acc)}%</b>`,
       `Stroop mean RT: <b>${fmt(stro.meanRTCorrect)} ms</b>`,
       `Stroop cost: <b>${isFinite(stro.congruencyCost)?fmt(stro.congruencyCost):"—"} ms</b>`,
-      `2-back d′: <b>${isFinite(nb.dprime)?fmt(nb.dprime):"—"}</b>`,
+      `2-back d′ (scaled): <b>${isFinite(shownNbD)?fmt(shownNbD):"—"}</b>`,
       `2-back hits / FA / miss: <b>${nb.counts.hits}/${nb.counts.fas}/${nb.counts.miss}</b>`,
       res.nbackNote? `<span class="muted">${res.nbackNote}</span>` : ``
     ].map(x=>`<div>${x}</div>`).join("");
@@ -489,7 +527,7 @@
       baseLine("Stroop mean RT","stro_mean_rt"," ms"),
       baseLine("Stroop cost","stro_cost"," ms"),
       baseLine("Stroop score (acc)","stro_score",""),
-      baseLine("2-back d′","nb_d",""),
+      baseLine("2-back d′ (scaled)","nb_d",""),
     ].join("");
 
     resultCard.dataset.payload=JSON.stringify({srt,stro,nb,res});
@@ -497,10 +535,8 @@
 
   function addCurrentToBaseline(){
     const payload=resultCard.dataset.payload?JSON.parse(resultCard.dataset.payload):null; if(!payload) return;
-    const {srt,stro,nb}=payload;
-    const today={ srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
-      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
-      nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT };
+    const {srt,stro,nb,res}=payload;
+    const today=res.today; // already uses scaled d'
     baselineSessions.push(today); saveBaseline(baselineSessions);
     alert("Added to baseline. Collect at least 3 baseline sessions on good days to enable assessment.");
   }
@@ -517,6 +553,7 @@
       <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount}</div>`;
     if(!payload){ html+=`<p>No recent test run to export.</p></body></html>`; const w=window.open("","_blank"); w.document.write(html); w.print(); return; }
     const {srt,stro,nb,res}=payload; const totalPresses=srt.falseStarts+srt.n; const fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
+    const shownNbD = res.today.nb_d;
     html+=`
       <h2>Overall</h2>
       <div class="box">
@@ -543,7 +580,7 @@
       </div>
       <div class="box" style="margin-top:10px">
         <h2>2-back (Working Memory)</h2>
-        <div>d′: <b>${isFinite(nb.dprime)?fmt(nb.dprime):"—"}</b></div>
+        <div>d′ (scaled): <b>${isFinite(shownNbD)?fmt(shownNbD):"—"}</b></div>
         <div>Hits / False Alarms / Misses: <b>${nb.counts.hits}/${nb.counts.fas}/${nb.counts.miss}</b> (${nb.groups} groups)</div>
         ${res.nbackNote?`<div class="muted">${res.nbackNote}</div>`:""}
       </div>
@@ -556,7 +593,7 @@
         Stroop mean RT: ${fmt(res.baseStats.mean.stro_mean_rt)} ms ± ${fmt(res.baseStats.sd.stro_mean_rt)}<br/>
         Stroop cost: ${fmt(res.baseStats.mean.stro_cost)} ms ± ${fmt(res.baseStats.sd.stro_cost)}<br/>
         Stroop score (acc): ${fmt(res.baseStats.mean.stro_score)} ± ${fmt(res.baseStats.sd.stro_score)}<br/>
-        2-back d′: ${fmt(res.baseStats.mean.nb_d)} ± ${fmt(res.baseStats.sd.nb_d)}
+        2-back d′ (scaled): ${fmt(res.baseStats.mean.nb_d)} ± ${fmt(res.baseStats.sd.nb_d)}
       </div></body></html>`;
     const w=window.open("","_blank"); w.document.open(); w.document.write(html); w.document.close(); w.focus(); w.print();
   }
