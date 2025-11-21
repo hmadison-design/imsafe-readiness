@@ -240,10 +240,10 @@
     return new Promise(res=>{function frame(){const t=now()-t0; if(abortFlag) return res(); const rem=Math.max(0,total-t); const p=clamp(t/total,0,1); tick(rem/1000,p); if(t<total) requestAnimationFrame(frame); else res();} requestAnimationFrame(frame);});
   }
 
-  // ------------ Simple Reaction Time (1.5–4.0 s gaps, more variability) ------------
+  // ------------ Simple Reaction Time (1.0–5.5 s gaps) ------------
   function randomGap(){
-    // Option C: conservative variability, 1500–4000 ms, uniform
-    return 1500 + Math.random()*2500;
+    // per your request: 1000–5500 ms, uniform
+    return 1000 + Math.random()*4500;
   }
 
   async function runSRT(sec){
@@ -282,7 +282,7 @@
     const endAt=now()+sec*1000, gap=400;
 
     function nextPair(){
-      const wantCong = Math.random()<0.5; // target 50/50
+      const wantCong = Math.random()<0.5; // 50/50
 
       // allowed words (no immediate word repeat)
       let wordChoices = names.filter(w=>w!==prevWord);
@@ -294,7 +294,7 @@
       if(!colorChoices.length) colorChoices = names.slice();
 
       if(wantCong){
-        // congruent: color = word, but also avoid repeating previous color if possible
+        // congruent: color = word, avoid reusing prevColor when possible
         if(word === prevColor){
           const otherWords = wordChoices.filter(w=>w!==prevColor);
           if(otherWords.length){
@@ -401,7 +401,7 @@
     const rawD=dPrimeApprox(hitRate/100, faRate/100);
     let scaledD = rawD;
     if(isFinite(rawD)){
-      if(total<=5) scaledD = rawD*0.4;     // shrink exaggerated d' with small N
+      if(total<=5) scaledD = rawD*0.4;     // shrink exaggerated d′ for small N
       else if(total<=10) scaledD = rawD*0.7;
     }
     const meanHitRT=hitRTs.length?mean(hitRTs):NaN;
@@ -433,7 +433,6 @@
 
   // ------------ Scoring & Baseline ------------
   function computeScoring(srt,stro,nb,baseline){
-    // apply small-sample scaled d' in stats
     const today={ srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
       stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
       nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT };
@@ -535,8 +534,8 @@
 
   function addCurrentToBaseline(){
     const payload=resultCard.dataset.payload?JSON.parse(resultCard.dataset.payload):null; if(!payload) return;
-    const {srt,stro,nb,res}=payload;
-    const today=res.today; // already uses scaled d'
+    const {res}=payload;
+    const today=res.today; // already uses scaled d′
     baselineSessions.push(today); saveBaseline(baselineSessions);
     alert("Added to baseline. Collect at least 3 baseline sessions on good days to enable assessment.");
   }
