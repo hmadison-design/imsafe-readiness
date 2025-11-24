@@ -1,129 +1,139 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Flying M – Readiness & Risk Tools</title>
-<style>
-  :root{
-    --bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;
-    --accent:#4da3ff;--good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;background:var(--bg);color:var(--ink);
-    font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-  }
-  .wrap{max-width:820px;margin:0 auto;padding:20px}
-  .card{
-    background:var(--card);border-radius:16px;
-    padding:18px 18px 22px;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
-    margin:14px 0;
-  }
-  h1{font-size:1.55rem;margin:.2rem 0 .6rem}
-  h2{font-size:1.15rem;margin:.2rem 0 .4rem}
-  h3{font-size:1rem;margin:.2rem 0 .4rem}
-  .row{display:flex;gap:10px;flex-wrap:wrap}
-  .center{display:flex;justify-content:center;align-items:center;text-align:center}
-  .grid{display:grid;gap:10px}
-  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .muted{color:var(--muted)}
-  .big{font-size:2.2rem;font-weight:700}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace}
-  .btn{
-    appearance:none;border:0;border-radius:14px;
-    padding:14px 18px;font-weight:700;
-    color:#0b0f14;background:var(--accent);
-    cursor:pointer;min-width:150px;user-select:none;
-  }
-  .btn:disabled{opacity:.6;cursor:not-allowed}
-  .btn-ghost{
-    background:transparent;color:var(--ink);
-    border:2px solid #8795a3;
-  }
-  .btn-sm{padding:8px 12px;font-size:.9rem;min-width:0}
-  .btn:active{transform:translateY(1px) scale(.98);opacity:.9}
-  .kbd{
-    display:inline-block;padding:.2rem .45rem;border-radius:.4rem;
-    border:1px solid #2a3850;background:#0c121a;font-weight:700
-  }
-  .pill{
-    display:inline-flex;gap:8px;align-items:center;
-    padding:8px 12px;border-radius:999px;
-    background:#0e141c;border:1px solid #223042;
-    color:var(--muted);font-size:.9rem
-  }
-  .hr{height:1px;background:#213043;margin:12px 0}
-  .bar{height:10px;border-radius:999px;background:#1a2330;overflow:hidden}
-  .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4da3ff,#13c27a)}
-  .tapTarget{
-    width:240px;height:240px;border-radius:999px;
-    background:#3a485c;display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:1.1rem;user-select:none;cursor:pointer;
-    transition:background .1s,transform .05s
-  }
-  .tapTarget.ready{background:#6a7688}
-  .tapTarget.go{background:#3aa657}
-  .tapTarget.active{transform:scale(.97);filter:brightness(1.05)}
-  .wordBox{
-    font-weight:900;font-size:2.6rem;letter-spacing:.02em;
-    padding:.2rem .6rem;border-radius:.5rem;
-    background:#0e1520;min-width:8ch
-  }
-  .hide{display:none}
-  #btnMatch,#btnMismatch{min-width:160px}
-  #btnTarget,#btnNotTarget{min-width:200px}
-  .dot{width:12px;height:12px;border-radius:999px;background:var(--muted);display:inline-block;margin-right:6px}
-  .dot.green{background:var(--good)} .dot.amber{background:var(--warn)} .dot.red{background:var(--bad)}
-  .sectionTitle{margin-top:10px;font-weight:600}
-  .frat-q{
-    display:flex;justify-content:space-between;align-items:flex-start;
-    gap:10px;padding:8px 10px;border-radius:8px;
-    border:1px solid #223042;margin-top:6px
-  }
-  .frat-q-text{flex:1}
-  .frat-q-controls{white-space:nowrap;font-size:.9rem}
-  .chip{
-    display:inline-flex;gap:6px;align-items:center;
-    padding:6px 10px;border-radius:999px;
-    border:1px solid #223042;background:#101826
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>On Second Thought — Pilot Readiness & Risk Tools</title>
+  <style>
+    :root{
+      --bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;
+      --accent:#4da3ff;--good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;background:var(--bg);color:var(--ink);
+      font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    }
+    .wrap{max-width:880px;margin:0 auto;padding:20px}
+    .card{
+      background:var(--card);border-radius:16px;
+      padding:18px 18px 22px;
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      margin:14px 0;
+    }
+    h1{font-size:1.55rem;margin:.2rem 0 .6rem}
+    h2{font-size:1.15rem;margin:.2rem 0 .4rem}
+    h3{font-size:1rem;margin:.2rem 0 .4rem}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .center{display:flex;justify-content:center;align-items:center;text-align:center}
+    .grid{display:grid;gap:10px}
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .muted{color:var(--muted)}
+    .big{font-size:2.2rem;font-weight:700}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace}
+    .btn{
+      appearance:none;border:0;border-radius:14px;
+      padding:14px 18px;font-weight:700;
+      color:#0b0f14;background:var(--accent);
+      cursor:pointer;min-width:150px;user-select:none;
+    }
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .btn-ghost{
+      background:transparent;color:var(--ink);
+      border:2px solid #8795a3;
+    }
+    .btn-sm{padding:8px 12px;font-size:.9rem;min-width:0}
+    .btn:active{transform:translateY(1px) scale(.98);opacity:.9}
+    .kbd{
+      display:inline-block;padding:.2rem .45rem;border-radius:.4rem;
+      border:1px solid #2a3850;background:#0c121a;font-weight:700
+    }
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:8px 12px;border-radius:999px;
+      background:#0e141c;border:1px solid #223042;
+      color:var(--muted);font-size:.9rem
+    }
+    .chip{
+      display:inline-flex;gap:6px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid #223042;background:#101826
+    }
+    .hr{height:1px;background:#213043;margin:12px 0}
+    .bar{height:10px;border-radius:999px;background:#1a2330;overflow:hidden}
+    .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4da3ff,#13c27a)}
+    .tapTarget{
+      width:240px;height:240px;border-radius:999px;
+      background:#3a485c;display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:1.1rem;user-select:none;cursor:pointer;
+      transition:background .1s,transform .05s
+    }
+    .tapTarget.ready{background:#6a7688}
+    .tapTarget.go{background:#3aa657}
+    .tapTarget.active{transform:scale(.97);filter:brightness(1.05)}
+    .wordBox{
+      font-weight:900;font-size:2.6rem;letter-spacing:.02em;
+      padding:.2rem .6rem;border-radius:.5rem;
+      background:#0e1520;min-width:8ch
+    }
+    .hide{display:none}
+    #btnMatch,#btnMismatch{min-width:160px}
+    #btnTarget,#btnNotTarget{min-width:200px}
+    .dot{width:12px;height:12px;border-radius:999px;background:var(--muted);display:inline-block;margin-right:6px}
+    .dot.green{background:var(--good)} .dot.amber{background:var(--warn)} .dot.red{background:var(--bad)}
+    .sectionTitle{margin-top:10px;font-weight:600}
+    .frat-q{
+      display:flex;justify-content:space-between;align-items:flex-start;
+      gap:10px;padding:8px 10px;border-radius:8px;
+      border:1px solid #223042;margin-top:6px
+    }
+    .frat-q-text{flex:1}
+    .frat-q-controls{white-space:nowrap;font-size:.9rem}
+  </style>
 </head>
 <body>
 <div class="wrap">
 
   <!-- MODE CHOOSER -->
   <section id="modeCard" class="card">
-    <h1>Flying M – Readiness &amp; Risk Tools</h1>
-    <div class="muted">
-      Quick, research-informed tools to support IM SAFE and preflight risk thinking.
-      Nothing is stored on a server; everything runs locally in your browser.
-    </div>
+    <header class="row" style="justify-content:space-between;align-items:flex-start">
+      <div class="row" style="align-items:center;gap:10px">
+        <img src="SVG_VERSION_OST_Main_Logo.svg" alt="On Second Thought logo" style="height:42px;">
+        <div>
+          <h1>On Second Thought — Readiness &amp; Risk</h1>
+          <div class="muted">
+            Free tools for OST listeners who pause, think twice, and then go fly on purpose.
+          </div>
+        </div>
+      </div>
+    </header>
+
     <div class="hr"></div>
+
     <div class="grid grid-2">
       <div>
         <h2>Two-Minute Drill</h2>
         <p class="muted">
-          A ~2-minute baseline-referenced check of reaction time, executive function (Stroop),
-          and 2-back working memory.
+          A ~2-minute baseline-referenced snapshot of reaction time, executive function (Stroop),
+          and 2-back working memory. Designed to complement IM SAFE.
         </p>
         <button id="goTmdBtn" type="button" class="btn">Run Two-Minute Drill</button>
       </div>
       <div>
         <h2>FRAT Assessment</h2>
         <p class="muted">
-          FAA-style Flight Risk Assessment Tool (FRAT) for VFR and IFR flights using
-          weighted True/False items and a risk-band matrix.
+          FAA-style Flight Risk Assessment Tool for VFR and IFR flights using weighted True/False items
+          and a VFR/IFR risk-band matrix.
         </p>
         <button id="goFratBtn" type="button" class="btn btn-ghost">Run FRAT Assessment</button>
       </div>
     </div>
+
     <div class="hr"></div>
-    <div class="muted">
-      These tools support, but do not replace, your own aeronautical decision making,
-      your CFI’s guidance, or regulatory requirements.
+    <div class="muted" style="font-size:.9rem">
+      Developed for the <b>On Second Thought</b> safety series — deep dives into real GA accidents and the
+      human factors behind them. These tools support your decision-making; they don’t replace your CFI,
+      the regulations, or your own ADM.
     </div>
   </section>
 
@@ -134,34 +144,39 @@
 
     <header class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
-        <div>
-          <h1>IM SAFE — Two-Minute Drill</h1>
-          <div class="muted">
-            A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory.
-            <span class="pill">Local &amp; private</span>
-            <span class="pill">v0.6 experimental</span>
+        <div class="row" style="align-items:center;gap:10px">
+          <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:28px;opacity:.7;">
+          <div>
+            <h1>IM SAFE — Two-Minute Drill</h1>
+            <div class="muted">
+              A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory.
+              <span class="pill">Local &amp; private</span>
+              <span class="pill">v0.6 experimental</span>
+            </div>
           </div>
         </div>
         <button id="backFromTmd" type="button" class="btn btn-sm btn-ghost">Back to menu</button>
       </div>
+
       <div class="hr"></div>
       <div class="grid grid-2">
         <div>
           <h2>How it works</h2>
           <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
-            <li>Reaction (30s) • Color-Word (45s) • 2-back (5 groups)</li>
-            <li>Compare to your baseline (T-scores for Stroop)</li>
-            <li>Qualitative status: Near / Below / Well below baseline</li>
+            <li>Reaction (30 s) • Color–Word (45 s) • 2-back (5 groups)</li>
+            <li>Compare to your own baseline (per-device)</li>
+            <li>Qualitative status: near, below, or well below baseline</li>
           </ul>
         </div>
         <div>
           <h2>Baseline days</h2>
           <div class="muted">
-            Rested, sober (≥48h alcohol-free), low stress, well-fed/hydrated.
-            Add ≥3 baseline sessions to enable assessment.
+            Use well-rested, low-stress, sober days (≥48 h alcohol-free, no meds affecting cognition)
+            to build your baseline. Aim for at least 3–5 sessions.
           </div>
         </div>
       </div>
+
       <div class="hr"></div>
       <div class="row">
         <button id="startBtn" type="button" class="btn">Start Two-Minute Drill</button>
@@ -236,7 +251,7 @@
       </div>
       <div class="muted" id="driverText" style="margin-top:6px"></div>
       <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
-        <b>Guidance:</b> <span id="guidanceText">—</span>
+        <b>On Second Thought…</b> <span id="guidanceText">—</span>
       </div>
       <div class="grid grid-2">
         <div>
@@ -274,11 +289,13 @@
   <div id="fratRoot" class="hide">
     <section class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
-        <div>
-          <h1>Flight Risk Assessment Tool (FRAT)</h1>
-          <div class="muted">
-            FAA-style True/False risk items with weighted scores and a VFR/IFR risk-band matrix.
-            Scores are local to this device and cleared when you refresh.
+        <div class="row" style="align-items:center;gap:10px">
+          <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:28px;opacity:.7;">
+          <div>
+            <h1>Flight Risk Assessment Tool (FRAT)</h1>
+            <div class="muted">
+              FAA-style True/False risk items with weighted scores and a VFR/IFR risk-band matrix.
+            </div>
           </div>
         </div>
         <button id="backFromFrat" type="button" class="btn btn-sm btn-ghost">Back to menu</button>
@@ -345,7 +362,7 @@
       </div>
       <div class="muted" id="fratNarrative" style="margin-top:6px"></div>
       <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
-        <b>Guidance:</b> <span id="fratGuidance">—</span>
+        <b>On Second Thought…</b> <span id="fratGuidance">—</span>
       </div>
       <div class="grid grid-2">
         <div>
@@ -381,7 +398,6 @@
   $("#backFromFrat").addEventListener("click",()=>{fratRoot.classList.add("hide");modeCard.classList.remove("hide");});
 
   // ---------- Shared helpers ----------
-
   const lastPress=new WeakMap();
   function onPressPointer(el,fn,db=200){
     function down(e){
@@ -407,7 +423,6 @@
   const loadBaseline=()=>{try{return JSON.parse(localStorage.getItem(storeKey)||"[]");}catch{return[];}};
   const saveBaseline=s=>localStorage.setItem(storeKey,JSON.stringify(s||[]));
 
-  // Refs
   const startBtn=$("#startBtn"), addBaselineBtn=$("#addBaselineBtn"), addBaselineBtn2=$("#addBaselineBtn2");
   const resetBaselineBtn=$("#resetBaselineBtn"), exportBtn=$("#exportBtn");
   const testCard=$("#testCard"), stepName=$("#stepName"), countdown=$("#countdown"), progressBar=$("#progressBar");
@@ -439,7 +454,7 @@
   exportBtn.addEventListener('click', exportPDF);
 
   const DUR={warmup:5,srt:30,stroop:45,nbackGroups:5};
-  const TOTAL_TIME = DUR.warmup + DUR.srt + DUR.stroop + 15;
+  const TOTAL_TIME=DUR.warmup + DUR.srt + DUR.stroop + 15;
   const BASELINE_MIN=3;
   let abortFlag=false;
 
@@ -458,7 +473,7 @@
     const srt=await runSRT(DUR.srt); if(abortFlag) return;
     const stro=await runStroop(DUR.stroop); if(abortFlag) return;
 
-    const started = await waitForNbackStart(10000);
+    const started=await waitForNbackStart(10000);
     hide(preNbackPane);
     if(!started){
       hide(testCard);
@@ -534,7 +549,7 @@
     scheduleNext();
     await sectionTimer("Reaction",sec,(tleft,p)=>{
       countdown.textContent=Math.ceil(tleft)+"s";
-      const elapsed = DUR.warmup + (DUR.srt - tleft);
+      const elapsed=DUR.warmup + (DUR.srt - tleft);
       setProgress(elapsed / TOTAL_TIME);
     });
     off();
@@ -550,26 +565,26 @@
     const endAt=now()+sec*1000, gap=400;
 
     function nextPair(){
-      const wantCong = Math.random()<0.5;
-      let wordChoices = names.filter(w=>w!==prevWord);
-      if(!wordChoices.length) wordChoices = names.slice();
-      let word = wordChoices[Math.floor(Math.random()*wordChoices.length)];
-      let colorChoices = names.filter(c=>c!==prevColor);
-      if(!colorChoices.length) colorChoices = names.slice();
+      const wantCong=Math.random()<0.5;
+      let wordChoices=names.filter(w=>w!==prevWord);
+      if(!wordChoices.length) wordChoices=names.slice();
+      let word=wordChoices[Math.floor(Math.random()*wordChoices.length)];
+      let colorChoices=names.filter(c=>c!==prevColor);
+      if(!colorChoices.length) colorChoices=names.slice();
 
       if(wantCong){
-        if(word === prevColor){
-          const other = wordChoices.filter(w=>w!==prevColor);
-          if(other.length) word = other[Math.floor(Math.random()*other.length)];
+        if(word===prevColor){
+          const other=wordChoices.filter(w=>w!==prevColor);
+          if(other.length) word=other[Math.floor(Math.random()*other.length)];
         }
-        const colorName = word;
-        prevWord = word; prevColor = colorName;
+        const colorName=word;
+        prevWord=word; prevColor=colorName;
         return {word,colorName,congruent:true};
-      } else {
-        let incongChoices = colorChoices.filter(c=>c!==word);
-        if(!incongChoices.length) incongChoices = names.filter(c=>c!==word);
-        const colorName = incongChoices[Math.floor(Math.random()*incongChoices.length)];
-        prevWord = word; prevColor = colorName;
+      }else{
+        let incongChoices=colorChoices.filter(c=>c!==word);
+        if(!incongChoices.length) incongChoices=names.filter(c=>c!==word);
+        const colorName=incongChoices[Math.floor(Math.random()*incongChoices.length)];
+        prevWord=word; prevColor=colorName;
         return {word,colorName,congruent:false};
       }
     }
@@ -584,7 +599,8 @@
     function respond(which){
       if(!awaiting) return; awaiting=false;
       const rt=now()-tStim;
-      const correct=(current.word===current.colorName && which==="MATCH") || (current.word!==current.colorName && which==="MISMATCH");
+      const correct=(current.word===current.colorName && which==="MATCH") ||
+                    (current.word!==current.colorName && which==="MISMATCH");
       trials.push({rt,correct,congruent:current.congruent});
       (which==="MATCH"?btnMatch:btnMismatch).classList.add('active');
       queueNext();
@@ -598,7 +614,7 @@
     showTrial();
     await sectionTimer("Color-Word",sec,(tleft,p)=>{
       countdown.textContent=Math.ceil(tleft)+"s";
-      const elapsed = DUR.warmup + DUR.srt + (DUR.stroop - tleft);
+      const elapsed=DUR.warmup + DUR.srt + (DUR.stroop - tleft);
       setProgress(elapsed / TOTAL_TIME);
     });
     offM(); offMM(); window.removeEventListener('keydown',key);
@@ -612,7 +628,7 @@
     const congruencyCost=isFinite(raw)?Math.max(0,raw):NaN;
     const meanRTCorrect=corrects.length?mean(corrects.map(t=>t.rt)):NaN;
     const stroopScore=acc;
-    return {acc,meanRTCorrect,congruencyCost,n:trials.length,stroopScore, nCong:cong.length, nIncong:incong.length};
+    return {acc,meanRTCorrect,congruencyCost,n:trials.length,stroopScore,nCong:cong.length,nIncong:incong.length};
   }
 
   async function runTwoBack(groups){
@@ -638,8 +654,12 @@
           if(!awaiting) return;
           awaiting=false;
           const rt=now()-tStim, correctTarget=(c===a);
-          if(isTarget){ if(correctTarget){ hits++; if(rt>=100 && rt<=3000) hitRTs.push(rt); } else { fas++; } }
-          else { if(correctTarget){ miss++; } }
+          if(isTarget){
+            if(correctTarget){ hits++; if(rt>=100 && rt<=3000) hitRTs.push(rt); }
+            else { fas++; }
+          }else{
+            if(correctTarget){ miss++; }
+          }
           setDigit(c,false); twoBackButtons.style.visibility="hidden";
           offT(); offNT(); offKey(); group++; res();
         }
@@ -660,10 +680,10 @@
     const nonTargets=Math.max(1, total-(hits+miss));
     const hitRate=(hits/targets)*100, faRate=(fas/nonTargets)*100;
     const rawD=dPrimeApprox(hitRate/100, faRate/100);
-    let scaledD = rawD;
+    let scaledD=rawD;
     if(isFinite(rawD)){
-      if(total<=5) scaledD = rawD*0.4;
-      else if(total<=10) scaledD = rawD*0.7;
+      if(total<=5) scaledD=rawD*0.4;
+      else if(total<=10) scaledD=rawD*0.7;
     }
     const meanHitRT=hitRTs.length?mean(hitRTs):NaN;
     return {hitRate,faRate,dprime:scaledD,rawDprime:rawD,meanHitRT,counts:{hits,fas,miss},groups:total};
@@ -694,11 +714,23 @@
     return invNorm(H)-invNorm(F);
   }
 
-  function computeScoring(srt,stro,nb,baseline){
-    const today={ srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
-      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
-      nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT };
+  function computeBaselineStats(b){
+    const keys=["srt_median","srt_lapses","srt_false","stro_acc","stro_mean_rt","stro_cost","stro_score","nb_hit","nb_fa","nb_d","nb_hit_rt"];
+    const meanObj={}, sdObj={};
+    keys.forEach(k=>{
+      const arr=b.map(s=>s[k]).filter(x=>Number.isFinite(x));
+      meanObj[k]=arr.length?mean(arr):NaN;
+      sdObj[k]=arr.length>1?sd(arr):0;
+    });
+    return {mean:meanObj, sd:sdObj, n:b.length};
+  }
 
+  function computeScoring(srt,stro,nb,baseline){
+    const today={
+      srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
+      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
+      nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT
+    };
     const base=computeBaselineStats(baseline);
 
     function sdEff(key, raw){
@@ -736,9 +768,9 @@
     function comp(keys){
       const vals=keys.map(k=>z[k]).filter(Number.isFinite);
       if(!vals.length) return NaN;
-      const srt=vals.slice().sort((a,b)=>a-b);
-      const trim=Math.max(0,Math.floor(srt.length*0.1));
-      return mean(srt.slice(trim, srt.length-trim||undefined));
+      const srtArr=vals.slice().sort((a,b)=>a-b);
+      const trim=Math.max(0,Math.floor(srtArr.length*0.1));
+      return mean(srtArr.slice(trim, srtArr.length-trim||undefined));
     }
 
     const zSpeed=comp(["speed_median","speed_lapses","speed_false"]);
@@ -749,21 +781,21 @@
     const readiness=Math.round(100-clamp(10*maxZ,0,50));
     const hasBaseline=baseline.length>=BASELINE_MIN;
 
-    const baseLaps = base.mean.srt_lapses;
-    const lapseThreshold = (isFinite(baseLaps) ? baseLaps + 3 : 4);
-    let lapseFlag = ( (srt.lapses >= 4) || (isFinite(baseLaps) && srt.lapses >= lapseThreshold) );
+    const baseLaps=base.mean.srt_lapses;
+    const lapseThreshold=(isFinite(baseLaps)? baseLaps+3 : 4);
+    const lapseFlag=((srt.lapses>=4) || (isFinite(baseLaps) && srt.lapses>=lapseThreshold));
 
     let stroopTScore=NaN, stroopMessage="—";
     if(isFinite(today.stro_score)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
       const zSt=(today.stro_score-base.mean.stro_score)/base.sd.stro_score;
       stroopTScore=50+10*zSt;
       const drop=(50-stroopTScore)/50;
-      if(drop<=0.10) stroopMessage="No meaningful decline in executive function compared to your baseline.";
-      else if(drop>0.10 && drop<=0.15000) stroopMessage="Small executive function dip relative to baseline—worth noticing.";
-      else if(drop>0.15001 && drop<=0.20) stroopMessage="Noticeable executive function deficit compared to baseline. Pause and reflect before taking on demanding tasks.";
-      else if(drop>0.20) stroopMessage="Substantial executive function deficit vs baseline. If your device seems fine, assume you’re having an off day.";
+      if(drop<=0.10) stroopMessage="you do not show a meaningful decline in executive function compared to your baseline.";
+      else if(drop>0.10 && drop<=0.15000) stroopMessage="there’s a small dip in executive function relative to baseline — worth noticing, even if it’s subtle.";
+      else if(drop>0.15001 && drop<=0.20) stroopMessage="your executive function is noticeably below baseline. Treat today as a higher-workload day before you add a demanding flight on top.";
+      else if(drop>0.20) stroopMessage="your executive function is substantially below baseline. If your device seems fine, assume you may be having an off day and plan very conservatively—or scrub.";
     } else {
-      stroopMessage="Collect at least 3 baseline sessions to enable T-score comparison.";
+      stroopMessage="you still need at least 3 baseline sessions on this device before Stroop T-scores mean much.";
     }
 
     let statusLabel="Baseline needed", light="amber", qualitativeLevel="baseline";
@@ -789,54 +821,48 @@
 
     let guidance="";
     if(!hasBaseline){
-      guidance="You need several good-days’ worth of baseline sessions on this device before these scores mean much. Use this as practice only for now.";
+      guidance="treat this as a practice run. You still need several good-days’ worth of baseline sessions on this device before the numbers can really tell you anything.";
     } else {
       if(qualitativeLevel==="near"){
-        guidance="Today’s performance is close to your personal baseline on this device. If your phone or tablet seems to be behaving normally, this looks like a typical day for you.";
+        guidance="you’re performing close to your own baseline today. If your phone or tablet seems to be behaving normally, this feels like one of your typical days.";
       } else if(qualitativeLevel==="mild"){
-        guidance="You’re a bit below your usual baseline. Consider food, hydration, or a short break, then re-run the drill if you’re planning a cognitively demanding task.";
+        guidance="you’re a bit softer than usual. This might be a good moment to grab food, water, or a short break, then re-run the drill before you launch into a demanding flight.";
       } else if(qualitativeLevel==="moderate"){
-        guidance="You’re noticeably below your typical scores. If your device seems to be working normally, treat this as a real yellow flag and think carefully about workload, conditions, and alternatives.";
+        guidance="you’re noticeably below baseline. If your device seems fine, treat this as a yellow flag and ask whether today’s conditions and workload really deserve a ‘go’ call.";
       } else {
-        guidance="You’re well below your usual performance. If your phone or tablet appears to be working fine, assume attention or working memory may be degraded today and make a very conservative plan.";
+        guidance="you’re well below your usual performance. Assuming your device is behaving, that’s a strong hint to slow down, build in extra margin, or simply not go today.";
       }
     }
 
     const drivers=[];
-    if(Number.isFinite(zSpeed)&&zSpeed>=1) drivers.push("slower reaction / more lapses");
+    if(Number.isFinite(zSpeed)&&zSpeed>=1) drivers.push("slower reaction and/or more lapses");
     if(Number.isFinite(zStroop)&&zStroop>=1) drivers.push("weaker color–word control");
     if(Number.isFinite(zNback)&&zNback>=1) drivers.push("reduced 2-back working memory");
-    const driver=!hasBaseline? "Baseline not established yet; this run is best treated as practice." :
-      (drivers.length?("Most of the difference from baseline seems to come from: "+drivers.join(" + ")+"."):"Nothing stands far from your baseline; differences are small and spread across domains.");
+    const driver=!hasBaseline
+      ? "Baseline not established yet; this run is best treated as practice."
+      : (drivers.length?("Most of the difference from baseline seems to come from: "+drivers.join(" + ")+".")
+                       :"Nothing stands far from your baseline; differences are small and spread across domains.");
 
-    const nbackNote = (DUR.nbackGroups<=5) ? "Note: 2-back d′ is based on 5 groups and scaled for small-sample stability; for research-level work you’d want 10–20 groups." : "";
+    const nbackNote=(DUR.nbackGroups<=5)
+      ? "Note: 2-back d′ is based on 5 groups and scaled for small-sample stability; for research-level work you’d want 10–20 groups."
+      : "";
 
     return {today,baseStats:base,z:{speed:zSpeed,stroop:zStroop,nback:zNback,max:maxZ},
             readiness,light,statusLabel,guidance,driver,hasBaseline,stroopTScore,stroopMessage,nbackNote};
   }
 
-  function computeBaselineStats(b){
-    const keys=["srt_median","srt_lapses","srt_false","stro_acc","stro_mean_rt","stro_cost","stro_score","nb_hit","nb_fa","nb_d","nb_hit_rt"];
-    const meanObj={}, sdObj={};
-    keys.forEach(k=>{
-      const arr=b.map(s=>s[k]).filter(x=>Number.isFinite(x));
-      meanObj[k]=arr.length?mean(arr):NaN;
-      sdObj[k]=arr.length>1?sd(arr):0;
-    });
-    return {mean:meanObj, sd:sdObj, n:b.length};
-  }
-
   function renderResults(res,srt,stro,nb){
     hide(testCard); show(resultCard);
-    lightDot.className="dot "+(res.hasBaseline?(res.light==="green"?"green":res.light==="red"?"red":"amber"):"amber");
-    statusText.textContent=res.hasBaseline? res.statusLabel:"Baseline needed";
+    const hasBaseline=res.hasBaseline;
+    lightDot.className="dot "+(hasBaseline?(res.light==="green"?"green":res.light==="red"?"red":"amber"):"amber");
+    statusText.textContent=hasBaseline? res.statusLabel:"Baseline needed";
     driverText.textContent=res.driver;
     guidanceText.textContent=res.guidance;
 
     addBaselineBtn.disabled=false; addBaselineBtn2.disabled=false;
 
     const totalPresses=srt.falseStarts+srt.n, fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
-    const shownNbD = res.today.nb_d;
+    const shownNbD=res.today.nb_d;
 
     metricToday.innerHTML=[
       `Reaction median: <b>${fmt(srt.medianRT)} ms</b>`,
@@ -894,13 +920,13 @@
       const w=window.open("","_blank"); w.document.write(html); w.print(); return;
     }
     const {srt,stro,nb,res}=payload; const totalPresses=srt.falseStarts+srt.n; const fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
-    const shownNbD = res.today.nb_d;
+    const shownNbD=res.today.nb_d;
     html+=`
       <h2>Overall</h2>
       <div class="box">
         <div><b>Status:</b> ${res.statusLabel}${res.hasBaseline?" (baseline-referenced)":" (baseline not yet established)"}</div>
-        <div><b>Qualitative guidance:</b> ${res.guidance}</div>
-        <div><b>What seems to be driving the difference:</b> ${res.driver}</div>
+        <div><b>On Second Thought…</b> ${res.guidance}</div>
+        <div><b>Driver:</b> ${res.driver}</div>
       </div>
       <div class="grid" style="margin-top:10px">
         <div class="box">
@@ -916,7 +942,7 @@
           <div>Mean RT (correct): <b>${fmt(stro.meanRTCorrect)} ms</b></div>
           <div>Cost (incong − cong): <b>${isFinite(stro.congruencyCost)?fmt(stro.congruencyCost):"—"} ms</b></div>
           <div>T-score vs baseline (accuracy): <b>${isFinite(res.stroopTScore)?fmt(res.stroopTScore):"—"}</b></div>
-          <div><i>${res.stroopMessage}</i></div>
+          <div><i>On Second Thought… ${res.stroopMessage}</i></div>
         </div>
       </div>
       <div class="box" style="margin-top:10px">
@@ -1012,6 +1038,11 @@
   const fratResultCard=$("#fratResultCard"), fratDot=$("#fratDot"), fratStatusLabel=$("#fratStatusLabel"), fratScoreText=$("#fratScoreText");
   const fratNarrative=$("#fratNarrative"), fratGuidance=$("#fratGuidance"), fratBreakdown=$("#fratBreakdown"), fratBandRef=$("#fratBandRef"), fratExportBtn=$("#fratExportBtn");
 
+  function getSelected(groupName){
+    const n=document.querySelector(`input[name="${groupName}"]:checked`);
+    return n?n.value:null;
+  }
+
   function buildFratForm(){
     const selectedRule=getSelected("fratRules");
     let html="";
@@ -1033,10 +1064,6 @@
         });
     });
     fratQuestionsDiv.innerHTML=html;
-  }
-  function getSelected(groupName){
-    const n=document.querySelector(`input[name="${groupName}"]:checked`);
-    return n?n.value:null;
   }
 
   document.querySelectorAll('input[name="fratRules"]').forEach(r=>r.addEventListener("change",()=>{
@@ -1067,6 +1094,7 @@
       alert(`Please answer all questions. Missing: ${missing.slice(0,3).map(q=>q.text).join("; ")}${missing.length>3?"…":""}`);
       return;
     }
+
     const bands=FRAT_BANDS[rule][exp];
     let status="Below reference band (very low)", dot="green", narrative="";
     let bandRef=`For ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type: Low ${bands.low[0]}–${bands.low[1]}, Moderate ${bands.moderate[0]}–${bands.moderate[1]}, High >${bands.highMin}.`;
@@ -1091,13 +1119,13 @@
 
     let guidance="";
     if(status==="High band"){
-      guidance="This is a strong cue to slow down and think carefully about mitigation, alternatives, or delaying the flight. Talk it through with a trusted CFI or safety-minded pilot if you can.";
+      guidance="this profile really deserves a long pause. Talk it through with a trusted CFI or safety-minded pilot and look hard at mitigation, alternatives, or simply not going.";
     }else if(status==="Moderate band"){
-      guidance="Risk is in the moderate reference band. Make sure each contributing item has an intentional mitigation and that the overall plan still feels conservative for today.";
+      guidance="you’re in the moderate band. Make sure every risk item has an intentional mitigation, and double-check that the overall plan still feels conservative for today.";
     }else if(status==="Low band"){
-      guidance="Overall risk is in the low reference band. Still treat each contributing factor with respect and avoid letting a “good score” push you into marginal decisions.";
+      guidance="the score is in the low band, but each contributing item still deserves respect. Don’t let a ‘good’ number talk you into stretching your comfort zone.";
     }else{
-      guidance="Score is below the typical low band range. This usually reflects a relatively simple, benign profile—but continue to apply normal skepticism and IM SAFE thinking.";
+      guidance="you’re below the typical low band range for this reference FRAT. That usually reflects a fairly benign profile, but the real go/no-go call still lives with you and your IM SAFE check.";
     }
 
     let breakdownHtml="";
@@ -1143,7 +1171,7 @@
         <div><b>Total FRAT score:</b> ${payload.total}</div>
         <div><b>Status:</b> ${payload.status}</div>
         <div><b>Narrative:</b> ${payload.narrative}</div>
-        <div><b>Guidance:</b> ${payload.guidance}</div>
+        <div><b>On Second Thought…</b> ${payload.guidance}</div>
       </div>
       <h2>Score breakdown</h2>
       <div class="box">`;
