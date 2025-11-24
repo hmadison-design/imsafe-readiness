@@ -3,13 +3,24 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>IM SAFE — Two-Minute Drill (Readiness Check)</title>
+<title>Flying M – Readiness & Risk Tools</title>
 <style>
-  :root{ --bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;--accent:#4da3ff;--good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b }
+  :root{
+    --bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;
+    --accent:#4da3ff;--good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b;
+  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
-  .wrap{max-width:760px;margin:0 auto;padding:20px}
-  .card{background:var(--card);border-radius:16px;padding:18px 18px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin:14px 0}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:20px}
+  .card{
+    background:var(--card);border-radius:16px;
+    padding:18px 18px 22px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    margin:14px 0;
+  }
   h1{font-size:1.55rem;margin:.2rem 0 .6rem}
   h2{font-size:1.15rem;margin:.2rem 0 .4rem}
   h3{font-size:1rem;margin:.2rem 0 .4rem}
@@ -20,151 +31,337 @@
   .muted{color:var(--muted)}
   .big{font-size:2.2rem;font-weight:700}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace}
-  .btn{appearance:none;border:0;border-radius:14px;padding:14px 18px;font-weight:700;color:#0b0f14;background:var(--accent);cursor:pointer;min-width:150px;user-select:none}
+  .btn{
+    appearance:none;border:0;border-radius:14px;
+    padding:14px 18px;font-weight:700;
+    color:#0b0f14;background:var(--accent);
+    cursor:pointer;min-width:150px;user-select:none;
+  }
   .btn:disabled{opacity:.6;cursor:not-allowed}
-  .btn-ghost{background:transparent;color:var(--ink);border:2px solid #8795a3}
+  .btn-ghost{
+    background:transparent;color:var(--ink);
+    border:2px solid #8795a3;
+  }
+  .btn-sm{padding:8px 12px;font-size:.9rem;min-width:0}
   .btn:active{transform:translateY(1px) scale(.98);opacity:.9}
-  .kbd{display:inline-block;padding:.2rem .45rem;border-radius:.4rem;border:1px solid #2a3850;background:#0c121a;font-weight:700}
-  .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:#0e141c;border:1px solid #223042;color:var(--muted);font-size:.9rem}
+  .kbd{
+    display:inline-block;padding:.2rem .45rem;border-radius:.4rem;
+    border:1px solid #2a3850;background:#0c121a;font-weight:700
+  }
+  .pill{
+    display:inline-flex;gap:8px;align-items:center;
+    padding:8px 12px;border-radius:999px;
+    background:#0e141c;border:1px solid #223042;
+    color:var(--muted);font-size:.9rem
+  }
   .hr{height:1px;background:#213043;margin:12px 0}
-  .chip{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid #223042;background:#101826}
   .bar{height:10px;border-radius:999px;background:#1a2330;overflow:hidden}
   .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4da3ff,#13c27a)}
-  .tapTarget{width:240px;height:240px;border-radius:999px;background:#3a485c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;user-select:none;cursor:pointer;transition:background .1s,transform .05s}
+  .tapTarget{
+    width:240px;height:240px;border-radius:999px;
+    background:#3a485c;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:1.1rem;user-select:none;cursor:pointer;
+    transition:background .1s,transform .05s
+  }
   .tapTarget.ready{background:#6a7688}
   .tapTarget.go{background:#3aa657}
   .tapTarget.active{transform:scale(.97);filter:brightness(1.05)}
-  .wordBox{font-weight:900;font-size:2.6rem;letter-spacing:.02em;padding:.2rem .6rem;border-radius:.5rem;background:#0e1520;min-width:8ch}
+  .wordBox{
+    font-weight:900;font-size:2.6rem;letter-spacing:.02em;
+    padding:.2rem .6rem;border-radius:.5rem;
+    background:#0e1520;min-width:8ch
+  }
   .hide{display:none}
   #btnMatch,#btnMismatch{min-width:160px}
   #btnTarget,#btnNotTarget{min-width:200px}
-  .dot{width:12px;height:12px;border-radius:999px;background:var(--muted)}
+  .dot{width:12px;height:12px;border-radius:999px;background:var(--muted);display:inline-block;margin-right:6px}
   .dot.green{background:var(--good)} .dot.amber{background:var(--warn)} .dot.red{background:var(--bad)}
+  .sectionTitle{margin-top:10px;font-weight:600}
+  .frat-q{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    gap:10px;padding:8px 10px;border-radius:8px;
+    border:1px solid #223042;margin-top:6px
+  }
+  .frat-q-text{flex:1}
+  .frat-q-controls{white-space:nowrap;font-size:.9rem}
+  .chip{
+    display:inline-flex;gap:6px;align-items:center;
+    padding:6px 10px;border-radius:999px;
+    border:1px solid #223042;background:#101826
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header class="card">
-    <h1>IM SAFE — Two-Minute Drill</h1>
+
+  <!-- MODE CHOOSER -->
+  <section id="modeCard" class="card">
+    <h1>Flying M – Readiness &amp; Risk Tools</h1>
     <div class="muted">
-      A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory.
-      <span class="pill">Local &amp; private</span>
-      <span class="pill">v0.6 experimental</span>
+      Quick, research-informed tools to support IM SAFE and preflight risk thinking.
+      Nothing is stored on a server; everything runs locally in your browser.
     </div>
     <div class="hr"></div>
     <div class="grid grid-2">
       <div>
-        <h2>How it works</h2>
-        <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
-          <li>Reaction (30s) • Color-Word (45s) • 2-back (5 groups)</li>
-          <li>Compare to your baseline (T-scores for Stroop)</li>
-          <li>Qualitative status: Near / Below / Well below baseline</li>
-        </ul>
+        <h2>Two-Minute Drill</h2>
+        <p class="muted">
+          A ~2-minute baseline-referenced check of reaction time, executive function (Stroop),
+          and 2-back working memory.
+        </p>
+        <button id="goTmdBtn" type="button" class="btn">Run Two-Minute Drill</button>
       </div>
       <div>
-        <h2>Baseline days</h2>
-        <div class="muted">Rested, sober (≥48h alcohol-free), low stress, well-fed/hydrated. Add ≥3 baseline sessions to enable assessment.</div>
+        <h2>FRAT Assessment</h2>
+        <p class="muted">
+          FAA-style Flight Risk Assessment Tool (FRAT) for VFR and IFR flights using
+          weighted True/False items and a risk-band matrix.
+        </p>
+        <button id="goFratBtn" type="button" class="btn btn-ghost">Run FRAT Assessment</button>
       </div>
     </div>
     <div class="hr"></div>
-    <div class="row">
-      <button id="startBtn" type="button" class="btn">Start Two-Minute Drill</button>
-      <button id="addBaselineBtn" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
-      <button id="resetBaselineBtn" type="button" class="btn btn-ghost">Manage Baseline</button>
-      <button id="exportBtn" type="button" class="btn btn-ghost">Export PDF</button>
+    <div class="muted">
+      These tools support, but do not replace, your own aeronautical decision making,
+      your CFI’s guidance, or regulatory requirements.
     </div>
-    <div class="muted" style="margin-top:6px">Tip: Put your phone in <span class="kbd">Airplane Mode</span> so notifications don’t interrupt timing.</div>
-  </header>
+  </section>
 
-  <section id="testCard" class="card hide">
-    <div class="row" style="justify-content:space-between;align-items:center">
-      <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
-      <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
-    </div>
-    <div class="bar" style="margin:10px 0 8px"><i id="progressBar"></i></div>
+  <!-- ========================= -->
+  <!-- TWO-MINUTE DRILL ROOT     -->
+  <!-- ========================= -->
+  <div id="tmdRoot" class="hide">
 
-    <!-- SRT -->
-    <div id="srtPane" class="center" style="min-height:260px">
-      <div id="srtTarget" class="tapTarget" role="button" aria-label="Tap when it turns green">WAIT</div>
-    </div>
-
-    <!-- Stroop -->
-    <div id="stroopPane" class="hide" style="min-height:260px">
-      <div class="center" style="margin:10px 0 18px">
-        <div id="stroopWord" class="wordBox mono" aria-live="off">RED</div>
+    <header class="card">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div>
+          <h1>IM SAFE — Two-Minute Drill</h1>
+          <div class="muted">
+            A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory.
+            <span class="pill">Local &amp; private</span>
+            <span class="pill">v0.6 experimental</span>
+          </div>
+        </div>
+        <button id="backFromTmd" type="button" class="btn btn-sm btn-ghost">Back to menu</button>
       </div>
-      <div class="row center" style="justify-content:center">
-        <button id="btnMatch" type="button" class="btn">MATCH</button>
-        <button id="btnMismatch" type="button" class="btn btn-ghost">MISMATCH</button>
-      </div>
-      <div class="muted center" style="margin-top:6px">
-        Keyboard: <span class="kbd">F</span>=MATCH, <span class="kbd">J</span>=MISMATCH
-      </div>
-    </div>
-
-    <!-- Pre 2-back start -->
-    <div id="preNbackPane" class="center hide" style="min-height:120px;margin-top:10px;flex-direction:column;gap:8px;">
-      <div class="muted">When you’re ready, start the working-memory segment.</div>
-      <button id="startNbackBtn" type="button" class="btn">Tap to begin 2-Back Test</button>
-      <div class="muted" id="preNbackHint"></div>
-    </div>
-
-    <!-- 2-back -->
-    <div id="nbackPane" class="hide" style="min-height:260px">
-      <div class="center" style="margin:4px 0 6px;">
-        <div class="pill">Session: <b id="groupLabel">Group 1</b> of 5</div>
-      </div>
-      <div class="center" style="margin:10px 0 18px; min-height:3.2rem">
-        <div id="nbackDigit" class="big mono" style="visibility:hidden">5</div>
-      </div>
-      <div class="center" id="twoBackButtons" style="visibility:hidden">
-        <div class="row center" style="justify-content:center">
-          <button id="btnTarget" type="button" class="btn">TARGET (same as 2 ago)</button>
-          <button id="btnNotTarget" type="button" class="btn btn-ghost">NOT TARGET</button>
+      <div class="hr"></div>
+      <div class="grid grid-2">
+        <div>
+          <h2>How it works</h2>
+          <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
+            <li>Reaction (30s) • Color-Word (45s) • 2-back (5 groups)</li>
+            <li>Compare to your baseline (T-scores for Stroop)</li>
+            <li>Qualitative status: Near / Below / Well below baseline</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Baseline days</h2>
+          <div class="muted">
+            Rested, sober (≥48h alcohol-free), low stress, well-fed/hydrated.
+            Add ≥3 baseline sessions to enable assessment.
+          </div>
         </div>
       </div>
-      <div class="muted center" style="margin-top:6px">Each group: flash 2 digits, then show the 3rd and respond. Keyboard: <span class="kbd">Space</span>=TARGET, <span class="kbd">N</span>=NOT TARGET.</div>
-    </div>
-  </section>
-
-  <section id="resultCard" class="card hide">
-    <h2>Result</h2>
-    <div class="row" style="align-items:center;gap:14px">
-      <div class="scoreLight"><span id="lightDot" class="dot"></span><b id="lightLabel">Overall status</b></div>
-      <div class="big" id="statusText">—</div>
-    </div>
-    <div class="muted" id="driverText" style="margin-top:6px"></div>
-    <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
-      <b>Guidance:</b> <span id="guidanceText">—</span>
-    </div>
-    <div class="grid grid-2">
-      <div>
-        <h3>Today’s metrics</h3>
-        <div class="muted" id="metricToday"></div>
+      <div class="hr"></div>
+      <div class="row">
+        <button id="startBtn" type="button" class="btn">Start Two-Minute Drill</button>
+        <button id="addBaselineBtn" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
+        <button id="resetBaselineBtn" type="button" class="btn btn-ghost">Manage Baseline</button>
+        <button id="exportBtn" type="button" class="btn btn-ghost">Export PDF</button>
       </div>
-      <div>
-        <h3>Baseline (mean ± SD)</h3>
-        <div class="muted" id="metricBase"></div>
+      <div class="muted" style="margin-top:6px">
+        Tip: Put your phone in <span class="kbd">Airplane Mode</span> so notifications don’t interrupt timing.
       </div>
-    </div>
-    <div class="hr"></div>
-    <div class="row">
-      <button id="againBtn" type="button" class="btn">Run Again</button>
-      <button id="addBaselineBtn2" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
-    </div>
-    <div class="muted" style="margin-top:8px">
-      This tool supports—but does not replace—your own judgment and the full IM SAFE self-assessment.
-    </div>
-  </section>
+    </header>
 
-  <section id="baselineCard" class="card hide">
-    <h2>Baseline Sessions</h2>
-    <div id="baselineList" class="muted">No baseline yet.</div>
-    <div class="row" style="margin-top:10px">
-      <button id="deleteBaselineBtn" type="button" class="btn btn-ghost">Delete All Baseline</button>
-      <button id="closeBaselineBtn" type="button" class="btn">Close</button>
-    </div>
-  </section>
+    <section id="testCard" class="card hide">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
+        <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
+      </div>
+      <div class="bar" style="margin:10px 0 8px"><i id="progressBar"></i></div>
+
+      <!-- SRT -->
+      <div id="srtPane" class="center" style="min-height:260px">
+        <div id="srtTarget" class="tapTarget" role="button" aria-label="Tap when it turns green">WAIT</div>
+      </div>
+
+      <!-- Stroop -->
+      <div id="stroopPane" class="hide" style="min-height:260px">
+        <div class="center" style="margin:10px 0 18px">
+          <div id="stroopWord" class="wordBox mono" aria-live="off">RED</div>
+        </div>
+        <div class="row center" style="justify-content:center">
+          <button id="btnMatch" type="button" class="btn">MATCH</button>
+          <button id="btnMismatch" type="button" class="btn btn-ghost">MISMATCH</button>
+        </div>
+        <div class="muted center" style="margin-top:6px">
+          Keyboard: <span class="kbd">F</span>=MATCH, <span class="kbd">J</span>=MISMATCH
+        </div>
+      </div>
+
+      <!-- Pre 2-back start -->
+      <div id="preNbackPane" class="center hide" style="min-height:120px;margin-top:10px;flex-direction:column;gap:8px;">
+        <div class="muted">When you’re ready, start the working-memory segment.</div>
+        <button id="startNbackBtn" type="button" class="btn">Tap to begin 2-Back Test</button>
+        <div class="muted" id="preNbackHint"></div>
+      </div>
+
+      <!-- 2-back -->
+      <div id="nbackPane" class="hide" style="min-height:260px">
+        <div class="center" style="margin:4px 0 6px;">
+          <div class="pill">Session: <b id="groupLabel">Group 1</b> of 5</div>
+        </div>
+        <div class="center" style="margin:10px 0 18px; min-height:3.2rem">
+          <div id="nbackDigit" class="big mono" style="visibility:hidden">5</div>
+        </div>
+        <div class="center" id="twoBackButtons" style="visibility:hidden">
+          <div class="row center" style="justify-content:center">
+            <button id="btnTarget" type="button" class="btn">TARGET (same as 2 ago)</button>
+            <button id="btnNotTarget" type="button" class="btn btn-ghost">NOT TARGET</button>
+          </div>
+        </div>
+        <div class="muted center" style="margin-top:6px">
+          Each group: flash 2 digits, then show the 3rd and respond.
+          Keyboard: <span class="kbd">Space</span>=TARGET, <span class="kbd">N</span>=NOT TARGET.
+        </div>
+      </div>
+    </section>
+
+    <section id="resultCard" class="card hide">
+      <h2>Result</h2>
+      <div class="row" style="align-items:center;gap:14px">
+        <div><span id="lightDot" class="dot"></span><b id="lightLabel">Overall status</b></div>
+        <div class="big" id="statusText">—</div>
+      </div>
+      <div class="muted" id="driverText" style="margin-top:6px"></div>
+      <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
+        <b>Guidance:</b> <span id="guidanceText">—</span>
+      </div>
+      <div class="grid grid-2">
+        <div>
+          <h3>Today’s metrics</h3>
+          <div class="muted" id="metricToday"></div>
+        </div>
+        <div>
+          <h3>Baseline (mean ± SD)</h3>
+          <div class="muted" id="metricBase"></div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="row">
+        <button id="againBtn" type="button" class="btn">Run Again</button>
+        <button id="addBaselineBtn2" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
+      </div>
+      <div class="muted" style="margin-top:8px">
+        This tool supports—but does not replace—your own judgment and the full IM SAFE self-assessment.
+      </div>
+    </section>
+
+    <section id="baselineCard" class="card hide">
+      <h2>Baseline Sessions</h2>
+      <div id="baselineList" class="muted">No baseline yet.</div>
+      <div class="row" style="margin-top:10px">
+        <button id="deleteBaselineBtn" type="button" class="btn btn-ghost">Delete All Baseline</button>
+        <button id="closeBaselineBtn" type="button" class="btn">Close</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========================= -->
+  <!-- FRAT ROOT                 -->
+  <!-- ========================= -->
+  <div id="fratRoot" class="hide">
+    <section class="card">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div>
+          <h1>Flight Risk Assessment Tool (FRAT)</h1>
+          <div class="muted">
+            FAA-style True/False risk items with weighted scores and a VFR/IFR risk-band matrix.
+            Scores are local to this device and cleared when you refresh.
+          </div>
+        </div>
+        <button id="backFromFrat" type="button" class="btn btn-sm btn-ghost">Back to menu</button>
+      </div>
+      <div class="hr"></div>
+
+      <div class="grid grid-2">
+        <div>
+          <h2>Flight profile</h2>
+          <div class="muted">Select flight rules and experience in current aircraft / avionics type.</div>
+          <div class="sectionTitle">Flight rules</div>
+          <div class="row" style="margin-top:4px">
+            <label><input type="radio" name="fratRules" value="VFR"> VFR</label>
+            <label><input type="radio" name="fratRules" value="IFR"> IFR</label>
+          </div>
+          <div class="sectionTitle" style="margin-top:8px">Experience in type</div>
+          <div class="row" style="margin-top:4px">
+            <label><input type="radio" name="fratExp" value="<100"> &lt;100 hours in type</label>
+            <label><input type="radio" name="fratExp" value=">=100"> ≥100 hours in type</label>
+          </div>
+          <div class="muted" style="margin-top:6px">
+            These bands mirror one published FAA FRAT. Your own SOP or CFI may use different thresholds.
+          </div>
+        </div>
+        <div>
+          <h2>Risk bands (reference)</h2>
+          <div class="muted">
+            After scoring, your total will be placed into one of these reference bands.
+            High-band scores are a cue to slow down and think hard about mitigation, alternatives, or delay.
+          </div>
+          <div class="card" style="margin-top:8px;background:#0f1622;border:1px solid #223042">
+            <div class="sectionTitle">IFR</div>
+            <div class="muted">
+              <b>&lt;100 in type:</b> Low 20–25, Moderate 25–30, High &gt;30<br>
+              <b>≥100 in type:</b> Low 25–30, Moderate 30–35, High &gt;35
+            </div>
+            <div class="sectionTitle" style="margin-top:6px">VFR</div>
+            <div class="muted">
+              <b>&lt;100 in type:</b> Low 5–15, Moderate 15–20, High &gt;20<br>
+              <b>≥100 in type:</b> Low 15–20, Moderate 20–25, High &gt;25
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hr"></div>
+
+      <div id="fratQuestions"></div>
+
+      <div class="hr"></div>
+      <div class="row">
+        <button id="fratCalcBtn" type="button" class="btn">Calculate FRAT Score</button>
+        <button id="fratResetBtn" type="button" class="btn btn-ghost">Clear Answers</button>
+      </div>
+      <div class="muted" style="margin-top:6px">
+        All items are True/False. “True” applies the score shown in the FAA table for that condition; “False” contributes zero.
+      </div>
+    </section>
+
+    <section id="fratResultCard" class="card hide">
+      <h2>FRAT Result</h2>
+      <div class="row" style="align-items:center;gap:14px">
+        <div><span id="fratDot" class="dot"></span><b id="fratStatusLabel">—</b></div>
+        <div class="big" id="fratScoreText">—</div>
+      </div>
+      <div class="muted" id="fratNarrative" style="margin-top:6px"></div>
+      <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
+        <b>Guidance:</b> <span id="fratGuidance">—</span>
+      </div>
+      <div class="grid grid-2">
+        <div>
+          <h3>Score breakdown</h3>
+          <div class="muted" id="fratBreakdown"></div>
+        </div>
+        <div>
+          <h3>Band reference</h3>
+          <div class="muted" id="fratBandRef"></div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <button id="fratExportBtn" type="button" class="btn btn-ghost">Open printable summary</button>
+    </section>
+  </div>
+
 </div>
 
 <script>
@@ -176,7 +373,15 @@
   const sd=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));};
   const now=()=>performance.now();
 
-  // Tap handling
+  // MODE TOGGLE
+  const modeCard=$("#modeCard"), tmdRoot=$("#tmdRoot"), fratRoot=$("#fratRoot");
+  $("#goTmdBtn").addEventListener("click",()=>{modeCard.classList.add("hide");tmdRoot.classList.remove("hide");});
+  $("#goFratBtn").addEventListener("click",()=>{modeCard.classList.add("hide");fratRoot.classList.remove("hide");});
+  $("#backFromTmd").addEventListener("click",()=>{tmdRoot.classList.add("hide");modeCard.classList.remove("hide");});
+  $("#backFromFrat").addEventListener("click",()=>{fratRoot.classList.add("hide");modeCard.classList.remove("hide");});
+
+  // ---------- Shared helpers ----------
+
   const lastPress=new WeakMap();
   function onPressPointer(el,fn,db=200){
     function down(e){
@@ -195,6 +400,9 @@
     return()=>{el.removeEventListener('pointerdown',down);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);el.removeEventListener('mouseleave',up);};
   }
 
+  // =====================================================================
+  //                         TWO-MINUTE DRILL
+  // =====================================================================
   const storeKey="flyingm_imsafe_baseline_v2";
   const loadBaseline=()=>{try{return JSON.parse(localStorage.getItem(storeKey)||"[]");}catch{return[];}};
   const saveBaseline=s=>localStorage.setItem(storeKey,JSON.stringify(s||[]));
@@ -207,7 +415,7 @@
   const stroopPane=$("#stroopPane"), stroopWord=$("#stroopWord"), btnMatch=$("#btnMatch"), btnMismatch=$("#btnMismatch");
   const preNbackPane=$("#preNbackPane"), startNbackBtn=$("#startNbackBtn"), preNbackHint=$("#preNbackHint");
   const nbackPane=$("#nbackPane"), nbackDigit=$("#nbackDigit"), btnTarget=$("#btnTarget"), btnNotTarget=$("#btnNotTarget"), twoBackButtons=$("#twoBackButtons"), groupLabel=$("#groupLabel");
-  const resultCard=$("#resultCard"), lightDot=$("#lightDot"), lightLabel=$("#lightLabel"), statusText=$("#statusText"), driverText=$("#driverText"), guidanceText=$("#guidanceText"), metricToday=$("#metricToday"), metricBase=$("#metricBase"), againBtn=$("#againBtn");
+  const resultCard=$("#resultCard"), lightDot=$("#lightDot"), statusText=$("#statusText"), driverText=$("#driverText"), guidanceText=$("#guidanceText"), metricToday=$("#metricToday"), metricBase=$("#metricBase"), againBtn=$("#againBtn");
   const baselineCard=$("#baselineCard"), baselineList=$("#baselineList"), deleteBaselineBtn=$("#deleteBaselineBtn"), closeBaselineBtn=$("#closeBaselineBtn");
 
   let baselineSessions=loadBaseline();
@@ -217,7 +425,6 @@
   function hide(el){el.classList.add("hide");}
   function setProgress(p){progressBar.style.width=(p*100).toFixed(1)+"%";}
 
-  // Buttons
   startBtn.addEventListener('click', runTest);
   againBtn.addEventListener('click', runTest);
   addBaselineBtn.addEventListener('click', addCurrentToBaseline);
@@ -232,7 +439,7 @@
   exportBtn.addEventListener('click', exportPDF);
 
   const DUR={warmup:5,srt:30,stroop:45,nbackGroups:5};
-  const TOTAL_TIME = DUR.warmup + DUR.srt + DUR.stroop + 15; // ~15s budget for 2-back block
+  const TOTAL_TIME = DUR.warmup + DUR.srt + DUR.stroop + 15;
   const BASELINE_MIN=3;
   let abortFlag=false;
 
@@ -251,7 +458,6 @@
     const srt=await runSRT(DUR.srt); if(abortFlag) return;
     const stro=await runStroop(DUR.stroop); if(abortFlag) return;
 
-    // Pre 2-back interactive start with 10s timeout
     const started = await waitForNbackStart(10000);
     hide(preNbackPane);
     if(!started){
@@ -278,13 +484,11 @@
     });
   }
 
-  // Wait for "Tap to begin 2-Back Test" with timeout
   function waitForNbackStart(timeoutMs){
     show(preNbackPane); hide(srtPane); hide(stroopPane); hide(nbackPane);
     preNbackHint.textContent="If you don’t start within about 10 seconds, this drill will be cancelled.";
     countdown.textContent="—";
     stepName.textContent="Prepare: 2-back";
-
     return new Promise(res=>{
       let done=false;
       function finish(ok){
@@ -294,16 +498,13 @@
         clearTimeout(to);
         res(ok);
       }
-      function onClick(){
-        finish(true);
-      }
+      function onClick(){finish(true);}
       startNbackBtn.disabled=false;
       startNbackBtn.addEventListener('click', onClick);
       const to=setTimeout(()=>finish(false), timeoutMs);
     });
   }
 
-  // SRT with 1.0–5.5 s gaps
   function randomGap(){ return 1000 + Math.random()*4500; }
 
   async function runSRT(sec){
@@ -341,7 +542,6 @@
     return {medianRT,lapses,falseStarts,n:rts.length};
   }
 
-  // Stroop
   async function runStroop(sec){
     show(stroopPane); hide(srtPane); hide(nbackPane);
     const names=["RED","GREEN","BLUE","YELLOW"];
@@ -415,7 +615,6 @@
     return {acc,meanRTCorrect,congruencyCost,n:trials.length,stroopScore, nCong:cong.length, nIncong:incong.length};
   }
 
-  // 2-back
   async function runTwoBack(groups){
     show(nbackPane); hide(srtPane); hide(stroopPane);
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
@@ -480,11 +679,13 @@
       const pl=0.02425, ph=1-pl; let q,r;
       if(p<pl){
         q=Math.sqrt(-2*Math.log(p));
-        return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / (((((d[0]*q+d[1])*q+d[2])*q+d[3])*q)+1);
+        return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+               (((((d[0]*q+d[1])*q+d[2])*q+d[3])*q)+1);
       }
       if(p>ph){
         q=Math.sqrt(-2*Math.log(1-p));
-        return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / (((((d[0]*q+d[1])*q+d[2])*q+d[3])*q)+1);
+        return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+               (((((d[0]*q+d[1])*q+d[2])*q+d[3])*q)+1);
       }
       q=p-0.5; r=q*q;
       return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5]) * q /
@@ -493,7 +694,6 @@
     return invNorm(H)-invNorm(F);
   }
 
-  // Scoring
   function computeScoring(srt,stro,nb,baseline){
     const today={ srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
       stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
@@ -503,9 +703,9 @@
 
     function sdEff(key, raw){
       let min=0;
-      if(key==="srt_median") min=30;        // ms floor for med RT
-      else if(key==="stro_mean_rt") min=50; // ms floor for Stroop RT
-      else if(key==="stro_cost") min=25;    // ms floor for cost
+      if(key==="srt_median") min=30;
+      else if(key==="stro_mean_rt") min=50;
+      else if(key==="stro_cost") min=25;
       if(!isFinite(raw) || raw<=0) return min || 1;
       return Math.max(raw, min || raw);
     }
@@ -528,7 +728,7 @@
       stro_cost:zLower("stro_cost"),
       stro_acc:zHigher("stro_acc"),
       stro_rt:zLower("stro_mean_rt"),
-      nb_d:zHigher("nb_d"),            // higher d′ = better
+      nb_d:zHigher("nb_d"),
       nb_hit_rt:zLower("nb_hit_rt"),
       nb_fa:zLower("nb_fa")
     };
@@ -546,17 +746,13 @@
     const zNback=comp(["nb_d","nb_hit_rt","nb_fa"]);
     const maxZ=Math.max(zSpeed||0,zStroop||0,zNback||0);
 
-    // Internal readiness index (not shown to user)
     const readiness=Math.round(100-clamp(10*maxZ,0,50));
-
     const hasBaseline=baseline.length>=BASELINE_MIN;
 
-    // Softer lapse rule
     const baseLaps = base.mean.srt_lapses;
     const lapseThreshold = (isFinite(baseLaps) ? baseLaps + 3 : 4);
     let lapseFlag = ( (srt.lapses >= 4) || (isFinite(baseLaps) && srt.lapses >= lapseThreshold) );
 
-    // T-score for Stroop acc
     let stroopTScore=NaN, stroopMessage="—";
     if(isFinite(today.stro_score)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
       const zSt=(today.stro_score-base.mean.stro_score)/base.sd.stro_score;
@@ -570,7 +766,6 @@
       stroopMessage="Collect at least 3 baseline sessions to enable T-score comparison.";
     }
 
-    // Qualitative status label
     let statusLabel="Baseline needed", light="amber", qualitativeLevel="baseline";
     if(hasBaseline){
       if(maxZ < 0.75){
@@ -587,14 +782,11 @@
         light="red"; qualitativeLevel="high";
       }
     }
-
-    // If lapses are significantly elevated, bump concern
     if(hasBaseline && lapseFlag){
       statusLabel="Well below baseline";
       light="red"; qualitativeLevel="high";
     }
 
-    // Narrative guidance
     let guidance="";
     if(!hasBaseline){
       guidance="You need several good-days’ worth of baseline sessions on this device before these scores mean much. Use this as practice only for now.";
@@ -605,7 +797,7 @@
         guidance="You’re a bit below your usual baseline. Consider food, hydration, or a short break, then re-run the drill if you’re planning a cognitively demanding task.";
       } else if(qualitativeLevel==="moderate"){
         guidance="You’re noticeably below your typical scores. If your device seems to be working normally, treat this as a real yellow flag and think carefully about workload, conditions, and alternatives.";
-      } else { // high
+      } else {
         guidance="You’re well below your usual performance. If your phone or tablet appears to be working fine, assume attention or working memory may be degraded today and make a very conservative plan.";
       }
     }
@@ -759,6 +951,219 @@
       e.preventDefault(); e.returnValue="";
     }
   });
+
+  // =====================================================================
+  //                               FRAT
+  // =====================================================================
+  const FRAT_QUESTIONS = [
+    // Pilot
+    {id:"p_less50", section:"Pilot", text:"Less than 50 hours in aircraft or avionics type", score:5, rules:["VFR","IFR"]},
+    {id:"p_less15_90", section:"Pilot", text:"Less than 15 hours in the last 90 days", score:3, rules:["VFR","IFR"]},
+    {id:"p_after_work", section:"Pilot", text:"Flight will occur after work", score:4, rules:["VFR","IFR"]},
+    {id:"p_less8sleep", section:"Pilot", text:"Less than 8 hours sleep prior to flight", score:5, rules:["VFR","IFR"]},
+    {id:"p_dual_last90", section:"Pilot", text:"Dual instruction received in last 90 days", score:-1, rules:["VFR","IFR"]},
+    {id:"p_wings6mo", section:"Pilot", text:"WINGS phase completion in last 6 months", score:-3, rules:["VFR","IFR"]},
+    {id:"p_ir_current", section:"Pilot", text:"Instrument rating current and proficient", score:-3, rules:["VFR","IFR"]},
+
+    // Flight conditions
+    {id:"fc_twilight_night", section:"Flight Conditions", text:"Twilight or night", score:5, rules:["VFR","IFR"]},
+    {id:"fc_crosswind7", section:"Flight Conditions", text:"Crosswind greater than 7 knots", score:4, rules:["VFR","IFR"]},
+    {id:"fc_surface15", section:"Flight Conditions", text:"Surface wind greater than 15 knots", score:4, rules:["VFR","IFR"]},
+    {id:"fc_mountainous", section:"Flight Conditions", text:"Mountainous terrain", score:4, rules:["VFR","IFR"]},
+
+    // Airport
+    {id:"ap_nontowered", section:"Airport", text:"Non-towered airport or tower closed at ETD or ETA", score:5, rules:["VFR","IFR"]},
+    {id:"ap_wet_soft", section:"Airport", text:"Wet or soft field runway", score:3, rules:["VFR","IFR"]},
+    {id:"ap_short3k", section:"Airport", text:"Runway length less than 3,000 feet", score:3, rules:["VFR","IFR"]},
+    {id:"ap_obstacles", section:"Airport", text:"Obstacles on approach and/or departure", score:3, rules:["VFR","IFR"]},
+
+    // VFR flight plan
+    {id:"vfr_ceiling3k", section:"VFR Flight Plan", text:"Ceiling less than 3,000 feet AGL", score:2, rules:["VFR"]},
+    {id:"vfr_vis5", section:"VFR Flight Plan", text:"Visibility less than 5 SM", score:2, rules:["VFR"]},
+    {id:"vfr_no_wx_dest", section:"VFR Flight Plan", text:"No weather reporting at destination", score:4, rules:["VFR"]},
+    {id:"vfr_fp_filed", section:"VFR Flight Plan", text:"Flight plan filed and activated", score:-2, rules:["VFR"]},
+    {id:"vfr_atc_ff", section:"VFR Flight Plan", text:"ATC flight following used", score:-3, rules:["VFR"]},
+
+    // IFR flight plan
+    {id:"ifr_ceiling1k", section:"IFR Flight Plan", text:"Ceiling less than 1,000 feet AGL", score:2, rules:["IFR"]},
+    {id:"ifr_vis3", section:"IFR Flight Plan", text:"Visibility less than 3 SM", score:2, rules:["IFR"]},
+    {id:"ifr_no_wx_dest", section:"IFR Flight Plan", text:"No weather reporting at destination", score:4, rules:["IFR"]},
+
+    // Approaches
+    {id:"appr_precision", section:"Approaches – Instrument Pilots", text:"Precision approach (best available)", score:-2, rules:["IFR"]},
+    {id:"appr_nonprecision", section:"Approaches – Instrument Pilots", text:"Non precision approach (best available)", score:3, rules:["IFR"]},
+    {id:"appr_no_instr", section:"Approaches – Instrument Pilots", text:"No instrument approach available", score:4, rules:["IFR"]},
+    {id:"appr_circling", section:"Approaches – Instrument Pilots", text:"Circling approach", score:7, rules:["IFR"]}
+  ];
+
+  const FRAT_BANDS = {
+    IFR: {
+      "<100": {low:[20,25], moderate:[25,30], highMin:30},
+      ">=100": {low:[25,30], moderate:[30,35], highMin:35}
+    },
+    VFR: {
+      "<100": {low:[5,15], moderate:[15,20], highMin:20},
+      ">=100": {low:[15,20], moderate:[20,25], highMin:25}
+    }
+  };
+
+  const fratQuestionsDiv=$("#fratQuestions");
+  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn");
+  const fratResultCard=$("#fratResultCard"), fratDot=$("#fratDot"), fratStatusLabel=$("#fratStatusLabel"), fratScoreText=$("#fratScoreText");
+  const fratNarrative=$("#fratNarrative"), fratGuidance=$("#fratGuidance"), fratBreakdown=$("#fratBreakdown"), fratBandRef=$("#fratBandRef"), fratExportBtn=$("#fratExportBtn");
+
+  function buildFratForm(){
+    const selectedRule=getSelected("fratRules");
+    let html="";
+    const sections=[...new Set(FRAT_QUESTIONS.filter(q=>!selectedRule || q.rules.includes(selectedRule)).map(q=>q.section))];
+    if(!selectedRule){
+      html+=`<div class="muted">Select flight rules (VFR or IFR) to see the relevant questions.</div>`;
+    }
+    sections.forEach(sec=>{
+      html+=`<div class="sectionTitle">${sec}</div>`;
+      FRAT_QUESTIONS.filter(q=>q.section===sec && (!selectedRule || q.rules.includes(selectedRule)))
+        .forEach(q=>{
+          html+=`<div class="frat-q" data-qid="${q.id}">
+            <div class="frat-q-text">${q.text}</div>
+            <div class="frat-q-controls">
+              <label><input type="radio" name="frat_${q.id}" value="true"> True</label>
+              <label style="margin-left:6px"><input type="radio" name="frat_${q.id}" value="false"> False</label>
+            </div>
+          </div>`;
+        });
+    });
+    fratQuestionsDiv.innerHTML=html;
+  }
+  function getSelected(groupName){
+    const n=document.querySelector(`input[name="${groupName}"]:checked`);
+    return n?n.value:null;
+  }
+
+  document.querySelectorAll('input[name="fratRules"]').forEach(r=>r.addEventListener("change",()=>{
+    fratResultCard.classList.add("hide");
+    buildFratForm();
+  }));
+  document.querySelectorAll('input[name="fratExp"]').forEach(r=>r.addEventListener("change",()=>{
+    fratResultCard.classList.add("hide");
+  }));
+
+  fratCalcBtn.addEventListener("click",()=>{
+    const rule=getSelected("fratRules");
+    const exp=getSelected("fratExp");
+    if(!rule || !exp){alert("Please select both flight rules (VFR/IFR) and experience in type before scoring.");return;}
+    const questions=FRAT_QUESTIONS.filter(q=>q.rules.includes(rule));
+    let total=0, missing=[];
+    const bySection={};
+    questions.forEach(q=>{
+      const t=document.querySelector(`input[name="frat_${q.id}"][value="true"]`);
+      const f=document.querySelector(`input[name="frat_${q.id}"][value="false"]`);
+      if(!t || !f){return;}
+      if(!t.checked && !f.checked){missing.push(q);return;}
+      if(t.checked) total+=q.score;
+      if(!bySection[q.section]) bySection[q.section]=0;
+      if(t.checked) bySection[q.section]+=q.score;
+    });
+    if(missing.length){
+      alert(`Please answer all questions. Missing: ${missing.slice(0,3).map(q=>q.text).join("; ")}${missing.length>3?"…":""}`);
+      return;
+    }
+    const bands=FRAT_BANDS[rule][exp];
+    let status="Below reference band (very low)", dot="green", narrative="";
+    let bandRef=`For ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type: Low ${bands.low[0]}–${bands.low[1]}, Moderate ${bands.moderate[0]}–${bands.moderate[1]}, High >${bands.highMin}.`;
+
+    if(total>=bands.highMin){
+      status="High band";
+      dot="red";
+      narrative=`Your FRAT score of ${total} falls in the reference HIGH band for ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type.`;
+    }else if(total>=bands.moderate[0] && total<bands.moderate[1]){
+      status="Moderate band";
+      dot="amber";
+      narrative=`Your FRAT score of ${total} falls in the reference MODERATE band for ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type.`;
+    }else if(total>=bands.low[0] && total<bands.low[1]){
+      status="Low band";
+      dot="green";
+      narrative=`Your FRAT score of ${total} falls in the reference LOW band for ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type.`;
+    }else{
+      status="Below reference low band";
+      dot="green";
+      narrative=`Your FRAT score of ${total} is below the typical LOW band range for ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type.`;
+    }
+
+    let guidance="";
+    if(status==="High band"){
+      guidance="This is a strong cue to slow down and think carefully about mitigation, alternatives, or delaying the flight. Talk it through with a trusted CFI or safety-minded pilot if you can.";
+    }else if(status==="Moderate band"){
+      guidance="Risk is in the moderate reference band. Make sure each contributing item has an intentional mitigation and that the overall plan still feels conservative for today.";
+    }else if(status==="Low band"){
+      guidance="Overall risk is in the low reference band. Still treat each contributing factor with respect and avoid letting a “good score” push you into marginal decisions.";
+    }else{
+      guidance="Score is below the typical low band range. This usually reflects a relatively simple, benign profile—but continue to apply normal skepticism and IM SAFE thinking.";
+    }
+
+    let breakdownHtml="";
+    Object.keys(bySection).forEach(sec=>{
+      breakdownHtml+=`<div><b>${sec}:</b> ${bySection[sec]}</div>`;
+    });
+    if(!breakdownHtml) breakdownHtml="<div>No items contributed to this score.</div>";
+
+    fratDot.className="dot "+(dot==="red"?"red":dot==="amber"?"amber":"green");
+    fratStatusLabel.textContent=status;
+    fratScoreText.textContent=String(total);
+    fratNarrative.textContent=narrative;
+    fratGuidance.textContent=guidance;
+    fratBreakdown.innerHTML=breakdownHtml;
+    fratBandRef.textContent=bandRef;
+    fratResultCard.dataset.payload=JSON.stringify({rule,exp,total,status,guidance,narrative,bySection,bands});
+    fratResultCard.classList.remove("hide");
+  });
+
+  fratResetBtn.addEventListener("click",()=>{
+    document.querySelectorAll('input[name^="frat_"]').forEach(i=>{i.checked=false;});
+    fratResultCard.classList.add("hide");
+  });
+
+  fratExportBtn.addEventListener("click",()=>{
+    const payload=fratResultCard.dataset.payload?JSON.parse(fratResultCard.dataset.payload):null;
+    const when=new Date().toLocaleString();
+    const rule=getSelected("fratRules")||"—", exp=getSelected("fratExp")||"—";
+    let html=`<html><head><title>FRAT Summary</title>
+      <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
+      h1{font-size:20px;margin:0 0 6px} h2{font-size:16px;margin:18px 0 6px}
+      .muted{color:#555}.box{border:1px solid #ddd;border-radius:8px;padding:12px}</style></head><body>
+      <h1>Flight Risk Assessment Tool (FRAT)</h1>
+      <div class="muted">Generated: ${when}</div>
+      <div class="muted">Flight rules: ${rule} • Experience in type: ${exp}</div>`;
+    if(!payload){
+      html+=`<p>No FRAT run to export.</p></body></html>`;
+      const w=window.open("","_blank"); w.document.write(html); w.print(); return;
+    }
+    html+=`
+      <h2>Overall</h2>
+      <div class="box">
+        <div><b>Total FRAT score:</b> ${payload.total}</div>
+        <div><b>Status:</b> ${payload.status}</div>
+        <div><b>Narrative:</b> ${payload.narrative}</div>
+        <div><b>Guidance:</b> ${payload.guidance}</div>
+      </div>
+      <h2>Score breakdown</h2>
+      <div class="box">`;
+    Object.keys(payload.bySection).forEach(sec=>{
+      html+=`<div>${sec}: <b>${payload.bySection[sec]}</b></div>`;
+    });
+    html+=`</div>
+      <h2>Reference bands</h2>
+      <div class="box">
+        Low band: ${payload.bands.low[0]}–${payload.bands.low[1]}<br/>
+        Moderate band: ${payload.bands.moderate[0]}–${payload.bands.moderate[1]}<br/>
+        High band: &gt;${payload.bands.highMin}
+      </div>
+      </body></html>`;
+    const w=window.open("","_blank"); w.document.open(); w.document.write(html); w.document.close(); w.focus(); w.print();
+  });
+
+  // initial FRAT UI
+  buildFratForm();
+
 })();
 </script>
 </body>
