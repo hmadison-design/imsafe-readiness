@@ -89,6 +89,21 @@
     }
     .frat-q-text{flex:1}
     .frat-q-controls{white-space:nowrap;font-size:.9rem}
+    /* Mental Status home menu */
+    #tmdMenu{
+      margin-top:10px;
+      background:#0f1622;
+      border:1px solid #223042;
+    }
+    #tmdMenu .btn{
+      margin:4px 6px 4px 0;
+    }
+    a.infoLink{
+      color:var(--accent);
+      text-decoration:none;
+      font-size:.9rem;
+    }
+    a.infoLink:hover{text-decoration:underline}
   </style>
 </head>
 <body>
@@ -148,53 +163,73 @@
   <!-- ========================= -->
   <div id="tmdRoot" class="hide">
 
-    <header class="card">
+    <!-- Mental Status Home -->
+    <section id="tmdHome" class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
-        <div class="row" style="align-items:center;gap:10px">
-          <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:28px;opacity:.7;">
+        <div class="row" style="align-items:center;gap:18px">
+          <div style="background:#ffffff;border-radius:20px;padding:14px 18px;box-shadow:0 10px 26px rgba(0,0,0,0.4);">
+            <img src="SVG_VERSION_OST_Main_Logo.svg"
+                 alt="On Second Thought logo"
+                 style="height:120px;display:block;">
+          </div>
           <div>
             <h1>IM SAFE — Mental Status</h1>
             <div class="muted">
-              Structured snapshot of reaction speed, color–word control, and 2-back working memory.
-              <span class="pill">Local &amp; private</span>
-              <span class="pill">v0.7 experimental</span>
+              A quick mental snapshot before you go fly: reaction speed, color–word control, and 2-back working memory.
+            </div>
+            <div style="margin-top:10px;">
+              <button id="startBtn" type="button" class="btn">Start Mental Status Check</button>
+            </div>
+            <div style="margin-top:8px;">
+              <a href="javascript:void(0)" id="tmdInfoBtn" class="infoLink">What is this?</a>
             </div>
           </div>
         </div>
-        <button id="backFromTmd" type="button" class="btn btn-sm btn-ghost">Back to menu</button>
+        <button id="tmdMenuBtn" type="button" class="btn btn-sm btn-ghost" aria-label="Mental Status menu">☰</button>
       </div>
 
-      <div class="hr"></div>
-      <div class="grid grid-2">
-        <div>
-          <h2>How it works</h2>
-          <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
-            <li>Reaction (30 s) • Color–Word (45 s) • 2-back (12 groups)</li>
-            <li>Compare to your own baseline (per-device)</li>
-            <li>Qualitative status: near, below, or well below baseline</li>
-          </ul>
+      <div id="tmdMenu" class="card hide">
+        <h3>Mental Status menu</h3>
+        <div class="muted" style="margin-bottom:4px;font-size:.9rem">
+          Actions apply to this device only.
         </div>
-        <div>
-          <h2>Baseline days</h2>
-          <div class="muted">
-            Use well-rested, low-stress, sober days (≥48 h alcohol-free, no meds affecting cognition)
-            to build your baseline. Aim for at least 3–5 sessions.
-          </div>
+        <div class="row">
+          <button id="menuAddBaseline" type="button" class="btn btn-sm">Add this result to baseline</button>
+          <button id="menuManageBaseline" type="button" class="btn btn-sm btn-ghost">Manage baseline</button>
+        </div>
+        <div class="row" style="margin-top:6px">
+          <button id="menuExport" type="button" class="btn btn-sm btn-ghost">Export Mental Status PDF</button>
+          <button id="menuMain" type="button" class="btn btn-sm btn-ghost">Main Menu</button>
         </div>
       </div>
+    </section>
 
+    <!-- Info card -->
+    <section id="tmdInfoCard" class="card hide">
+      <h2>About Mental Status</h2>
+      <div class="muted">
+        <p>
+          Mental Status is an experimental, on-device tool inspired by IM SAFE and human factors research.
+          It samples three domains:
+        </p>
+        <ul>
+          <li><b>Reaction:</b> how quickly you respond to a simple “go” cue.</li>
+          <li><b>Color–Word (Stroop):</b> how well you resist interference between words and colors.</li>
+          <li><b>2-back:</b> a small working-memory task, similar to what’s used in many lab studies.</li>
+        </ul>
+        <p>
+          The goal isn’t to diagnose anything. It’s to give you a private, repeatable sense of whether today feels
+          like one of your “good” days, a “soft” day, or a “not today” day—<b>before</b> you add the workload of a flight.
+        </p>
+        <p>
+          All data stays on this device. It’s a supplement to IM SAFE and good ADM, not a replacement.
+        </p>
+      </div>
       <div class="hr"></div>
-      <div class="row">
-        <button id="startBtn" type="button" class="btn">Start Mental Status Check</button>
-        <button id="addBaselineBtn" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
-        <button id="resetBaselineBtn" type="button" class="btn btn-ghost">Manage Baseline</button>
-        <button id="exportBtn" type="button" class="btn btn-ghost">Export PDF</button>
-      </div>
-      <div class="muted" style="margin-top:6px">
-        Tip: Put your phone in <span class="kbd">Airplane Mode</span> so notifications don’t interrupt timing.
-      </div>
-    </header>
+      <button id="tmdInfoBackBtn" type="button" class="btn btn-ghost">Back to Mental Status</button>
+    </section>
 
+    <!-- Test card -->
     <section id="testCard" class="card hide">
       <div class="row" style="justify-content:space-between;align-items:center">
         <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
@@ -249,6 +284,7 @@
       </div>
     </section>
 
+    <!-- Result card -->
     <section id="resultCard" class="card hide">
       <h2>Result</h2>
       <div class="row" style="align-items:center;gap:14px">
@@ -279,6 +315,7 @@
       </div>
     </section>
 
+    <!-- Baseline card -->
     <section id="baselineCard" class="card hide">
       <h2>Baseline Sessions</h2>
       <div id="baselineList" class="muted">No baseline yet.</div>
@@ -398,10 +435,45 @@
 
   // MODE TOGGLE
   const modeCard=$("#modeCard"), tmdRoot=$("#tmdRoot"), fratRoot=$("#fratRoot");
-  $("#goTmdBtn").addEventListener("click",()=>{modeCard.classList.add("hide");tmdRoot.classList.remove("hide");});
-  $("#goFratBtn").addEventListener("click",()=>{modeCard.classList.add("hide");fratRoot.classList.remove("hide");});
-  $("#backFromTmd").addEventListener("click",()=>{tmdRoot.classList.add("hide");modeCard.classList.remove("hide");});
-  $("#backFromFrat").addEventListener("click",()=>{fratRoot.classList.add("hide");modeCard.classList.remove("hide");});
+  const goTmdBtn=$("#goTmdBtn"), goFratBtn=$("#goFratBtn");
+  const tmdHome=$("#tmdHome"), tmdInfoCard=$("#tmdInfoCard");
+  const tmdInfoBtn=$("#tmdInfoBtn"), tmdInfoBackBtn=$("#tmdInfoBackBtn");
+
+  function show(el){el.classList.remove("hide");}
+  function hide(el){el.classList.add("hide");}
+
+  goTmdBtn.addEventListener("click",()=>{
+    modeCard.classList.add("hide");
+    fratRoot.classList.add("hide");
+    tmdRoot.classList.remove("hide");
+    show(tmdHome);
+    hide(tmdInfoCard);
+    hide($("#testCard"));
+    hide($("#resultCard"));
+    hide($("#baselineCard"));
+    hide($("#tmdMenu"));
+  });
+
+  goFratBtn.addEventListener("click",()=>{
+    modeCard.classList.add("hide");
+    tmdRoot.classList.add("hide");
+    fratRoot.classList.remove("hide");
+  });
+
+  $("#backFromFrat").addEventListener("click",()=>{
+    fratRoot.classList.add("hide");
+    modeCard.classList.remove("hide");
+  });
+
+  tmdInfoBtn.addEventListener("click",()=>{
+    hide(tmdHome);
+    hide($("#tmdMenu"));
+    show(tmdInfoCard);
+  });
+  tmdInfoBackBtn.addEventListener("click",()=>{
+    hide(tmdInfoCard);
+    show(tmdHome);
+  });
 
   // ---------- Shared helpers ----------
   const lastPress=new WeakMap();
@@ -429,8 +501,11 @@
   const loadBaseline=()=>{try{return JSON.parse(localStorage.getItem(storeKey)||"[]");}catch{return[];}};
   const saveBaseline=s=>localStorage.setItem(storeKey,JSON.stringify(s||[]));
 
-  const startBtn=$("#startBtn"), addBaselineBtn=$("#addBaselineBtn"), addBaselineBtn2=$("#addBaselineBtn2");
-  const resetBaselineBtn=$("#resetBaselineBtn"), exportBtn=$("#exportBtn");
+  const startBtn=$("#startBtn"), addBaselineBtn2=$("#addBaselineBtn2");
+  const tmdMenuBtn=$("#tmdMenuBtn"), tmdMenu=$("#tmdMenu");
+  const menuAddBaseline=$("#menuAddBaseline"), menuManageBaseline=$("#menuManageBaseline");
+  const menuExport=$("#menuExport"), menuMain=$("#menuMain");
+
   const testCard=$("#testCard"), stepName=$("#stepName"), countdown=$("#countdown"), progressBar=$("#progressBar");
   const srtPane=$("#srtPane"), srtTarget=$("#srtTarget");
   const stroopPane=$("#stroopPane"), stroopWord=$("#stroopWord"), btnMatch=$("#btnMatch"), btnMismatch=$("#btnMismatch");
@@ -442,67 +517,102 @@
   let baselineSessions=loadBaseline();
   let sessionResult=null;
 
-  function show(el){el.classList.remove("hide");}
-  function hide(el){el.classList.add("hide");}
   function setProgress(p){progressBar.style.width=(p*100).toFixed(1)+"%";}
+
+  tmdMenuBtn.addEventListener("click",()=>{
+    if(tmdMenu.classList.contains("hide")) show(tmdMenu); else hide(tmdMenu);
+  });
+
+  menuAddBaseline.addEventListener("click",()=>{
+    hide(tmdMenu);
+    addCurrentToBaseline();
+  });
+
+  menuManageBaseline.addEventListener("click",()=>{
+    hide(tmdMenu);
+    updateBaselineList();
+    hide(resultCard);
+    hide(testCard);
+    hide(tmdInfoCard);
+    show(baselineCard);
+  });
+
+  menuExport.addEventListener("click",()=>{
+    hide(tmdMenu);
+    exportPDF();
+  });
+
+  menuMain.addEventListener("click",()=>{
+    hide(tmdMenu);
+    hide(baselineCard);
+    hide(testCard);
+    hide(resultCard);
+    hide(tmdInfoCard);
+    tmdRoot.classList.add("hide");
+    modeCard.classList.remove("hide");
+  });
 
   startBtn.addEventListener('click', runTest);
   againBtn.addEventListener('click', runTest);
-  addBaselineBtn.addEventListener('click', addCurrentToBaseline);
   addBaselineBtn2.addEventListener('click', addCurrentToBaseline);
-  resetBaselineBtn.addEventListener('click', ()=>{updateBaselineList(); hide(resultCard); hide(testCard); show(baselineCard);});
-  closeBaselineBtn.addEventListener('click', ()=>hide(baselineCard));
   deleteBaselineBtn.addEventListener('click', ()=>{
     if(confirm("Delete ALL baseline sessions on this device?")){
       baselineSessions=[]; saveBaseline(baselineSessions); updateBaselineList();
     }
   });
-  exportBtn.addEventListener('click', exportPDF);
+  closeBaselineBtn.addEventListener('click', ()=>hide(baselineCard));
 
   const DUR={warmup:5,srt:30,stroop:45,nbackGroups:12};
   const TOTAL_TIME=DUR.warmup + DUR.srt + DUR.stroop + 15;
   const BASELINE_MIN=3;
-  let abortFlag=false;
-
-  async function runTest(){
-    abortFlag=false; sessionResult=null; addBaselineBtn.disabled=true; addBaselineBtn2.disabled=true;
-    hide(resultCard); hide(baselineCard); show(testCard); hide(preNbackPane);
-    stepName.textContent="Warm-up";
-
-    await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{
-      countdown.textContent=Math.ceil(t)+"s";
-      setProgress((DUR.warmup - t)/TOTAL_TIME);
-      srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
-      show(srtPane); hide(stroopPane); hide(nbackPane);
-    });
-
-    const srt=await runSRT(DUR.srt); if(abortFlag) return;
-    const stro=await runStroop(DUR.stroop); if(abortFlag) return;
-
-    const started=await waitForNbackStart(10000);
-    hide(preNbackPane);
-    if(!started){
-      hide(testCard);
-      alert("2-back segment was not started within 10 seconds. The Mental Status check has been cancelled. Please run it again for valid results.");
-      return;
-    }
-
-    const nb=await runTwoBack(DUR.nbackGroups); if(abortFlag) return;
-    sessionResult=computeScoring(srt,stro,nb,baselineSessions);
-    renderResults(sessionResult,srt,stro,nb,baselineSessions);
-  }
 
   function sectionTimer(name,sec,tick){
-    stepName.textContent=name; const t0=now(), total=sec*1000;
+    stepName.textContent=name;
+    const t0=now(), total=sec*1000;
     return new Promise(res=>{
       function frame(){
-        const t=now()-t0; if(abortFlag) return res();
+        const t=now()-t0;
         const rem=Math.max(0,total-t); const p=clamp(t/total,0,1);
         tick(rem/1000,p);
         if(t<total) requestAnimationFrame(frame); else res();
       }
       requestAnimationFrame(frame);
     });
+  }
+
+  async function runTest(){
+    sessionResult=null;
+    addBaselineBtn2.disabled=true;
+    hide(resultCard);
+    hide(baselineCard);
+    hide(tmdHome);
+    hide(tmdInfoCard);
+    show(testCard);
+    testCard.scrollIntoView({behavior:"auto"});
+    // Warm-up (simple countdown)
+    await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{
+      countdown.textContent=Math.ceil(t)+"s";
+      setProgress((DUR.warmup - t)/TOTAL_TIME);
+      srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
+      show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane);
+    });
+
+    const srt=await runSRT(DUR.srt);
+    const stro=await runStroop(DUR.stroop);
+
+    const started=await waitForNbackStart(10000);
+    hide(preNbackPane);
+    if(!started){
+      hide(testCard);
+      alert("2-back segment was not started within 10 seconds. The Mental Status check has been cancelled. Please run it again for valid results.");
+      show(tmdHome);
+      return;
+    }
+
+    const nb=await runTwoBack(DUR.nbackGroups);
+    sessionResult=computeScoring(srt,stro,nb,baselineSessions);
+    renderResults(sessionResult,srt,stro,nb,baselineSessions);
+    resultCard.scrollIntoView({behavior:"auto"});
   }
 
   function waitForNbackStart(timeoutMs){
@@ -529,133 +639,219 @@
   function randomGap(){ return 1000 + Math.random()*4500; }
 
   async function runSRT(sec){
-    show(srtPane); hide(stroopPane); hide(nbackPane);
-    let rts=[], falseStarts=0, lapses=0, waiting=true, goTime=0; const endAt=now()+sec*1000;
+    show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane);
+    return await new Promise(resolve=>{
+      let rts=[], falseStarts=0, lapses=0;
+      let waiting=true, goTime=0, timeOver=false, finished=false;
+      const endAt=now()+sec*1000;
+      let offHandler=null;
 
-    function scheduleNext(){
-      waiting=true;
-      const delay=randomGap();
-      srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
-      setTimeout(()=>{
-        if(now()>endAt) return;
-        srtTarget.textContent="TAP"; srtTarget.className="tapTarget go";
-        waiting=false; goTime=now();
-      },delay);
-    }
-    const off=onPressPointer(srtTarget,()=>{
-      if(now()>endAt) return;
-      if(waiting){ falseStarts++; }
-      else{
-        const rt=now()-goTime;
+      function finish(){
+        if(finished) return;
+        finished=true;
+        if(offHandler) offHandler();
+        const medianRT=rts.length?rts.slice().sort((a,b)=>a-b)[Math.floor(rts.length/2)]:999;
+        resolve({medianRT,lapses,falseStarts,n:rts.length});
+      }
+
+      function scheduleNext(){
+        if(finished) return;
+        waiting=true;
+        const delay=randomGap();
+        srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
+        setTimeout(()=>{
+          if(finished) return;
+          if(now()>endAt || timeOver){
+            waiting=true;
+            if(timeOver) finish();
+            return;
+          }
+          srtTarget.textContent="TAP"; srtTarget.className="tapTarget go";
+          waiting=false; goTime=now();
+        },delay);
+      }
+
+      offHandler=onPressPointer(srtTarget,()=>{
+        if(finished) return;
+        const t=now();
+        if(waiting){
+          falseStarts++;
+          return;
+        }
+        const rt=t-goTime;
         if(rt>500) lapses++;
         else if(rt>=100) rts.push(rt);
-        scheduleNext();
-      }
+        waiting=true;
+        if(t>=endAt || timeOver){
+          finish();
+        } else {
+          scheduleNext();
+        }
+      });
+
+      scheduleNext();
+
+      sectionTimer("Reaction",sec,(tleft,p)=>{
+        countdown.textContent=Math.ceil(tleft)+"s";
+        const elapsed=DUR.warmup + (DUR.srt - tleft);
+        setProgress(elapsed / TOTAL_TIME);
+      }).then(()=>{
+        timeOver=true;
+        if(waiting && !finished){
+          finish();
+        }
+      });
     });
-    scheduleNext();
-    await sectionTimer("Reaction",sec,(tleft,p)=>{
-      countdown.textContent=Math.ceil(tleft)+"s";
-      const elapsed=DUR.warmup + (DUR.srt - tleft);
-      setProgress(elapsed / TOTAL_TIME);
-    });
-    off();
-    const medianRT=rts.length?rts.slice().sort((a,b)=>a-b)[Math.floor(rts.length/2)]:999;
-    return {medianRT,lapses,falseStarts,n:rts.length};
   }
 
   async function runStroop(sec){
-    show(stroopPane); hide(srtPane); hide(nbackPane);
-    const names=["RED","GREEN","BLUE","YELLOW"];
-    const colors={RED:"#ff4d4d",GREEN:"#18d96e",BLUE:"#4da3ff",YELLOW:"#ffd633"};
-    let trials=[], tStim=0, awaiting=false, prevWord=null, prevColor=null;
-    const endAt=now()+sec*1000, gap=400;
+    show(stroopPane); hide(srtPane); hide(nbackPane); hide(preNbackPane);
+    return await new Promise(resolve=>{
+      const names=["RED","GREEN","BLUE","YELLOW","ORANGE","WHITE"];
+      const colors={
+        RED:"#ff4d4d",
+        GREEN:"#18d96e",
+        BLUE:"#4da3ff",
+        YELLOW:"#ffd633",
+        ORANGE:"#ff9933",
+        WHITE:"#ffffff"
+      };
+      let trials=[], tStim=0, awaiting=false, prevWord=null, prevColor=null;
+      let timeOver=false, finished=false;
+      const endAt=now()+sec*1000;
+      const gap=400;
+      let offM=null, offMM=null;
 
-    function nextPair(){
-      const wantCong=Math.random()<0.5;
-      let wordChoices=names.filter(w=>w!==prevWord);
-      if(!wordChoices.length) wordChoices=names.slice();
-      let word=wordChoices[Math.floor(Math.random()*wordChoices.length)];
-      let colorChoices=names.filter(c=>c!==prevColor);
-      if(!colorChoices.length) colorChoices=names.slice();
+      function finish(){
+        if(finished) return;
+        finished=true;
+        if(offM) offM();
+        if(offMM) offMM();
+        window.removeEventListener('keydown',keyHandler);
+        stroopWord.style.visibility="hidden";
 
-      if(wantCong){
-        if(word===prevColor){
-          const other=wordChoices.filter(w=>w!==prevColor);
-          if(other.length) word=other[Math.floor(Math.random()*other.length)];
-        }
-        const colorName=word;
-        prevWord=word; prevColor=colorName;
-        return {word,colorName,congruent:true};
-      }else{
-        let incongChoices=colorChoices.filter(c=>c!==word);
-        if(!incongChoices.length) incongChoices=names.filter(c=>c!==word);
-        const colorName=incongChoices[Math.floor(Math.random()*incongChoices.length)];
-        prevWord=word; prevColor=colorName;
-        return {word,colorName,congruent:false};
+        const corrects=trials.filter(t=>t.correct);
+        const acc=trials.length?(corrects.length/trials.length)*100:0;
+        const cong=trials.filter(t=>t.congruent && t.correct).map(t=>t.rt);
+        const incong=trials.filter(t=>!t.congruent && t.correct).map(t=>t.rt);
+        const rtCon=cong.length?mean(cong):NaN;
+        const rtIncon=incong.length?mean(incong):NaN;
+        const raw=(isFinite(rtIncon)&&isFinite(rtCon))?(rtIncon-rtCon):NaN;
+        const congruencyCost=isFinite(raw)?Math.max(0,raw):NaN;
+        const meanRTCorrect=corrects.length?mean(corrects.map(t=>t.rt)):NaN;
+        const stroopScore=acc;
+        resolve({acc,meanRTCorrect,congruencyCost,n:trials.length,stroopScore,nCong:cong.length,nIncong:incong.length});
       }
-    }
 
-    let current=null;
-    function showTrial(){
-      const p=nextPair();
-      current=p; stroopWord.textContent=p.word; stroopWord.style.color=colors[p.colorName]; stroopWord.style.visibility="visible";
-      tStim=now(); awaiting=true; btnMatch.classList.remove('active'); btnMismatch.classList.remove('active');
-    }
-    function queueNext(){ stroopWord.style.visibility="hidden"; setTimeout(()=>{ if(now()<endAt) showTrial(); },gap); }
-    function respond(which){
-      if(!awaiting) return; awaiting=false;
-      const rt=now()-tStim;
-      const correct=(current.word===current.colorName && which==="MATCH") ||
-                    (current.word!==current.colorName && which==="MISMATCH");
-      trials.push({rt,correct,congruent:current.congruent});
-      (which==="MATCH"?btnMatch:btnMismatch).classList.add('active');
-      queueNext();
-    }
+      function nextPair(){
+        const wantCong=Math.random()<0.5;
+        let wordChoices=names.filter(w=>w!==prevWord);
+        if(!wordChoices.length) wordChoices=names.slice();
+        let word=wordChoices[Math.floor(Math.random()*wordChoices.length)];
 
-    const offM=onPressPointer(btnMatch,()=>respond("MATCH"));
-    const offMM=onPressPointer(btnMismatch,()=>respond("MISMATCH"));
-    function key(e){const k=e.key?.toLowerCase(); if(k==='f') respond("MATCH"); if(k==='j') respond("MISMATCH");}
-    window.addEventListener('keydown',key);
+        let colorChoices=names.filter(c=>c!==prevColor);
+        if(!colorChoices.length) colorChoices=names.slice();
 
-    showTrial();
-    await sectionTimer("Color-Word",sec,(tleft,p)=>{
-      countdown.textContent=Math.ceil(tleft)+"s";
-      const elapsed=DUR.warmup + DUR.srt + (DUR.stroop - tleft);
-      setProgress(elapsed / TOTAL_TIME);
+        if(wantCong){
+          if(word===prevColor){
+            const other=wordChoices.filter(w=>w!==prevColor);
+            if(other.length) word=other[Math.floor(Math.random()*other.length)];
+          }
+          const colorName=word;
+          prevWord=word; prevColor=colorName;
+          return {word,colorName,congruent:true};
+        }else{
+          let incongChoices=colorChoices.filter(c=>c!==word);
+          if(!incongChoices.length) incongChoices=names.filter(c=>c!==word);
+          const colorName=incongChoices[Math.floor(Math.random()*incongChoices.length)];
+          prevWord=word; prevColor=colorName;
+          return {word,colorName,congruent:false};
+        }
+      }
+
+      let current=null;
+      function showTrial(){
+        if(finished || timeOver) return;
+        current=nextPair();
+        stroopWord.textContent=current.word;
+        stroopWord.style.color=colors[current.colorName];
+        stroopWord.style.visibility="visible";
+        tStim=now();
+        awaiting=true;
+        btnMatch.classList.remove("active");
+        btnMismatch.classList.remove("active");
+      }
+
+      function queueNext(){
+        stroopWord.style.visibility="hidden";
+        setTimeout(()=>{
+          if(finished) return;
+          if(now()>endAt || timeOver){
+            timeOver=true;
+            if(!awaiting) finish();
+          }else{
+            showTrial();
+          }
+        },gap);
+      }
+
+      function respond(which){
+        if(!awaiting || finished) return;
+        awaiting=false;
+        const rt=now()-tStim;
+        const correct=(current.word===current.colorName && which==="MATCH") ||
+                      (current.word!==current.colorName && which==="MISMATCH");
+        trials.push({rt,correct,congruent:current.congruent});
+        (which==="MATCH"?btnMatch:btnMismatch).classList.add('active');
+
+        if(timeOver || now()>endAt){
+          finish();
+        }else{
+          queueNext();
+        }
+      }
+
+      offM=onPressPointer(btnMatch,()=>respond("MATCH"));
+      offMM=onPressPointer(btnMismatch,()=>respond("MISMATCH"));
+      function keyHandler(e){
+        const k=e.key?.toLowerCase();
+        if(k==='f'){e.preventDefault();respond("MATCH");}
+        if(k==='j'){e.preventDefault();respond("MISMATCH");}
+      }
+      window.addEventListener('keydown',keyHandler);
+
+      showTrial();
+      sectionTimer("Color-Word",sec,(tleft,p)=>{
+        countdown.textContent=Math.ceil(tleft)+"s";
+        const elapsed=DUR.warmup + DUR.srt + (DUR.stroop - tleft);
+        setProgress(elapsed / TOTAL_TIME);
+      }).then(()=>{
+        timeOver=true;
+        if(!awaiting && !finished) finish();
+      });
     });
-    offM(); offMM(); window.removeEventListener('keydown',key);
-
-    const corrects=trials.filter(t=>t.correct);
-    const acc=trials.length?(corrects.length/trials.length)*100:0;
-    const cong=trials.filter(t=>t.congruent && t.correct).map(t=>t.rt);
-    const incong=trials.filter(t=>!t.congruent && t.correct).map(t=>t.rt);
-    const rtCon=cong.length?mean(cong):NaN, rtIncon=incong.length?mean(incong):NaN;
-    const raw=(isFinite(rtIncon)&&isFinite(rtCon))?(rtIncon-rtCon):NaN;
-    const congruencyCost=isFinite(raw)?Math.max(0,raw):NaN;
-    const meanRTCorrect=corrects.length?mean(corrects.map(t=>t.rt)):NaN;
-    const stroopScore=acc;
-    return {acc,meanRTCorrect,congruencyCost,n:trials.length,stroopScore,nCong:cong.length,nIncong:incong.length};
   }
 
   async function runTwoBack(groups){
-    show(nbackPane); hide(srtPane); hide(stroopPane);
+    show(nbackPane); hide(srtPane); hide(stroopPane); hide(preNbackPane);
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
     const VIS=250, GAP=100; let tStim=0; twoBackButtons.style.visibility="hidden";
 
     function setDigit(d,vis){ nbackDigit.textContent=String(d); nbackDigit.style.visibility=vis?"visible":"hidden"; }
     function rDigit(except){ let d; do{ d=Math.floor(1+Math.random()*9); }while(d===except); return d; }
 
-    function doGroup(){
-      if(group>groups) return Promise.resolve();
-      groupLabel.textContent=`Group ${group}`; twoBackButtons.style.visibility="hidden";
+    async function doGroup(){
+      if(group>groups) return;
+      groupLabel.textContent=`Group ${group}`;
+      twoBackButtons.style.visibility="hidden";
       const a=rDigit(null), b=rDigit(null), target=Math.random()<0.5, c=target?a:rDigit(a);
 
-      return new Promise(res=>{
+      await new Promise(res=>{
+        let awaiting=false;
         function showA(){ setDigit(a,true); setTimeout(()=>{ setDigit(a,false); setTimeout(showB,GAP); },VIS); }
         function showB(){ setDigit(b,true); setTimeout(()=>{ setDigit(b,false); setTimeout(showC,GAP); },VIS); }
         function showC(){ setDigit(c,true); twoBackButtons.style.visibility="visible"; awaiting=true; tStim=now(); }
 
-        let awaiting=false;
         function evalResp(isTarget){
           if(!awaiting) return;
           awaiting=false;
@@ -667,16 +863,23 @@
             if(correctTarget){ miss++; }
           }
           setDigit(c,false); twoBackButtons.style.visibility="hidden";
-          offT(); offNT(); offKey(); group++; res();
+          offT(); offNT(); offKey();
+          res();
         }
+
         const offT=onPressPointer(btnTarget,()=>evalResp(true));
         const offNT=onPressPointer(btnNotTarget,()=>evalResp(false));
-        function key(e){ if(e.code==='Space'){e.preventDefault();evalResp(true);} if(e.key && e.key.toLowerCase()==='n'){e.preventDefault();evalResp(false);} }
+        function key(e){
+          if(e.code==='Space'){e.preventDefault();evalResp(true);}
+          if(e.key && e.key.toLowerCase()==='n'){e.preventDefault();evalResp(false);}
+        }
         function offKey(){ window.removeEventListener('keydown',key); }
         window.addEventListener('keydown',key);
 
         showA();
-      }).then(()=>doGroup());
+      });
+      group++;
+      await doGroup();
     }
 
     await doGroup();
@@ -686,14 +889,11 @@
     const nonTargets=Math.max(1, total-(hits+miss));
     const hitRate=(hits/targets)*100, faRate=(fas/nonTargets)*100;
     const rawD=dPrimeApprox(hitRate/100, faRate/100);
-
-    // For 12 groups, we consider d′ stable enough not to scale down.
     let scaledD=rawD;
     if(isFinite(rawD)){
       if(total<=5) scaledD=rawD*0.4;
       else if(total<=10) scaledD=rawD*0.7;
     }
-
     const meanHitRT=hitRTs.length?mean(hitRTs):NaN;
     return {hitRate,faRate,dprime:scaledD,rawDprime:rawD,meanHitRT,counts:{hits,fas,miss},groups:total};
   }
@@ -861,15 +1061,14 @@
   }
 
   function renderResults(res,srt,stro,nb){
-    hide(testCard); show(resultCard);
-    const hasBaseline=res.hasBaseline;
-    lightDot.className="dot "+(hasBaseline?(res.light==="green"?"green":res.light==="red"?"red":"amber"):"amber");
-    statusText.textContent=hasBaseline? res.statusLabel:"Baseline needed";
+    hide(testCard);
+    hide(baselineCard);
+    show(resultCard);
+    lightDot.className="dot "+(res.hasBaseline?(res.light==="green"?"green":res.light==="red"?"red":"amber"):"amber");
+    statusText.textContent=res.hasBaseline? res.statusLabel:"Baseline needed";
     driverText.textContent=res.driver;
     guidanceText.textContent=res.guidance;
-
-    addBaselineBtn.disabled=false; addBaselineBtn2.disabled=false;
-
+    addBaselineBtn2.disabled=false;
     const totalPresses=srt.falseStarts+srt.n, fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
     const shownNbD=res.today.nb_d;
 
@@ -907,10 +1106,14 @@
 
   function addCurrentToBaseline(){
     const payload=resultCard.dataset.payload?JSON.parse(resultCard.dataset.payload):null;
-    if(!payload) return;
+    if(!payload){
+      alert("Run a Mental Status check and view the results before adding to baseline.");
+      return;
+    }
     const {res}=payload;
-    const today=res.today;
-    baselineSessions.push(today); saveBaseline(baselineSessions);
+    baselineSessions.push(res.today);
+    saveBaseline(baselineSessions);
+    updateBaselineList();
     alert("Added to baseline. Collect at least 3 baseline sessions on good days to make the comparisons meaningful.");
   }
 
@@ -977,10 +1180,13 @@
   function updateBaselineList(){
     const b=baselineSessions;
     if(!b.length){ baselineList.textContent="No baseline yet."; return; }
-    baselineList.innerHTML=b.map((s,i)=>`<div class="chip">#${i+1} • medRT ${fmt(s.srt_median)} ms • lapses ${s.srt_lapses} • Stroop acc ${fmt(s.stro_acc)}% • 2-back d′ ${fmt(s.nb_d)}</div>`).join("<br/>");
+    baselineList.innerHTML=b.map((s,i)=>
+      `<div class="chip">#${i+1} • medRT ${fmt(s.srt_median)} ms • lapses ${fmt(s.srt_lapses)} • Stroop acc ${fmt(s.stro_acc)}% • 2-back d′ ${fmt(s.nb_d)}</div>`
+    ).join("<br/>");
   }
   updateBaselineList();
 
+  // Warn on navigation while test running
   window.addEventListener("beforeunload",e=>{
     if(!testCard.classList.contains("hide")){
       e.preventDefault(); e.returnValue="";
@@ -1043,7 +1249,7 @@
   };
 
   const fratQuestionsDiv=$("#fratQuestions");
-  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn");
+  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn);
   const fratResultCard=$("#fratResultCard"), fratDot=$("#fratDot"), fratStatusLabel=$("#fratStatusLabel"), fratScoreText=$("#fratScoreText");
   const fratNarrative=$("#fratNarrative"), fratGuidance=$("#fratGuidance"), fratBreakdown=$("#fratBreakdown"), fratBandRef=$("#fratBandRef"), fratExportBtn=$("#fratExportBtn");
 
@@ -1205,5 +1411,3 @@
 </script>
 </body>
 </html>
-
-
