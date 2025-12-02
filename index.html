@@ -97,34 +97,33 @@
   <!-- MODE CHOOSER -->
   <section id="modeCard" class="card">
     <header class="row" style="justify-content:space-between;align-items:flex-start">
-  <div class="row" style="align-items:center;gap:16px">
-    <!-- Big logo on white background -->
-    <div style="background:#ffffff;border-radius:16px;padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.35);">
-      <img src="SVG_VERSION_OST_Main_Logo.svg"
-           alt="On Second Thought logo"
-           style="height:96px;display:block;">
-    </div>
-    <!-- Title + tagline -->
-    <div>
-      <h1>On Second Thought — Readiness &amp; Risk</h1>
-      <div class="muted">
-        Free tools for OST listeners who pause, think twice, and then go fly on purpose.
+      <div class="row" style="align-items:center;gap:16px">
+        <!-- Big logo on white background -->
+        <div style="background:#ffffff;border-radius:16px;padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.35);">
+          <img src="SVG_VERSION_OST_Main_Logo.svg"
+               alt="On Second Thought logo"
+               style="height:96px;display:block;">
+        </div>
+        <!-- Title + tagline -->
+        <div>
+          <h1>On Second Thought — Readiness &amp; Risk</h1>
+          <div class="muted">
+            Free tools for OST listeners who pause, think twice, and then go fly on purpose.
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</header>
-
+    </header>
 
     <div class="hr"></div>
 
     <div class="grid grid-2">
       <div>
-        <h2>Two-Minute Drill</h2>
+        <h2>Mental Status</h2>
         <p class="muted">
-          A ~2-minute baseline-referenced snapshot of reaction time, executive function (Stroop),
-          and 2-back working memory. Designed to complement IM SAFE.
+          A short, structured cognitive readiness check across reaction time,
+          executive function, and 2-back working memory, compared to your own baseline.
         </p>
-        <button id="goTmdBtn" type="button" class="btn">Run Two-Minute Drill</button>
+        <button id="goTmdBtn" type="button" class="btn">Run Mental Status Check</button>
       </div>
       <div>
         <h2>FRAT Assessment</h2>
@@ -145,7 +144,7 @@
   </section>
 
   <!-- ========================= -->
-  <!-- TWO-MINUTE DRILL ROOT     -->
+  <!-- MENTAL STATUS ROOT        -->
   <!-- ========================= -->
   <div id="tmdRoot" class="hide">
 
@@ -154,11 +153,11 @@
         <div class="row" style="align-items:center;gap:10px">
           <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:28px;opacity:.7;">
           <div>
-            <h1>IM SAFE — Two-Minute Drill</h1>
+            <h1>IM SAFE — Mental Status</h1>
             <div class="muted">
-              A ~2-minute, baseline-referenced snapshot of cognitive speed, attention control, and working memory.
+              Structured snapshot of reaction speed, color–word control, and 2-back working memory.
               <span class="pill">Local &amp; private</span>
-              <span class="pill">v0.6 experimental</span>
+              <span class="pill">v0.7 experimental</span>
             </div>
           </div>
         </div>
@@ -170,7 +169,7 @@
         <div>
           <h2>How it works</h2>
           <ul class="muted" style="margin:.4rem 0 0;padding-left:1.2rem">
-            <li>Reaction (30 s) • Color–Word (45 s) • 2-back (5 groups)</li>
+            <li>Reaction (30 s) • Color–Word (45 s) • 2-back (12 groups)</li>
             <li>Compare to your own baseline (per-device)</li>
             <li>Qualitative status: near, below, or well below baseline</li>
           </ul>
@@ -186,7 +185,7 @@
 
       <div class="hr"></div>
       <div class="row">
-        <button id="startBtn" type="button" class="btn">Start Two-Minute Drill</button>
+        <button id="startBtn" type="button" class="btn">Start Mental Status Check</button>
         <button id="addBaselineBtn" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
         <button id="resetBaselineBtn" type="button" class="btn btn-ghost">Manage Baseline</button>
         <button id="exportBtn" type="button" class="btn btn-ghost">Export PDF</button>
@@ -232,7 +231,7 @@
       <!-- 2-back -->
       <div id="nbackPane" class="hide" style="min-height:260px">
         <div class="center" style="margin:4px 0 6px;">
-          <div class="pill">Session: <b id="groupLabel">Group 1</b> of 5</div>
+          <div class="pill">Session: <b id="groupLabel">Group 1</b> of 12</div>
         </div>
         <div class="center" style="margin:10px 0 18px; min-height:3.2rem">
           <div id="nbackDigit" class="big mono" style="visibility:hidden">5</div>
@@ -272,7 +271,7 @@
       </div>
       <div class="hr"></div>
       <div class="row">
-        <button id="againBtn" type="button" class="btn">Run Again</button>
+        <button id="againBtn" type="button" class="btn">Run Mental Status Again</button>
         <button id="addBaselineBtn2" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
       </div>
       <div class="muted" style="margin-top:8px">
@@ -424,7 +423,7 @@
   }
 
   // =====================================================================
-  //                         TWO-MINUTE DRILL
+  //                         MENTAL STATUS
   // =====================================================================
   const storeKey="flyingm_imsafe_baseline_v2";
   const loadBaseline=()=>{try{return JSON.parse(localStorage.getItem(storeKey)||"[]");}catch{return[];}};
@@ -460,7 +459,7 @@
   });
   exportBtn.addEventListener('click', exportPDF);
 
-  const DUR={warmup:5,srt:30,stroop:45,nbackGroups:5};
+  const DUR={warmup:5,srt:30,stroop:45,nbackGroups:12};
   const TOTAL_TIME=DUR.warmup + DUR.srt + DUR.stroop + 15;
   const BASELINE_MIN=3;
   let abortFlag=false;
@@ -484,7 +483,7 @@
     hide(preNbackPane);
     if(!started){
       hide(testCard);
-      alert("2-back segment was not started within 10 seconds. The Two-Minute Drill has been cancelled. Please run the drill again for valid results.");
+      alert("2-back segment was not started within 10 seconds. The Mental Status check has been cancelled. Please run it again for valid results.");
       return;
     }
 
@@ -508,7 +507,7 @@
 
   function waitForNbackStart(timeoutMs){
     show(preNbackPane); hide(srtPane); hide(stroopPane); hide(nbackPane);
-    preNbackHint.textContent="If you don’t start within about 10 seconds, this drill will be cancelled.";
+    preNbackHint.textContent="If you don’t start within about 10 seconds, this run will be cancelled.";
     countdown.textContent="—";
     stepName.textContent="Prepare: 2-back";
     return new Promise(res=>{
@@ -687,11 +686,14 @@
     const nonTargets=Math.max(1, total-(hits+miss));
     const hitRate=(hits/targets)*100, faRate=(fas/nonTargets)*100;
     const rawD=dPrimeApprox(hitRate/100, faRate/100);
+
+    // For 12 groups, we consider d′ stable enough not to scale down.
     let scaledD=rawD;
     if(isFinite(rawD)){
       if(total<=5) scaledD=rawD*0.4;
       else if(total<=10) scaledD=rawD*0.7;
     }
+
     const meanHitRT=hitRTs.length?mean(hitRTs):NaN;
     return {hitRate,faRate,dprime:scaledD,rawDprime:rawD,meanHitRT,counts:{hits,fas,miss},groups:total};
   }
@@ -716,7 +718,7 @@
       }
       q=p-0.5; r=q*q;
       return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5]) * q /
-             (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r + 1);
+             (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r + b[4])*r + 1);
     }
     return invNorm(H)-invNorm(F);
   }
@@ -833,7 +835,7 @@
       if(qualitativeLevel==="near"){
         guidance="you’re performing close to your own baseline today. If your phone or tablet seems to be behaving normally, this feels like one of your typical days.";
       } else if(qualitativeLevel==="mild"){
-        guidance="you’re a bit softer than usual. This might be a good moment to grab food, water, or a short break, then re-run the drill before you launch into a demanding flight.";
+        guidance="you’re a bit softer than usual. This might be a good moment to grab food, water, or a short break, then re-run the check before you launch into a demanding flight.";
       } else if(qualitativeLevel==="moderate"){
         guidance="you’re noticeably below baseline. If your device seems fine, treat this as a yellow flag and ask whether today’s conditions and workload really deserve a ‘go’ call.";
       } else {
@@ -851,7 +853,7 @@
                        :"Nothing stands far from your baseline; differences are small and spread across domains.");
 
     const nbackNote=(DUR.nbackGroups<=5)
-      ? "Note: 2-back d′ is based on 5 groups and scaled for small-sample stability; for research-level work you’d want 10–20 groups."
+      ? "Note: 2-back d′ is based on a very small number of groups and scaled for small-sample stability; for research-level work you’d want 10–20 groups."
       : "";
 
     return {today,baseStats:base,z:{speed:zSpeed,stroop:zStroop,nback:zNback,max:maxZ},
@@ -915,13 +917,13 @@
   function exportPDF(){
     const payload=resultCard.dataset.payload?JSON.parse(resultCard.dataset.payload):null;
     const bcount=baselineSessions.length; const when=new Date().toLocaleString();
-    let html=`<html><head><title>IM SAFE — Two-Minute Drill Summary</title>
+    let html=`<html><head><title>IM SAFE — Mental Status Summary</title>
       <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
       h1{font-size:20px;margin:0 0 6px} h2{font-size:16px;margin:18px 0 6px}
       .muted{color:#555}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{border:1px solid #ddd;border-radius:8px;padding:12px}
       .mono{font-family:ui-monospace,Menlo,Monaco,Consolas}</style></head><body>
-      <h1>IM SAFE — Two-Minute Drill (Summary)</h1>
-      <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount} • Version: v0.6 experimental</div>`;
+      <h1>IM SAFE — Mental Status (Summary)</h1>
+      <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount} • Version: v0.7 experimental</div>`;
     if(!payload){
       html+=`<p>No recent test run to export.</p></body></html>`;
       const w=window.open("","_blank"); w.document.write(html); w.print(); return;
@@ -1041,7 +1043,7 @@
   };
 
   const fratQuestionsDiv=$("#fratQuestions");
-  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn");
+  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn);
   const fratResultCard=$("#fratResultCard"), fratDot=$("#fratDot"), fratStatusLabel=$("#fratStatusLabel"), fratScoreText=$("#fratScoreText");
   const fratNarrative=$("#fratNarrative"), fratGuidance=$("#fratGuidance"), fratBreakdown=$("#fratBreakdown"), fratBandRef=$("#fratBandRef"), fratExportBtn=$("#fratExportBtn");
 
@@ -1203,4 +1205,3 @@
 </script>
 </body>
 </html>
-
