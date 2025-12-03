@@ -315,6 +315,8 @@
       <div class="row">
         <button id="againBtn" type="button" class="btn">Run Mental Status Again</button>
         <button id="addBaselineBtn2" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
+        <!-- NEW: main menu button on result screen -->
+        <button id="backToMainBtn" type="button" class="btn btn-ghost">Main Menu</button>
       </div>
       <div class="muted" style="margin-top:8px">
         This tool supports—but does not replace—your own judgment and the full IM SAFE self-assessment.
@@ -438,6 +440,7 @@
   const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
   const sd=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));};
   const now=()=>performance.now();
+  const sleep = ms => new Promise(r=>setTimeout(r,ms));  // NEW helper
 
   // MODE TOGGLE
   const modeCard=$("#modeCard"), tmdRoot=$("#tmdRoot"), fratRoot=$("#fratRoot");
@@ -519,6 +522,7 @@
   const preNbackPane=$("#preNbackPane"), startNbackBtn=$("#startNbackBtn"), preNbackHint=$("#preNbackHint");
   const nbackPane=$("#nbackPane"), nbackDigit=$("#nbackDigit"), btnTarget=$("#btnTarget"), btnNotTarget=$("#btnNotTarget"), twoBackButtons=$("#twoBackButtons"), groupLabel=$("#groupLabel");
   const resultCard=$("#resultCard"), lightDot=$("#lightDot"), statusText=$("#statusText"), driverText=$("#driverText"), guidanceText=$("#guidanceText"), metricToday=$("#metricToday"), metricBase=$("#metricBase"), againBtn=$("#againBtn");
+  const backToMainBtn=$("#backToMainBtn");  // NEW main menu button
   const baselineCard=$("#baselineCard"), baselineList=$("#baselineList"), deleteBaselineBtn=$("#deleteBaselineBtn"), closeBaselineBtn=$("#closeBaselineBtn");
 
   let baselineSessions=loadBaseline();
@@ -559,6 +563,17 @@
     modeCard.classList.remove("hide");
   });
 
+  // NEW: return to main menu from result screen
+  backToMainBtn.addEventListener("click", () => {
+    hide(resultCard);
+    hide(testCard);
+    hide(baselineCard);
+    hide(tmdInfoCard);
+    show(tmdHome);           // if they come back into Mental Status later
+    tmdRoot.classList.add("hide");
+    modeCard.classList.remove("hide");
+  });
+
   startBtn.addEventListener('click', runTest);
   againBtn.addEventListener('click', runTest);
   addBaselineBtn2.addEventListener('click', addCurrentToBaseline);
@@ -570,7 +585,7 @@
   closeBaselineBtn.addEventListener('click', ()=>hide(baselineCard));
 
   const DUR={warmup:5,srt:30,stroop:45,nbackGroups:12};
-  const TOTAL_TIME=DUR.warmup + DUR.srt + DUR.stroop + 15; // progress is approximate by design
+  const TOTAL_TIME=DUR.warmup + DUR.srt + DUR.stroop + 15;
   const BASELINE_MIN=3;
 
   function sectionTimer(name,sec,tick){
@@ -775,14 +790,14 @@
       }
 
       function nextPair(){
-        // choose whether we WANT a congruent trial, with run-length limiting
+        // choose congruent vs incongruent with run-length limiting
         let wantCong;
         if(prevCongruent===true && runLen>=2){
-          wantCong=false;          // too many congruent in a row → force incongruent
+          wantCong=false;
         }else if(prevCongruent===false && runLen>=2){
-          wantCong=true;           // too many incongruent in a row → force congruent
+          wantCong=true;
         }else{
-          wantCong=Math.random()<0.5; // otherwise 50/50
+          wantCong=Math.random()<0.5;
         }
 
         let wordChoices=names.filter(w=>w!==prevWord);
@@ -794,7 +809,6 @@
 
         let colorName, isCong;
         if(wantCong){
-          // ensure word != prevColor if we're going to use it as color as well
           if(word===prevColor){
             const other=wordChoices.filter(w=>w!==prevColor);
             if(other.length) word=other[Math.floor(Math.random()*other.length)];
@@ -808,7 +822,6 @@
           isCong=false;
         }
 
-        // update run length tracking
         if(prevCongruent===null){
           prevCongruent=isCong;
           runLen=1;
@@ -889,6 +902,10 @@
 
   async function runTwoBack(groups){
     show(nbackPane); hide(srtPane); hide(stroopPane); hide(preNbackPane); hide(betweenPane);
+
+    // NEW: 1 second pause after the 2-back screen appears
+    await sleep(1000);
+
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
     const VIS=250, GAP=100; let tStim=0; twoBackButtons.style.visibility="hidden";
 
@@ -1304,7 +1321,7 @@
   };
 
   const fratQuestionsDiv=$("#fratQuestions");
-  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn");
+  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn);
   const fratResultCard=$("#fratResultCard"), fratDot=$("#fratDot"), fratStatusLabel=$("#fratStatusLabel"), fratScoreText=$("#fratScoreText");
   const fratNarrative=$("#fratNarrative"), fratGuidance=$("#fratGuidance"), fratBreakdown=$("#fratBreakdown"), fratBandRef=$("#fratBandRef"), fratExportBtn=$("#fratExportBtn");
 
@@ -1466,4 +1483,3 @@
 </script>
 </body>
 </html>
-
