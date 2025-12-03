@@ -3,92 +3,197 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>On Second Thought — Pilot Readiness & Risk Tools</title>
+  <title>Second Opinion — Pilot Readiness &amp; Risk Tools</title>
   <style>
     :root{
-      --bg:#0b0f14;--card:#121821;--ink:#e9eef5;--muted:#a9b7c6;
-      --accent:#4da3ff;--good:#13c27a;--warn:#ffb31a;--bad:#ff5b5b;
+      /* Updated background color */
+      --bg:#00354dfe;
+      --card:#101724;
+      --ink:#e9eef5;
+      --muted:#a9b7c6;
+      --accent:#4da3ff;
+      --good:#13c27a;
+      --warn:#ffb31a;
+      --bad:#ff5b5b;
     }
     *{box-sizing:border-box}
     body{
-      margin:0;background:var(--bg);color:var(--ink);
-      font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     }
-    .wrap{max-width:880px;margin:0 auto;padding:20px}
+    .wrap{
+      max-width:880px;
+      margin:0 auto;
+      padding:16px 16px 24px;
+    }
     .card{
-      background:var(--card);border-radius:16px;
-      padding:18px 18px 22px;
+      background:var(--card);
+      border-radius:16px;
+      padding:16px 16px 20px;
       box-shadow:0 10px 30px rgba(0,0,0,.35);
-      margin:14px 0;
+      margin:12px 0;
     }
-    h1{font-size:1.55rem;margin:.2rem 0 .6rem}
-    h2{font-size:1.15rem;margin:.2rem 0 .4rem}
-    h3{font-size:1rem;margin:.2rem 0 .4rem}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .center{display:flex;justify-content:center;align-items:center;text-align:center}
-    .grid{display:grid;gap:10px}
-    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    h1{font-size:1.9rem;margin:.2rem 0 .6rem}
+    h2{font-size:1.18rem;margin:.2rem 0 .4rem}
+    h3{font-size:1rem;margin:.2rem 0 .3rem}
+    p{margin:.3rem 0 .3rem}
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .center{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+    .grid{
+      display:grid;
+      gap:12px;
+    }
+    .grid-2{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
     .muted{color:var(--muted)}
     .big{font-size:2.2rem;font-weight:700}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace}
+    .mono{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace;
+    }
     .btn{
-      appearance:none;border:0;border-radius:14px;
-      padding:14px 18px;font-weight:700;
-      color:#0b0f14;background:var(--accent);
-      cursor:pointer;min-width:150px;user-select:none;
+      appearance:none;
+      border:0;
+      border-radius:14px;
+      padding:14px 18px;
+      font-weight:700;
+      color:#0b0f14;
+      background:var(--accent);
+      cursor:pointer;
+      min-width:150px;
+      user-select:none;
+      font-size:1rem;
     }
     .btn:disabled{opacity:.6;cursor:not-allowed}
     .btn-ghost{
-      background:transparent;color:var(--ink);
+      background:transparent;
+      color:var(--ink);
       border:2px solid #8795a3;
     }
-    .btn-sm{padding:8px 12px;font-size:.9rem;min-width:0}
-    .btn:active{transform:translateY(1px) scale(.98);opacity:.9}
+    .btn-sm{
+      padding:8px 12px;
+      font-size:.9rem;
+      min-width:0;
+    }
+    .btn:active{
+      transform:translateY(1px) scale(.98);
+      opacity:.9;
+    }
     .kbd{
-      display:inline-block;padding:.2rem .45rem;border-radius:.4rem;
-      border:1px solid #2a3850;background:#0c121a;font-weight:700
+      display:inline-block;
+      padding:.2rem .45rem;
+      border-radius:.4rem;
+      border:1px solid #2a3850;
+      background:#0c121a;
+      font-weight:700;
     }
     .pill{
-      display:inline-flex;gap:8px;align-items:center;
-      padding:8px 12px;border-radius:999px;
-      background:#0e141c;border:1px solid #223042;
-      color:var(--muted);font-size:.9rem
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#0e141c;
+      border:1px solid #223042;
+      color:var(--muted);
+      font-size:.9rem;
     }
     .chip{
-      display:inline-flex;gap:6px;align-items:center;
-      padding:6px 10px;border-radius:999px;
-      border:1px solid #223042;background:#101826
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #223042;
+      background:#101826;
     }
-    .hr{height:1px;background:#213043;margin:12px 0}
-    .bar{height:10px;border-radius:999px;background:#1a2330;overflow:hidden}
-    .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4da3ff,#13c27a)}
+    .hr{
+      height:1px;
+      background:#213043;
+      margin:12px 0;
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background:#1a2330;
+      overflow:hidden;
+    }
+    .bar>i{
+      display:block;
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg,#4da3ff,#13c27a);
+    }
     .tapTarget{
-      width:240px;height:240px;border-radius:999px;
-      background:#3a485c;display:flex;align-items:center;justify-content:center;
-      font-weight:800;font-size:1.1rem;user-select:none;cursor:pointer;
-      transition:background .1s,transform .05s
+      width:240px;
+      height:240px;
+      border-radius:999px;
+      background:#3a485c;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:1.1rem;
+      user-select:none;
+      cursor:pointer;
+      transition:background .1s,transform .05s;
     }
     .tapTarget.ready{background:#6a7688}
     .tapTarget.go{background:#3aa657}
     .tapTarget.active{transform:scale(.97);filter:brightness(1.05)}
     .wordBox{
-      font-weight:900;font-size:2.6rem;letter-spacing:.02em;
-      padding:.2rem .6rem;border-radius:.5rem;
-      background:#0e1520;min-width:8ch
+      font-weight:900;
+      font-size:2.6rem;
+      letter-spacing:.02em;
+      padding:.2rem .6rem;
+      border-radius:.5rem;
+      background:#0e1520;
+      min-width:8ch;
     }
     .hide{display:none}
     #btnMatch,#btnMismatch{min-width:160px}
     #btnTarget,#btnNotTarget{min-width:200px}
-    .dot{width:12px;height:12px;border-radius:999px;background:var(--muted);display:inline-block;margin-right:6px}
-    .dot.green{background:var(--good)} .dot.amber{background:var(--warn)} .dot.red{background:var(--bad)}
-    .sectionTitle{margin-top:10px;font-weight:600}
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      background:var(--muted);
+      display:inline-block;
+      margin-right:6px;
+    }
+    .dot.green{background:var(--good)}
+    .dot.amber{background:var(--warn)}
+    .dot.red{background:var(--bad)}
+    .sectionTitle{
+      margin-top:10px;
+      font-weight:600;
+    }
     .frat-q{
-      display:flex;justify-content:space-between;align-items:flex-start;
-      gap:10px;padding:8px 10px;border-radius:8px;
-      border:1px solid #223042;margin-top:6px
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:8px;
+      border:1px solid #223042;
+      margin-top:6px;
     }
     .frat-q-text{flex:1}
-    .frat-q-controls{white-space:nowrap;font-size:.9rem}
+    .frat-q-controls{
+      white-space:nowrap;
+      font-size:.9rem;
+    }
     /* Mental Status home menu */
     #tmdMenu{
       margin-top:10px;
@@ -104,16 +209,30 @@
       font-size:.9rem;
     }
     a.infoLink:hover{text-decoration:underline}
+    .tagline{
+      font-size:1rem;
+      margin-top:4px;
+      font-style:italic;
+    }
+    .footer-link{
+      margin-top:10px;
+      font-size:.85rem;
+    }
+    .footer-link a{
+      color:var(--accent);
+      text-decoration:none;
+    }
+    .footer-link a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- MODE CHOOSER -->
+  <!-- MAIN MODE CARD -->
   <section id="modeCard" class="card">
     <header class="row" style="justify-content:space-between;align-items:flex-start">
       <div class="row" style="align-items:center;gap:16px">
-        <!-- Big logo on white background -->
+        <!-- Logo on white -->
         <div style="background:#ffffff;border-radius:16px;padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.35);">
           <img src="SVG_VERSION_OST_Main_Logo.svg"
                alt="On Second Thought logo"
@@ -121,9 +240,10 @@
         </div>
         <!-- Title + tagline -->
         <div>
-          <h1>On Second Thought — Readiness &amp; Risk</h1>
-          <div class="muted">
-            Free tools for OST listeners who pause, think twice, and then go fly on purpose.
+          <h1>Second Opinion</h1>
+          <div class="tagline"><i>Real Flights – Human Factors – Safer Skies</i></div>
+          <div style="margin-top:8px;">
+            <a href="javascript:void(0)" id="appInfoLink" class="infoLink">What’s this?</a>
           </div>
         </div>
       </div>
@@ -133,37 +253,105 @@
 
     <div class="grid grid-2">
       <div>
-        <h2>Mental Status</h2>
-        <p class="muted">
-          A short, structured cognitive readiness check across reaction time,
-          executive function, and 2-back working memory, compared to your own baseline.
-        </p>
-        <button id="goTmdBtn" type="button" class="btn">Run Mental Status Check</button>
+        <h2>Cognition &amp; Acuity Assessment</h2>
+        <button id="goTmdBtn" type="button" class="btn" style="margin-top:8px;">Cognition &amp; Acuity Assessment</button>
       </div>
       <div>
         <h2>FRAT Assessment</h2>
-        <p class="muted">
-          FAA-style Flight Risk Assessment Tool for VFR and IFR flights using weighted True/False items
-          and a VFR/IFR risk-band matrix.
-        </p>
-        <button id="goFratBtn" type="button" class="btn btn-ghost">Run FRAT Assessment</button>
+        <button id="goFratBtn" type="button" class="btn btn-ghost" style="margin-top:8px;">FRAT Assessment</button>
       </div>
     </div>
 
     <div class="hr"></div>
     <div class="muted" style="font-size:.9rem">
-      Developed for the <b>On Second Thought</b> safety series — deep dives into real GA accidents and the
-      human factors behind them. These tools support your decision-making; they don’t replace your CFI,
-      the regulations, or your own ADM.
+      <i>Second Opinion</i> was developed by instructional designer and pilot Harvey Madison, co-host of
+      <i>On Second Thought</i>, to assist pilots in making more objective, data-informed decisions about
+      their fitness to fly at any given moment.
+      The underlying tasks draw on established brain-science paradigms:
+      a simple reaction-time task related to the Psychomotor Vigilance Task used in fatigue research;
+      a color–word interference (Stroop) task for executive control;
+      and a 2-back working-memory task widely used in cognitive neuroscience.
+      <br/><br/>
+      The app is designed to be one tool among many in your IM SAFE and ADM workflow. These tools support your
+      decision-making; they do not replace your CFI, the regulations, or your own judgment. All go/no-go decisions
+      remain entirely the responsibility of each pilot—just as they always have.
+    </div>
+    <div class="footer-link muted">
+      Learn more about the show at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+    </div>
+  </section>
+
+  <!-- APP INFO / HOW-TO CARD -->
+  <section id="appInfoCard" class="card hide">
+    <h2>How to use <i>Second Opinion</i></h2>
+    <div class="muted">
+      <p><b>When to use it.</b> Use <i>Second Opinion</i> before a flight when you want a quick, private check of your
+      cognitive sharpness, alongside IM SAFE, weather, and the rest of your preflight workflow.</p>
+
+      <p><b>Step 1: Build a baseline.</b> On days when you feel well-rested, well-fed, not stressed, and
+      absolutely comfortable flying, run the Cognition &amp; Acuity Assessment a few times (ideally 3–5 sessions).
+      Add only those “good-day” runs to your baseline. Future runs are compared to that personal baseline instead
+      of an abstract population norm.</p>
+
+      <p><b>The three pieces.</b></p>
+      <ul>
+        <li><b>Reaction:</b> tap as quickly as you can when the circle turns green. Slower median reaction times and
+        more lapses suggest reduced alertness.</li>
+        <li><b>Color–word (Stroop):</b> decide whether the ink color matches the word. Conflicting items require you
+        to suppress the automatic reading response—this taps executive control.</li>
+        <li><b>2-back:</b> watch short groups of digits and decide if the third matches the digit two positions back.
+        This stresses online updating and working memory. The summary statistic (<i>d′</i>) is essentially a
+        signal-to-noise measure; higher is better separation between “same” and “not same”.</li>
+      </ul>
+
+      <p><b>Interpreting results.</b> The app focuses on how far you are from your own baseline, not anyone else’s.</p>
+      <ul>
+        <li>“Near baseline” looks like a typical good day—assuming your device is behaving.</li>
+        <li>“Mildly” or “moderately” below baseline suggests you’re softer than usual; consider adding margin or
+        delaying until after rest, food, or reduced stress.</li>
+        <li>“Well below baseline” is an “On Second Thought…” moment: either something is wrong with the device,
+        or you are not bringing your usual cognitive resources to the flight.</li>
+      </ul>
+
+      <p><b>Limitations.</b> A good score does not guarantee fitness to fly; a soft score does not prove unfitness.
+      Treat this as a conservative nudge, not a verdict.</p>
+    </div>
+    <div class="hr"></div>
+    <button id="appInfoBackBtn" type="button" class="btn btn-ghost">Back to main menu</button>
+    <div class="footer-link muted">
+      Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+    </div>
+  </section>
+
+  <!-- ABOUT OST CARD (marketing copy) -->
+  <section id="aboutOstCard" class="card hide">
+    <h2>About <i>On Second Thought</i></h2>
+    <div class="muted">
+      <p><i>On Second Thought</i> is a safety-focused series for general aviation pilots who want more than
+      airplane porn and hangar talk. Each episode takes a single real-world accident and unpacks the human factors
+      behind it—attention, bias, pressure, habit patterns, and all the tiny choices that add up to a big outcome.</p>
+
+      <p>The show is co-hosted by instructional designer and GA pilot Harvey Madison and psychotherapist /
+      long-time aviation safety advocate Jolie Lucas. Together they blend solid research, story-driven case studies,
+      and practical “what would you actually do in this cockpit?” discussions aimed squarely at line pilots—
+      not just test pilots or airline crews.</p>
+
+      <p><i>Second Opinion</i> is part of that ecosystem: a quick, private way to pause, think twice, and give yourself
+      a reality check before you go fly on purpose.</p>
+    </div>
+    <div class="hr"></div>
+    <button id="aboutOstBackBtn" type="button" class="btn btn-ghost">Back</button>
+    <div class="footer-link muted">
+      Visit <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a> for episodes, articles, and upcoming events.
     </div>
   </section>
 
   <!-- ========================= -->
-  <!-- MENTAL STATUS ROOT        -->
+  <!-- COGNITION & ACUITY ROOT   -->
   <!-- ========================= -->
   <div id="tmdRoot" class="hide">
 
-    <!-- Mental Status Home -->
+    <!-- Mental Status Home (Cognition & Acuity) -->
     <section id="tmdHome" class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
         <div class="row" style="align-items:center;gap:18px">
@@ -173,43 +361,48 @@
                  style="height:120px;display:block;">
           </div>
           <div>
-            <h1>IM SAFE — Mental Status</h1>
-            <div class="muted">
+            <h1>Cognition &amp; Acuity Assessment</h1>
+            <div class="muted" style="margin-top:4px;">
               A quick mental snapshot before you go fly: reaction speed, color–word control, and 2-back working memory.
             </div>
-            <div style="margin-top:10px;">
-              <button id="startBtn" type="button" class="btn">Start Mental Status Check</button>
+            <div style="margin-top:12px;">
+              <button id="startBtn" type="button" class="btn">Start Assessment</button>
             </div>
             <div style="margin-top:8px;">
               <a href="javascript:void(0)" id="tmdInfoBtn" class="infoLink">What is this?</a>
             </div>
           </div>
         </div>
-        <button id="tmdMenuBtn" type="button" class="btn btn-sm btn-ghost" aria-label="Mental Status menu">☰</button>
+        <button id="tmdMenuBtn" type="button" class="btn btn-sm btn-ghost" aria-label="Cognition &amp; Acuity menu">☰</button>
       </div>
 
       <div id="tmdMenu" class="card hide">
-        <h3>Mental Status menu</h3>
+        <h3>Cognition &amp; Acuity menu</h3>
         <div class="muted" style="margin-bottom:4px;font-size:.9rem">
           Actions apply to this device only.
         </div>
-        <div class="row">
+        <div class="row" style="margin-top:4px;">
           <button id="menuAddBaseline" type="button" class="btn btn-sm">Add this result to baseline</button>
           <button id="menuManageBaseline" type="button" class="btn btn-sm btn-ghost">Manage baseline</button>
         </div>
-        <div class="row" style="margin-top:6px">
-          <button id="menuExport" type="button" class="btn btn-sm btn-ghost">Export Mental Status PDF</button>
+        <div class="row" style="margin-top:8px;">
+          <button id="menuExport" type="button" class="btn btn-sm btn-ghost">Export Assessment PDF</button>
+          <button id="menuAboutOst" type="button" class="btn btn-sm btn-ghost">About OST</button>
           <button id="menuMain" type="button" class="btn btn-sm btn-ghost">Main Menu</button>
         </div>
       </div>
+
+      <div class="footer-link muted">
+        Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+      </div>
     </section>
 
-    <!-- Info card -->
+    <!-- Info card for Cognition & Acuity -->
     <section id="tmdInfoCard" class="card hide">
-      <h2>About Mental Status</h2>
+      <h2>About the Cognition &amp; Acuity Assessment</h2>
       <div class="muted">
         <p>
-          Mental Status is an experimental, on-device tool inspired by IM SAFE and human factors research.
+          This assessment is an experimental, on-device tool inspired by IM SAFE and human-factors research.
           It samples three domains:
         </p>
         <ul>
@@ -226,7 +419,7 @@
         </p>
       </div>
       <div class="hr"></div>
-      <button id="tmdInfoBackBtn" type="button" class="btn btn-ghost">Back to Mental Status</button>
+      <button id="tmdInfoBackBtn" type="button" class="btn btn-ghost">Back to Cognition &amp; Acuity</button>
     </section>
 
     <!-- Test card -->
@@ -235,7 +428,7 @@
         <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
         <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
       </div>
-      <div class="bar" style="margin:10px 0 8px"><i id="progressBar"></i></div>
+      <div class="bar" style="margin:12px 0 10px"><i id="progressBar"></i></div>
 
       <!-- SRT -->
       <div id="srtPane" class="center" style="min-height:260px">
@@ -251,7 +444,7 @@
           <button id="btnMatch" type="button" class="btn">MATCH</button>
           <button id="btnMismatch" type="button" class="btn btn-ghost">MISMATCH</button>
         </div>
-        <div class="muted center" style="margin-top:6px">
+        <div class="muted center" style="margin-top:8px">
           Keyboard: <span class="kbd">F</span>=MATCH, <span class="kbd">J</span>=MISMATCH
         </div>
       </div>
@@ -271,10 +464,10 @@
 
       <!-- 2-back -->
       <div id="nbackPane" class="hide" style="min-height:260px">
-        <div class="center" style="margin:4px 0 6px;">
+        <div class="center" style="margin:6px 0 6px;">
           <div class="pill">Session: <b id="groupLabel">Group 1</b> of 12</div>
         </div>
-        <div class="center" style="margin:10px 0 18px; min-height:3.2rem">
+        <div class="center" style="margin:10px 0 16px; min-height:3.2rem">
           <div id="nbackDigit" class="big mono" style="visibility:hidden">5</div>
         </div>
         <div class="center" id="twoBackButtons" style="visibility:hidden">
@@ -283,7 +476,7 @@
             <button id="btnNotTarget" type="button" class="btn btn-ghost">NOT TARGET</button>
           </div>
         </div>
-        <div class="muted center" style="margin-top:6px">
+        <div class="muted center" style="margin-top:8px">
           Each group: flash 2 digits, then show the 3rd and respond.
           Keyboard: <span class="kbd">Space</span>=TARGET, <span class="kbd">N</span>=NOT TARGET.
         </div>
@@ -293,7 +486,7 @@
     <!-- Result card -->
     <section id="resultCard" class="card hide">
       <h2>Result</h2>
-      <div class="row" style="align-items:center;gap:14px">
+      <div class="row" style="align-items:center;gap:14px;margin-top:4px;">
         <div><span id="lightDot" class="dot"></span><b id="lightLabel">Overall status</b></div>
         <div class="big" id="statusText">—</div>
       </div>
@@ -301,7 +494,7 @@
       <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
         <b>On Second Thought…</b> <span id="guidanceText">—</span>
       </div>
-      <div class="grid grid-2">
+      <div class="grid grid-2" style="margin-top:6px;">
         <div>
           <h3>Today’s metrics</h3>
           <div class="muted" id="metricToday"></div>
@@ -312,13 +505,12 @@
         </div>
       </div>
       <div class="hr"></div>
-      <div class="row">
-        <button id="againBtn" type="button" class="btn">Run Mental Status Again</button>
+      <div class="row" style="gap:10px;">
+        <button id="againBtn" type="button" class="btn">Start Assessment Again</button>
         <button id="addBaselineBtn2" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
-        <!-- NEW: main menu button on result screen -->
         <button id="backToMainBtn" type="button" class="btn btn-ghost">Main Menu</button>
       </div>
-      <div class="muted" style="margin-top:8px">
+      <div class="muted" style="margin-top:8px;font-size:.9rem;">
         This tool supports—but does not replace—your own judgment and the full IM SAFE self-assessment.
       </div>
     </section>
@@ -343,48 +535,49 @@
         <div class="row" style="align-items:center;gap:10px">
           <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:28px;opacity:.7;">
           <div>
-            <h1>Flight Risk Assessment Tool (FRAT)</h1>
-            <div class="muted">
+            <h1>FRAT Assessment</h1>
+            <div class="muted" style="margin-top:4px;font-size:.95rem;">
               FAA-style True/False risk items with weighted scores and a VFR/IFR risk-band matrix.
             </div>
           </div>
         </div>
-        <button id="backFromFrat" type="button" class="btn btn-sm btn-ghost">Back to menu</button>
+        <button id="backFromFrat" type="button" class="btn btn-sm btn-ghost">Back to main menu</button>
       </div>
       <div class="hr"></div>
 
       <div class="grid grid-2">
         <div>
           <h2>Flight profile</h2>
-          <div class="muted">Select flight rules and experience in current aircraft / avionics type.</div>
+          <div class="muted" style="font-size:.95rem;">
+            Select flight rules and your experience in this aircraft / avionics type.
+          </div>
           <div class="sectionTitle">Flight rules</div>
-          <div class="row" style="margin-top:4px">
+          <div class="row" style="margin-top:4px;font-size:.95rem;">
             <label><input type="radio" name="fratRules" value="VFR"> VFR</label>
             <label><input type="radio" name="fratRules" value="IFR"> IFR</label>
           </div>
           <div class="sectionTitle" style="margin-top:8px">Experience in type</div>
-          <div class="row" style="margin-top:4px">
+          <div class="row" style="margin-top:4px;font-size:.95rem;">
             <label><input type="radio" name="fratExp" value="<100"> &lt;100 hours in type</label>
             <label><input type="radio" name="fratExp" value=">=100"> ≥100 hours in type</label>
           </div>
-          <div class="muted" style="margin-top:6px">
-            These bands mirror one published FAA FRAT. Your own SOP or CFI may use different thresholds.
+          <div class="muted" style="margin-top:6px;font-size:.85rem;">
+            These bands mirror one published FAA FRAT example. Your SOP or CFI may use different thresholds.
           </div>
         </div>
         <div>
           <h2>Risk bands (reference)</h2>
-          <div class="muted">
-            After scoring, your total will be placed into one of these reference bands.
-            High-band scores are a cue to slow down and think hard about mitigation, alternatives, or delay.
+          <div class="muted" style="font-size:.9rem;">
+            After scoring, your total is placed into one of these bands. High scores are a cue to slow down and think hard about mitigation, alternatives, or delay.
           </div>
           <div class="card" style="margin-top:8px;background:#0f1622;border:1px solid #223042">
             <div class="sectionTitle">IFR</div>
-            <div class="muted">
+            <div class="muted" style="font-size:.9rem;">
               <b>&lt;100 in type:</b> Low 20–25, Moderate 25–30, High &gt;30<br>
               <b>≥100 in type:</b> Low 25–30, Moderate 30–35, High &gt;35
             </div>
             <div class="sectionTitle" style="margin-top:6px">VFR</div>
-            <div class="muted">
+            <div class="muted" style="font-size:.9rem;">
               <b>&lt;100 in type:</b> Low 5–15, Moderate 15–20, High &gt;20<br>
               <b>≥100 in type:</b> Low 15–20, Moderate 20–25, High &gt;25
             </div>
@@ -393,21 +586,25 @@
       </div>
       <div class="hr"></div>
 
+      <div class="muted" style="margin-bottom:6px;font-size:.9rem;">
+        All questions are True/False. “True” applies the score shown; “False” contributes zero. Questions shown update based on VFR vs IFR.
+      </div>
+
       <div id="fratQuestions"></div>
 
       <div class="hr"></div>
-      <div class="row">
+      <div class="row" style="gap:10px;">
         <button id="fratCalcBtn" type="button" class="btn">Calculate FRAT Score</button>
         <button id="fratResetBtn" type="button" class="btn btn-ghost">Clear Answers</button>
       </div>
-      <div class="muted" style="margin-top:6px">
-        All items are True/False. “True” applies the score shown in the FAA table for that condition; “False” contributes zero.
+      <div class="footer-link muted">
+        Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
       </div>
     </section>
 
     <section id="fratResultCard" class="card hide">
       <h2>FRAT Result</h2>
-      <div class="row" style="align-items:center;gap:14px">
+      <div class="row" style="align-items:center;gap:14px;margin-top:4px;">
         <div><span id="fratDot" class="dot"></span><b id="fratStatusLabel">—</b></div>
         <div class="big" id="fratScoreText">—</div>
       </div>
@@ -415,7 +612,7 @@
       <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
         <b>On Second Thought…</b> <span id="fratGuidance">—</span>
       </div>
-      <div class="grid grid-2">
+      <div class="grid grid-2" style="margin-top:6px;">
         <div>
           <h3>Score breakdown</h3>
           <div class="muted" id="fratBreakdown"></div>
@@ -440,19 +637,33 @@
   const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
   const sd=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));};
   const now=()=>performance.now();
-  const sleep = ms => new Promise(r=>setTimeout(r,ms));  // NEW helper
+  const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
-  // MODE TOGGLE
+  function show(el){el.classList.remove("hide");}
+  function hide(el){el.classList.add("hide");}
+
+  // MODE TOGGLE & APP / ABOUT CARDS
   const modeCard=$("#modeCard"), tmdRoot=$("#tmdRoot"), fratRoot=$("#fratRoot");
   const goTmdBtn=$("#goTmdBtn"), goFratBtn=$("#goFratBtn");
   const tmdHome=$("#tmdHome"), tmdInfoCard=$("#tmdInfoCard");
   const tmdInfoBtn=$("#tmdInfoBtn"), tmdInfoBackBtn=$("#tmdInfoBackBtn");
 
-  function show(el){el.classList.remove("hide");}
-  function hide(el){el.classList.add("hide");}
+  const appInfoLink=$("#appInfoLink"), appInfoCard=$("#appInfoCard"), appInfoBackBtn=$("#appInfoBackBtn");
+  const aboutOstCard=$("#aboutOstCard");
+  const aboutOstBackBtn=$("#aboutOstBackBtn");
+
+  function goMain(){
+    hide(tmdRoot);
+    hide(fratRoot);
+    hide(appInfoCard);
+    hide(aboutOstCard);
+    show(modeCard);
+  }
 
   goTmdBtn.addEventListener("click",()=>{
-    modeCard.classList.add("hide");
+    hide(modeCard);
+    hide(appInfoCard);
+    hide(aboutOstCard);
     fratRoot.classList.add("hide");
     tmdRoot.classList.remove("hide");
     show(tmdHome);
@@ -464,14 +675,26 @@
   });
 
   goFratBtn.addEventListener("click",()=>{
-    modeCard.classList.add("hide");
+    hide(modeCard);
+    hide(appInfoCard);
+    hide(aboutOstCard);
     tmdRoot.classList.add("hide");
     fratRoot.classList.remove("hide");
   });
 
-  $("#backFromFrat").addEventListener("click",()=>{
-    fratRoot.classList.add("hide");
-    modeCard.classList.remove("hide");
+  $("#backFromFrat").addEventListener("click",goMain);
+
+  appInfoLink.addEventListener("click",()=>{
+    hide(modeCard);
+    hide(aboutOstCard);
+    show(appInfoCard);
+  });
+  appInfoBackBtn.addEventListener("click",goMain);
+
+  aboutOstBackBtn.addEventListener("click",()=>{
+    hide(aboutOstCard);
+    // Return to main by default; if you want, this could remember where you came from.
+    goMain();
   });
 
   tmdInfoBtn.addEventListener("click",()=>{
@@ -504,7 +727,7 @@
   }
 
   // =====================================================================
-  //                         MENTAL STATUS
+  //                         COGNITION & ACUITY
   // =====================================================================
   const storeKey="flyingm_imsafe_baseline_v2";
   const loadBaseline=()=>{try{return JSON.parse(localStorage.getItem(storeKey)||"[]");}catch{return[];}};
@@ -513,7 +736,7 @@
   const startBtn=$("#startBtn"), addBaselineBtn2=$("#addBaselineBtn2");
   const tmdMenuBtn=$("#tmdMenuBtn"), tmdMenu=$("#tmdMenu");
   const menuAddBaseline=$("#menuAddBaseline"), menuManageBaseline=$("#menuManageBaseline");
-  const menuExport=$("#menuExport"), menuMain=$("#menuMain");
+  const menuExport=$("#menuExport"), menuMain=$("#menuMain"), menuAboutOst=$("#menuAboutOst");
 
   const testCard=$("#testCard"), stepName=$("#stepName"), countdown=$("#countdown"), progressBar=$("#progressBar");
   const srtPane=$("#srtPane"), srtTarget=$("#srtTarget");
@@ -522,7 +745,7 @@
   const preNbackPane=$("#preNbackPane"), startNbackBtn=$("#startNbackBtn"), preNbackHint=$("#preNbackHint");
   const nbackPane=$("#nbackPane"), nbackDigit=$("#nbackDigit"), btnTarget=$("#btnTarget"), btnNotTarget=$("#btnNotTarget"), twoBackButtons=$("#twoBackButtons"), groupLabel=$("#groupLabel");
   const resultCard=$("#resultCard"), lightDot=$("#lightDot"), statusText=$("#statusText"), driverText=$("#driverText"), guidanceText=$("#guidanceText"), metricToday=$("#metricToday"), metricBase=$("#metricBase"), againBtn=$("#againBtn");
-  const backToMainBtn=$("#backToMainBtn");  // NEW main menu button
+  const backToMainBtn=$("#backToMainBtn");
   const baselineCard=$("#baselineCard"), baselineList=$("#baselineList"), deleteBaselineBtn=$("#deleteBaselineBtn"), closeBaselineBtn=$("#closeBaselineBtn");
 
   let baselineSessions=loadBaseline();
@@ -560,18 +783,26 @@
     hide(resultCard);
     hide(tmdInfoCard);
     tmdRoot.classList.add("hide");
-    modeCard.classList.remove("hide");
+    show(modeCard);
   });
 
-  // NEW: return to main menu from result screen
+  menuAboutOst.addEventListener("click",()=>{
+    hide(tmdMenu);
+    hide(tmdHome);
+    hide(testCard);
+    hide(resultCard);
+    hide(baselineCard);
+    hide(tmdInfoCard);
+    show(aboutOstCard);
+  });
+
   backToMainBtn.addEventListener("click", () => {
     hide(resultCard);
     hide(testCard);
     hide(baselineCard);
     hide(tmdInfoCard);
-    show(tmdHome);           // if they come back into Mental Status later
     tmdRoot.classList.add("hide");
-    modeCard.classList.remove("hide");
+    show(modeCard);
   });
 
   startBtn.addEventListener('click', runTest);
@@ -624,7 +855,7 @@
     show(testCard);
     testCard.scrollIntoView({behavior:"auto"});
 
-    // Warm-up (simple countdown)
+    // Warm-up
     await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{
       countdown.textContent=Math.ceil(t)+"s";
       setProgress((DUR.warmup - t)/TOTAL_TIME);
@@ -646,7 +877,7 @@
     hide(preNbackPane);
     if(!started){
       hide(testCard);
-      alert("2-back segment was not started within 10 seconds. The Mental Status check has been cancelled. Please run it again for valid results.");
+      alert("2-back segment was not started within 10 seconds. The assessment has been cancelled. Please run it again for valid results.");
       show(tmdHome);
       return;
     }
@@ -678,7 +909,7 @@
     });
   }
 
-  function randomGap(){ return 1000 + Math.random()*4500; }
+  function randomGap(){ return 1000 + Math.random()*4500; } // 1.0–5.5 seconds approx
 
   async function runSRT(sec){
     show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane); hide(betweenPane);
@@ -751,12 +982,12 @@
     return await new Promise(resolve=>{
       const names=["RED","GREEN","BLUE","YELLOW","ORANGE","WHITE"];
       const colors={
-        RED:"#ff4d4d",
-        GREEN:"#18d96e",
-        BLUE:"#4da3ff",
-        YELLOW:"#ffd633",
-        ORANGE:"#ff9933",
-        WHITE:"#ffffff"
+        RED:"#ff1744",
+        GREEN:"#00e676",
+        BLUE:"#2979ff",
+        YELLOW:"#ffeb3b",
+        ORANGE:"#ff9100",
+        WHITE:"#fafafa"
       };
       let trials=[], tStim=0, awaiting=false, prevWord=null, prevColor=null;
       let timeOver=false, finished=false;
@@ -764,7 +995,6 @@
       const gap=400;
       let offM=null, offMM=null;
 
-      // track congruency run to avoid long clusters
       let prevCongruent=null;
       let runLen=0;
 
@@ -790,7 +1020,6 @@
       }
 
       function nextPair(){
-        // choose congruent vs incongruent with run-length limiting
         let wantCong;
         if(prevCongruent===true && runLen>=2){
           wantCong=false;
@@ -889,7 +1118,7 @@
       window.addEventListener('keydown',keyHandler);
 
       showTrial();
-      sectionTimer("Color-Word",sec,(tleft,p)=>{
+      sectionTimer("Color–Word",sec,(tleft,p)=>{
         countdown.textContent=Math.ceil(tleft)+"s";
         const elapsed=DUR.warmup + DUR.srt + (DUR.stroop - tleft);
         setProgress(elapsed / TOTAL_TIME);
@@ -903,7 +1132,7 @@
   async function runTwoBack(groups){
     show(nbackPane); hide(srtPane); hide(stroopPane); hide(preNbackPane); hide(betweenPane);
 
-    // NEW: 1 second pause after the 2-back screen appears
+    // Small pause so the first digit doesn't slam in immediately
     await sleep(1000);
 
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
@@ -1009,7 +1238,7 @@
   function computeScoring(srt,stro,nb,baseline){
     const today={
       srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
-      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stroopScore:stro.stroopScore,
+      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
       nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT
     };
     const base=computeBaselineStats(baseline);
@@ -1067,8 +1296,8 @@
     const lapseFlag=((srt.lapses>=4) || (isFinite(baseLaps) && srt.lapses>=lapseThreshold));
 
     let stroopTScore=NaN, stroopMessage="—";
-    if(isFinite(today.stroopScore)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
-      const zSt=(today.stroopScore-base.mean.stro_score)/base.sd.stro_score;
+    if(isFinite(today.stro_score)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
+      const zSt=(today.stro_score-base.mean.stro_score)/base.sd.stro_score;
       stroopTScore=50+10*zSt;
       const drop=(50-stroopTScore)/50;
       if(drop<=0.10) stroopMessage="you do not show a meaningful decline in executive function compared to your baseline.";
@@ -1179,7 +1408,7 @@
   function addCurrentToBaseline(){
     const payload=resultCard.dataset.payload?JSON.parse(resultCard.dataset.payload):null;
     if(!payload){
-      alert("Run a Mental Status check and view the results before adding to baseline.");
+      alert("Run an assessment and view the results before adding to baseline.");
       return;
     }
     const {res}=payload;
@@ -1189,19 +1418,32 @@
     alert("Added to baseline. Collect at least 3 baseline sessions on good days to make the comparisons meaningful.");
   }
 
+  function updateBaselineList(){
+    if(!baselineSessions.length){
+      baselineList.textContent="No baseline yet.";
+      return;
+    }
+    const lines=baselineSessions.map((s,i)=>{
+      return `#${i+1} • medRT ${fmt(s.srt_median)} ms • lapses ${fmt(s.srt_lapses)} • Stroop acc ${fmt(s.stro_acc)}% • 2-back d′ ${fmt(s.nb_d)}`;
+    });
+    baselineList.innerHTML=lines.map(l=>`<div>${l}</div>`).join("");
+  }
+
   function exportPDF(){
     const payload=resultCard.dataset.payload?JSON.parse(resultCard.dataset.payload):null;
     const bcount=baselineSessions.length; const when=new Date().toLocaleString();
-    let html=`<html><head><title>IM SAFE — Mental Status Summary</title>
-      <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
+    let html=`<html><head><title>Second Opinion — Cognition &amp; Acuity Summary</title>
+      <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px;color:#111}
       h1{font-size:20px;margin:0 0 6px} h2{font-size:16px;margin:18px 0 6px}
       .muted{color:#555}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{border:1px solid #ddd;border-radius:8px;padding:12px}
       .mono{font-family:ui-monospace,Menlo,Monaco,Consolas}</style></head><body>
-      <h1>IM SAFE — Mental Status (Summary)</h1>
+      <h1>Second Opinion — Cognition &amp; Acuity (Summary)</h1>
       <div class="muted">Generated: ${when} • Baseline sessions on this device: ${bcount} • Version: v0.7 experimental</div>`;
     if(!payload){
-      html+=`<p>No recent test run to export.</p></body></html>`;
-      const w=window.open("","_blank"); w.document.write(html); w.print(); return;
+      html+=`<p>No recent assessment run to export.</p></body></html>`;
+      const w=window.open("","_blank"); if(w){w.document.write(html);w.document.close();w.focus();w.print();}
+      else alert("Pop-up blocked — please allow pop-ups to view the summary.");
+      return;
     }
     const {srt,stro,nb,res}=payload; const totalPresses=srt.falseStarts+srt.n; const fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
     const shownNbD=res.today.nb_d;
@@ -1244,240 +1486,250 @@
         Stroop mean RT: ${fmt(res.baseStats.mean.stro_mean_rt)} ms ± ${fmt(res.baseStats.sd.stro_mean_rt)}<br/>
         Stroop cost: ${fmt(res.baseStats.mean.stro_cost)} ms ± ${fmt(res.baseStats.sd.stro_cost)}<br/>
         Stroop score (acc): ${fmt(res.baseStats.mean.stro_score)} ± ${fmt(res.baseStats.sd.stro_score)}<br/>
-        2-back d′ (scaled): ${fmt(res.baseStats.mean.nb_d)} ± ${fmt(res.baseStats.sd.nb_d)}
-      </div></body></html>`;
-    const w=window.open("","_blank"); w.document.open(); w.document.write(html); w.document.close(); w.focus(); w.print();
+        2-back d′ (scaled): ${fmt(res.baseStats.mean.nb_d)} ± ${fmt(res.baseStats.sd.nb_d)}<br/>
+      </div>
+      </body></html>`;
+
+    const w = window.open("", "_blank");
+    if (w) {
+      w.document.write(html);
+      w.document.close();
+      w.focus();
+      w.print();
+    } else {
+      alert("Pop-up blocked — please allow pop-ups to view the summary.");
+    }
   }
 
-  function updateBaselineList(){
-    const b=baselineSessions;
-    if(!b.length){ baselineList.textContent="No baseline yet."; return; }
-    baselineList.innerHTML=b.map((s,i)=>
-      `<div class="chip">#${i+1} • medRT ${fmt(s.srt_median)} ms • lapses ${fmt(s.srt_lapses)} • Stroop acc ${fmt(s.stro_acc)}% • 2-back d′ ${fmt(s.nb_d)}</div>`
-    ).join("<br/>");
-  }
-  updateBaselineList();
-
-  // Warn on navigation while test running
-  window.addEventListener("beforeunload",e=>{
-    if(!testCard.classList.contains("hide")){
-      e.preventDefault(); e.returnValue="";
-    }
-  });
-
   // =====================================================================
-  //                               FRAT
+  //                              FRAT
   // =====================================================================
-  const FRAT_QUESTIONS = [
-    // Pilot
-    {id:"p_less50", section:"Pilot", text:"Less than 50 hours in aircraft or avionics type", score:5, rules:["VFR","IFR"]},
-    {id:"p_less15_90", section:"Pilot", text:"Less than 15 hours in the last 90 days", score:3, rules:["VFR","IFR"]},
-    {id:"p_after_work", section:"Pilot", text:"Flight will occur after work", score:4, rules:["VFR","IFR"]},
-    {id:"p_less8sleep", section:"Pilot", text:"Less than 8 hours sleep prior to flight", score:5, rules:["VFR","IFR"]},
-    {id:"p_dual_last90", section:"Pilot", text:"Dual instruction received in last 90 days", score:-1, rules:["VFR","IFR"]},
-    {id:"p_wings6mo", section:"Pilot", text:"WINGS phase completion in last 6 months", score:-3, rules:["VFR","IFR"]},
-    {id:"p_ir_current", section:"Pilot", text:"Instrument rating current and proficient", score:-3, rules:["VFR","IFR"]},
-
-    // Flight conditions
-    {id:"fc_twilight_night", section:"Flight Conditions", text:"Twilight or night", score:5, rules:["VFR","IFR"]},
-    {id:"fc_crosswind7", section:"Flight Conditions", text:"Crosswind greater than 7 knots", score:4, rules:["VFR","IFR"]},
-    {id:"fc_surface15", section:"Flight Conditions", text:"Surface wind greater than 15 knots", score:4, rules:["VFR","IFR"]},
-    {id:"fc_mountainous", section:"Flight Conditions", text:"Mountainous terrain", score:4, rules:["VFR","IFR"]},
-
-    // Airport
-    {id:"ap_nontowered", section:"Airport", text:"Non-towered airport or tower closed at ETD or ETA", score:5, rules:["VFR","IFR"]},
-    {id:"ap_wet_soft", section:"Airport", text:"Wet or soft field runway", score:3, rules:["VFR","IFR"]},
-    {id:"ap_short3k", section:"Airport", text:"Runway length less than 3,000 feet", score:3, rules:["VFR","IFR"]},
-    {id:"ap_obstacles", section:"Airport", text:"Obstacles on approach and/or departure", score:3, rules:["VFR","IFR"]},
-
-    // VFR flight plan
-    {id:"vfr_ceiling3k", section:"VFR Flight Plan", text:"Ceiling less than 3,000 feet AGL", score:2, rules:["VFR"]},
-    {id:"vfr_vis5", section:"VFR Flight Plan", text:"Visibility less than 5 SM", score:2, rules:["VFR"]},
-    {id:"vfr_no_wx_dest", section:"VFR Flight Plan", text:"No weather reporting at destination", score:4, rules:["VFR"]},
-    {id:"vfr_fp_filed", section:"VFR Flight Plan", text:"Flight plan filed and activated", score:-2, rules:["VFR"]},
-    {id:"vfr_atc_ff", section:"VFR Flight Plan", text:"ATC flight following used", score:-3, rules:["VFR"]},
-
-    // IFR flight plan
-    {id:"ifr_ceiling1k", section:"IFR Flight Plan", text:"Ceiling less than 1,000 feet AGL", score:2, rules:["IFR"]},
-    {id:"ifr_vis3", section:"IFR Flight Plan", text:"Visibility less than 3 SM", score:2, rules:["IFR"]},
-    {id:"ifr_no_wx_dest", section:"IFR Flight Plan", text:"No weather reporting at destination", score:4, rules:["IFR"]},
-
-    // Approaches
-    {id:"appr_precision", section:"Approaches – Instrument Pilots", text:"Precision approach (best available)", score:-2, rules:["IFR"]},
-    {id:"appr_nonprecision", section:"Approaches – Instrument Pilots", text:"Non precision approach (best available)", score:3, rules:["IFR"]},
-    {id:"appr_no_instr", section:"Approaches – Instrument Pilots", text:"No instrument approach available", score:4, rules:["IFR"]},
-    {id:"appr_circling", section:"Approaches – Instrument Pilots", text:"Circling approach", score:7, rules:["IFR"]}
-  ];
-
-  const FRAT_BANDS = {
-    IFR: {
-      "<100": {low:[20,25], moderate:[25,30], highMin:30},
-      ">=100": {low:[25,30], moderate:[30,35], highMin:35}
-    },
-    VFR: {
-      "<100": {low:[5,15], moderate:[15,20], highMin:20},
-      ">=100": {low:[15,20], moderate:[20,25], highMin:25}
-    }
-  };
 
   const fratQuestionsDiv=$("#fratQuestions");
-  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn);
-  const fratResultCard=$("#fratResultCard"), fratDot=$("#fratDot"), fratStatusLabel=$("#fratStatusLabel"), fratScoreText=$("#fratScoreText");
-  const fratNarrative=$("#fratNarrative"), fratGuidance=$("#fratGuidance"), fratBreakdown=$("#fratBreakdown"), fratBandRef=$("#fratBandRef"), fratExportBtn=$("#fratExportBtn");
+  const fratCalcBtn=$("#fratCalcBtn");
+  const fratResetBtn=$("#fratResetBtn");
+  const fratResultCard=$("#fratResultCard");
+  const fratDot=$("#fratDot");
+  const fratStatusLabel=$("#fratStatusLabel");
+  const fratScoreText=$("#fratScoreText");
+  const fratNarrative=$("#fratNarrative");
+  const fratGuidance=$("#fratGuidance");
+  const fratBreakdown=$("#fratBreakdown");
+  const fratBandRef=$("#fratBandRef");
+  const fratExportBtn=$("#fratExportBtn");
 
-  function getSelected(groupName){
-    const n=document.querySelector(`input[name="${groupName}"]:checked`);
-    return n?n.value:null;
-  }
+  // Simple FRAT item set, aligned with pilot / aircraft / environment / external pressures.
+  // rule: "BOTH", "VFR", or "IFR"
+  const FRAT_ITEMS=[
+    {id:"pilot_recent", cat:"Pilot", text:"Less than 3 hours flight time in last 30 days.", score:2, rule:"BOTH"},
+    {id:"pilot_inst_curr", cat:"Pilot", text:"Instrument rating not current and/or not proficient.", score:4, rule:"IFR"},
+    {id:"pilot_night", cat:"Pilot", text:"Planning night operations with minimal recent night experience.", score:3, rule:"BOTH"},
+    {id:"pilot_fatigue", cat:"Pilot", text:"Moderate fatigue or reduced sleep in last 24 hours.", score:3, rule:"BOTH"},
+    {id:"pilot_illness", cat:"Pilot", text:"IM SAFE: ‘Illness’ or ‘Medication’ not completely resolved.", score:5, rule:"BOTH"},
 
-  function buildFratForm(){
-    const selectedRule=getSelected("fratRules");
-    let html="";
-    const sections=[...new Set(FRAT_QUESTIONS.filter(q=>!selectedRule || q.rules.includes(selectedRule)).map(q=>q.section))];
-    if(!selectedRule){
-      html+=`<div class="muted">Select flight rules (VFR or IFR) to see the relevant questions.</div>`;
-    }
-    sections.forEach(sec=>{
-      html+=`<div class="sectionTitle">${sec}</div>`;
-      FRAT_QUESTIONS.filter(q=>q.section===sec && (!selectedRule || q.rules.includes(selectedRule)))
-        .forEach(q=>{
-          html+=`<div class="frat-q" data-qid="${q.id}">
-            <div class="frat-q-text">${q.text}</div>
-            <div class="frat-q-controls">
-              <label><input type="radio" name="frat_${q.id}" value="true"> True</label>
-              <label style="margin-left:6px"><input type="radio" name="frat_${q.id}" value="false"> False</label>
-            </div>
-          </div>`;
-        });
+    {id:"ac_new_type", cat:"Aircraft", text:"Less than 25 hours in this aircraft / avionics type.", score:3, rule:"BOTH"},
+    {id:"ac_mx_def", cat:"Aircraft", text:"Minor deferred maintenance items or recent maintenance just completed.", score:2, rule:"BOTH"},
+    {id:"ac_complex", cat:"Aircraft", text:"Complex or high-performance aircraft (retract, turbo, etc.) with limited recent experience.", score:3, rule:"BOTH"},
+
+    {id:"env_xwind", cat:"Environment", text:"Forecast crosswind component within 5 kt of personal minimums or POH limits.", score:3, rule:"BOTH"},
+    {id:"env_ceiling_marginal", cat:"Environment", text:"Ceiling / visibility marginal for planned route (MVFR or worse).", score:4, rule:"IFR"},
+    {id:"env_convective", cat:"Environment", text:"Convective activity or embedded cells along route or near destination.", score:4, rule:"BOTH"},
+    {id:"env_ice", cat:"Environment", text:"Known or forecast icing in climb/cruise/approach segment.", score:5, rule:"IFR"},
+
+    {id:"route_new", cat:"Route / Operation", text:"Unfamiliar route, airspace, or destination.", score:3, rule:"BOTH"},
+    {id:"route_mountain", cat:"Route / Operation", text:"Mountainous terrain or high density altitude without recent experience.", score:3, rule:"BOTH"},
+    {id:"route_night_vfr", cat:"Route / Operation", text:"Night VFR over unlit terrain or water.", score:3, rule:"VFR"},
+
+    {id:"ifrp_altmin", cat:"IFR Flight Plan", text:"IFR alternate required and close to minimums.", score:4, rule:"IFR"},
+    {id:"ifrp_single_pilot_ifr", cat:"IFR Flight Plan", text:"Single-pilot IFR in busy or unfamiliar airspace.", score:4, rule:"IFR"},
+
+    {id:"app_nonprec_mins", cat:"Approach (IFR)", text:"Planned nonprecision approach within 200 ft of published minimums.", score:4, rule:"IFR"},
+    {id:"app_circle", cat:"Approach (IFR)", text:"Circle-to-land or circling maneuver required at destination.", score:4, rule:"IFR"},
+
+    {id:"press_schedule", cat:"External Pressures", text:"Schedule pressure (late departure, tight arrival window, passengers waiting).", score:3, rule:"BOTH"},
+    {id:"press_passengers", cat:"External Pressures", text:"Carrying business associates, family, or people you feel pressure to impress.", score:3, rule:"BOTH"},
+    {id:"press_financial", cat:"External Pressures", text:"Financial or other external consequences if the flight is delayed or cancelled.", score:3, rule:"BOTH"}
+  ];
+
+  function buildFratQuestions(){
+    fratQuestionsDiv.innerHTML="";
+    const cats=[...new Set(FRAT_ITEMS.map(i=>i.cat))];
+    cats.forEach(cat=>{
+      const wrapper=document.createElement("div");
+      wrapper.className="card";
+      wrapper.style.background="#0f1622";
+      wrapper.style.border="1px solid #223042";
+      wrapper.style.marginBottom="10px";
+      const h=document.createElement("h3");
+      h.textContent=cat;
+      wrapper.appendChild(h);
+      const subset=FRAT_ITEMS.filter(i=>i.cat===cat);
+      subset.forEach(item=>{
+        const row=document.createElement("div");
+        row.className="frat-q";
+        row.dataset.itemId=item.id;
+        const textDiv=document.createElement("div");
+        textDiv.className="frat-q-text";
+        textDiv.innerHTML=`${item.text} <span class="muted" style="font-size:.8rem;">(True = +${item.score})</span>`;
+        const controls=document.createElement("div");
+        controls.className="frat-q-controls";
+        controls.innerHTML=`
+          <label><input type="radio" name="${item.id}" value="true"> True</label><br/>
+          <label><input type="radio" name="${item.id}" value="false"> False</label>
+        `;
+        row.appendChild(textDiv);
+        row.appendChild(controls);
+        wrapper.appendChild(row);
+      });
+      fratQuestionsDiv.appendChild(wrapper);
     });
-    fratQuestionsDiv.innerHTML=html;
   }
 
-  document.querySelectorAll('input[name="fratRules"]').forEach(r=>r.addEventListener("change",()=>{
-    fratResultCard.classList.add("hide");
-    buildFratForm();
-  }));
-  document.querySelectorAll('input[name="fratExp"]').forEach(r=>r.addEventListener("change",()=>{
-    fratResultCard.classList.add("hide");
-  }));
+  buildFratQuestions();
+
+  function getFratProfile(){
+    const rules=document.querySelector('input[name="fratRules"]:checked')?.value || null;
+    const exp=document.querySelector('input[name="fratExp"]:checked')?.value || null;
+    return {rules,exp};
+  }
+
+  function applicableToRules(itemRule, rules){
+    if(itemRule==="BOTH") return true;
+    return itemRule===rules;
+  }
 
   fratCalcBtn.addEventListener("click",()=>{
-    const rule=getSelected("fratRules");
-    const exp=getSelected("fratExp");
-    if(!rule || !exp){alert("Please select both flight rules (VFR/IFR) and experience in type before scoring.");return;}
-    const questions=FRAT_QUESTIONS.filter(q=>q.rules.includes(rule));
-    let total=0, missing=[];
-    const bySection={};
-    questions.forEach(q=>{
-      const t=document.querySelector(`input[name="frat_${q.id}"][value="true"]`);
-      const f=document.querySelector(`input[name="frat_${q.id}"][value="false"]`);
-      if(!t || !f){return;}
-      if(!t.checked && !f.checked){missing.push(q);return;}
-      if(t.checked) total+=q.score;
-      if(!bySection[q.section]) bySection[q.section]=0;
-      if(t.checked) bySection[q.section]+=q.score;
-    });
-    if(missing.length){
-      alert(`Please answer all questions. Missing: ${missing.slice(0,3).map(q=>q.text).join("; ")}${missing.length>3?"…":""}`);
+    const {rules,exp}=getFratProfile();
+    if(!rules || !exp){
+      alert("Please select flight rules (VFR/IFR) and experience in type before scoring.");
       return;
     }
-
-    const bands=FRAT_BANDS[rule][exp];
-    let status="Below reference band (very low)", dot="green", narrative="";
-    let bandRef=`For ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type: Low ${bands.low[0]}–${bands.low[1]}, Moderate ${bands.moderate[0]}–${bands.moderate[1]}, High >${bands.highMin}.`;
-
-    if(total>=bands.highMin){
-      status="High band";
-      dot="red";
-      narrative=`Your FRAT score of ${total} falls in the reference HIGH band for ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type.`;
-    }else if(total>=bands.moderate[0] && total<bands.moderate[1]){
-      status="Moderate band";
-      dot="amber";
-      narrative=`Your FRAT score of ${total} falls in the reference MODERATE band for ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type.`;
-    }else if(total>=bands.low[0] && total<bands.low[1]){
-      status="Low band";
-      dot="green";
-      narrative=`Your FRAT score of ${total} falls in the reference LOW band for ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type.`;
-    }else{
-      status="Below reference low band";
-      dot="green";
-      narrative=`Your FRAT score of ${total} is below the typical LOW band range for ${rule} with ${exp===">=100"?"≥100":"<100"} hours in type.`;
-    }
-
-    let guidance="";
-    if(status==="High band"){
-      guidance="this profile really deserves a long pause. Talk it through with a trusted CFI or safety-minded pilot and look hard at mitigation, alternatives, or simply not going.";
-    }else if(status==="Moderate band"){
-      guidance="you’re in the moderate band. Make sure every risk item has an intentional mitigation, and double-check that the overall plan still feels conservative for today.";
-    }else if(status==="Low band"){
-      guidance="the score is in the low band, but each contributing item still deserves respect. Don’t let a ‘good’ number talk you into stretching your comfort zone.";
-    }else{
-      guidance="you’re below the typical low band range for this reference FRAT. That usually reflects a fairly benign profile, but the real go/no-go call still lives with you and your IM SAFE check.";
-    }
-
-    let breakdownHtml="";
-    Object.keys(bySection).forEach(sec=>{
-      breakdownHtml+=`<div><b>${sec}:</b> ${bySection[sec]}</div>`;
+    let total=0;
+    const byCat={};
+    FRAT_ITEMS.forEach(item=>{
+      if(!applicableToRules(item.rule,rules)) return;
+      const val=document.querySelector(`input[name="${item.id}"]:checked`)?.value;
+      if(val==="true"){
+        total+=item.score;
+        byCat[item.cat]=(byCat[item.cat]||0)+item.score;
+      }
     });
-    if(!breakdownHtml) breakdownHtml="<div>No items contributed to this score.</div>";
 
-    fratDot.className="dot "+(dot==="red"?"red":dot==="amber"?"amber":"green");
-    fratStatusLabel.textContent=status;
-    fratScoreText.textContent=String(total);
+    // Determine band
+    let band="Low", dotClass="green", narrative="", guidance="";
+    let bandText="";
+    if(rules==="IFR"){
+      if(exp==="<100"){
+        if(total<20){band="Below ref range";dotClass="green";}
+        else if(total<=25){band="Low";dotClass="green";}
+        else if(total<=30){band="Moderate";dotClass="amber";}
+        else {band="High";dotClass="red";}
+        bandText="IFR • <100 in type: Low 20–25, Moderate 25–30, High >30.";
+      }else{
+        if(total<25){band="Below ref range";dotClass="green";}
+        else if(total<=30){band="Low";dotClass="green";}
+        else if(total<=35){band="Moderate";dotClass="amber";}
+        else {band="High";dotClass="red";}
+        bandText="IFR • ≥100 in type: Low 25–30, Moderate 30–35, High >35.";
+      }
+    }else{ // VFR
+      if(exp==="<100"){
+        if(total<5){band="Below ref range";dotClass="green";}
+        else if(total<=15){band="Low";dotClass="green";}
+        else if(total<=20){band="Moderate";dotClass="amber";}
+        else {band="High";dotClass="red";}
+        bandText="VFR • <100 in type: Low 5–15, Moderate 15–20, High >20.";
+      }else{
+        if(total<15){band="Below ref range";dotClass="green";}
+        else if(total<=20){band="Low";dotClass="green";}
+        else if(total<=25){band="Moderate";dotClass="amber";}
+        else {band="High";dotClass="red";}
+        bandText="VFR • ≥100 in type: Low 15–20, Moderate 20–25, High >25.";
+      }
+    }
+
+    if(band==="Below ref range"){
+      narrative="Your numeric score is below the reference “Low” band for this profile. That can happen if conditions are benign and you answered “False” to most items.";
+      guidance="don’t let a low number lull you into complacency. Keep scanning for traps that the form doesn’t capture—especially external pressure, fatigue, and subtle weather changes.";
+    }else if(band==="Low"){
+      narrative="Your risk score falls in the reference Low band for this profile.";
+      guidance="this is where a lot of routine, well-planned flights end up. Still, it’s worth a quick second look at any items you answered “True” on; those are the specific edges you’re choosing to accept today.";
+    }else if(band==="Moderate"){
+      narrative="Your risk score is in the Moderate band for this profile.";
+      guidance="this is a good moment for an “On Second Thought…” pause: can you mitigate any of the True items? Change routing or timing, add fuel, bring another pilot, or delay? Moderate scores reward deliberate, not automatic, go-decisions.";
+    }else{
+      narrative="Your risk score is in the High band for this profile.";
+      guidance="this deserves a very slow, very honest second look. If your answers are accurate, you’re stacking several meaningful risk factors. Scrubbing or substantially reshaping the plan is often the safest—and most professional—choice.";
+    }
+
+    fratDot.className="dot "+(dotClass==="green"?"green":dotClass==="red"?"red":"amber");
+    fratStatusLabel.textContent=`${band} risk band`;
+    fratScoreText.textContent=`Score: ${total}`;
     fratNarrative.textContent=narrative;
     fratGuidance.textContent=guidance;
-    fratBreakdown.innerHTML=breakdownHtml;
-    fratBandRef.textContent=bandRef;
-    fratResultCard.dataset.payload=JSON.stringify({rule,exp,total,status,guidance,narrative,bySection,bands});
+
+    const catLines=Object.keys(byCat).sort().map(cat=>{
+      return `<div><b>${cat}:</b> ${byCat[cat]} points</div>`;
+    });
+    fratBreakdown.innerHTML=catLines.length?catLines.join(""):"<div>No items scored True.</div>";
+    fratBandRef.textContent=bandText;
+
     fratResultCard.classList.remove("hide");
+    fratResultCard.scrollIntoView({behavior:"auto"});
+    fratResultCard.dataset.payload=JSON.stringify({total,band,byCat,rules,exp});
   });
 
   fratResetBtn.addEventListener("click",()=>{
-    document.querySelectorAll('input[name^="frat_"]').forEach(i=>{i.checked=false;});
+    document.querySelectorAll("#fratQuestions input[type=radio]").forEach(r=>r.checked=false);
     fratResultCard.classList.add("hide");
   });
 
   fratExportBtn.addEventListener("click",()=>{
     const payload=fratResultCard.dataset.payload?JSON.parse(fratResultCard.dataset.payload):null;
     const when=new Date().toLocaleString();
-    const rule=getSelected("fratRules")||"—", exp=getSelected("fratExp")||"—";
-    let html=`<html><head><title>FRAT Summary</title>
-      <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
+    const {rules,exp}=getFratProfile();
+    let html=`<html><head><title>Second Opinion — FRAT Summary</title>
+      <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px;color:#111}
       h1{font-size:20px;margin:0 0 6px} h2{font-size:16px;margin:18px 0 6px}
       .muted{color:#555}.box{border:1px solid #ddd;border-radius:8px;padding:12px}</style></head><body>
-      <h1>Flight Risk Assessment Tool (FRAT)</h1>
-      <div class="muted">Generated: ${when}</div>
-      <div class="muted">Flight rules: ${rule} • Experience in type: ${exp}</div>`;
+      <h1>Second Opinion — Flight Risk Assessment (FRAT)</h1>
+      <div class="muted">Generated: ${when}</div>`;
     if(!payload){
-      html+=`<p>No FRAT run to export.</p></body></html>`;
-      const w=window.open("","_blank"); w.document.write(html); w.print(); return;
+      html+=`<p>No FRAT result to export.</p></body></html>`;
+      const w=window.open("","_blank"); if(w){w.document.write(html);w.document.close();w.focus();w.print();}
+      else alert("Pop-up blocked — please allow pop-ups to view the summary.");
+      return;
     }
+    const {total,band,byCat}=payload;
     html+=`
       <h2>Overall</h2>
       <div class="box">
-        <div><b>Total FRAT score:</b> ${payload.total}</div>
-        <div><b>Status:</b> ${payload.status}</div>
-        <div><b>Narrative:</b> ${payload.narrative}</div>
-        <div><b>On Second Thought…</b> ${payload.guidance}</div>
+        <div><b>Flight rules:</b> ${rules||"—"} • <b>Experience in type:</b> ${exp||"—"}</div>
+        <div><b>Total FRAT score:</b> ${total}</div>
+        <div><b>Reference band:</b> ${band}</div>
+        <div><b>On Second Thought…</b> ${fratGuidance.textContent}</div>
       </div>
-      <h2>Score breakdown</h2>
+      <h2>Category breakdown</h2>
       <div class="box">`;
-    Object.keys(payload.bySection).forEach(sec=>{
-      html+=`<div>${sec}: <b>${payload.bySection[sec]}</b></div>`;
-    });
-    html+=`</div>
-      <h2>Reference bands</h2>
-      <div class="box">
-        Low band: ${payload.bands.low[0]}–${payload.bands.low[1]}<br/>
-        Moderate band: ${payload.bands.moderate[0]}–${payload.bands.moderate[1]}<br/>
-        High band: &gt;${payload.bands.highMin}
-      </div>
-      </body></html>`;
-    const w=window.open("","_blank"); w.document.open(); w.document.write(html); w.document.close(); w.focus(); w.print();
+    const cats=Object.keys(byCat).sort();
+    if(!cats.length){
+      html+=`No items scored True.`;
+    }else{
+      cats.forEach(cat=>{
+        html+=`<div><b>${cat}:</b> ${byCat[cat]} points</div>`;
+      });
+    }
+    html+=`</div></body></html>`;
+    const w=window.open("","_blank");
+    if(w){
+      w.document.write(html);
+      w.document.close();
+      w.focus();
+      w.print();
+    }else{
+      alert("Pop-up blocked — please allow pop-ups to view the summary.");
+    }
   });
-
-  // initial FRAT UI
-  buildFratForm();
 
 })();
 </script>
