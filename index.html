@@ -256,6 +256,12 @@
         </div>
       </div>
 
+      <!-- Between-tests countdown -->
+      <div id="betweenPane" class="center hide" style="min-height:200px;flex-direction:column;gap:14px;">
+        <div class="muted">The next evaluation begins in</div>
+        <div id="betweenCountdown" class="big" style="font-size:3rem;">5</div>
+      </div>
+
       <!-- Pre 2-back start -->
       <div id="preNbackPane" class="center hide" style="min-height:120px;margin-top:10px;flex-direction:column;gap:8px;">
         <div class="muted">When you’re ready, start the working-memory segment.</div>
@@ -509,6 +515,7 @@
   const testCard=$("#testCard"), stepName=$("#stepName"), countdown=$("#countdown"), progressBar=$("#progressBar");
   const srtPane=$("#srtPane"), srtTarget=$("#srtTarget");
   const stroopPane=$("#stroopPane"), stroopWord=$("#stroopWord"), btnMatch=$("#btnMatch"), btnMismatch=$("#btnMismatch");
+  const betweenPane=$("#betweenPane"), betweenCountdown=$("#betweenCountdown");
   const preNbackPane=$("#preNbackPane"), startNbackBtn=$("#startNbackBtn"), preNbackHint=$("#preNbackHint");
   const nbackPane=$("#nbackPane"), nbackDigit=$("#nbackDigit"), btnTarget=$("#btnTarget"), btnNotTarget=$("#btnNotTarget"), twoBackButtons=$("#twoBackButtons"), groupLabel=$("#groupLabel");
   const resultCard=$("#resultCard"), lightDot=$("#lightDot"), statusText=$("#statusText"), driverText=$("#driverText"), guidanceText=$("#guidanceText"), metricToday=$("#metricToday"), metricBase=$("#metricBase"), againBtn=$("#againBtn");
@@ -563,7 +570,7 @@
   closeBaselineBtn.addEventListener('click', ()=>hide(baselineCard));
 
   const DUR={warmup:5,srt:30,stroop:45,nbackGroups:12};
-  const TOTAL_TIME=DUR.warmup + DUR.srt + DUR.stroop + 15;
+  const TOTAL_TIME=DUR.warmup + DUR.srt + DUR.stroop + 15; // progress is approximate by design
   const BASELINE_MIN=3;
 
   function sectionTimer(name,sec,tick){
@@ -580,6 +587,18 @@
     });
   }
 
+  async function betweenSegments(label, seconds, elapsedBefore){
+    show(betweenPane);
+    hide(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane);
+    await sectionTimer(label, seconds,(tleft,p)=>{
+      countdown.textContent=Math.ceil(tleft)+"s";
+      betweenCountdown.textContent=Math.ceil(tleft);
+      const elapsed=elapsedBefore + (seconds - tleft);
+      setProgress(elapsed / TOTAL_TIME);
+    });
+    hide(betweenPane);
+  }
+
   async function runTest(){
     sessionResult=null;
     addBaselineBtn2.disabled=true;
@@ -589,16 +608,24 @@
     hide(tmdInfoCard);
     show(testCard);
     testCard.scrollIntoView({behavior:"auto"});
+
     // Warm-up (simple countdown)
     await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{
       countdown.textContent=Math.ceil(t)+"s";
       setProgress((DUR.warmup - t)/TOTAL_TIME);
       srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
-      show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane);
+      show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane); hide(betweenPane);
     });
 
     const srt=await runSRT(DUR.srt);
+
+    // 5-second blank countdown before Stroop
+    await betweenSegments("Pause",5, DUR.warmup + DUR.srt);
+
     const stro=await runStroop(DUR.stroop);
+
+    // 5-second blank countdown before showing the 2-back start button
+    await betweenSegments("Pause",5, DUR.warmup + DUR.srt + DUR.stroop);
 
     const started=await waitForNbackStart(10000);
     hide(preNbackPane);
@@ -616,7 +643,7 @@
   }
 
   function waitForNbackStart(timeoutMs){
-    show(preNbackPane); hide(srtPane); hide(stroopPane); hide(nbackPane);
+    show(preNbackPane); hide(srtPane); hide(stroopPane); hide(nbackPane); hide(betweenPane);
     preNbackHint.textContent="If you don’t start within about 10 seconds, this run will be cancelled.";
     countdown.textContent="—";
     stepName.textContent="Prepare: 2-back";
@@ -639,7 +666,7 @@
   function randomGap(){ return 1000 + Math.random()*4500; }
 
   async function runSRT(sec){
-    show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane);
+    show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane); hide(betweenPane);
     return await new Promise(resolve=>{
       let rts=[], falseStarts=0, lapses=0;
       let waiting=true, goTime=0, timeOver=false, finished=false;
@@ -705,7 +732,7 @@
   }
 
   async function runStroop(sec){
-    show(stroopPane); hide(srtPane); hide(nbackPane); hide(preNbackPane);
+    show(stroopPane); hide(srtPane); hide(nbackPane); hide(preNbackPane); hide(betweenPane);
     return await new Promise(resolve=>{
       const names=["RED","GREEN","BLUE","YELLOW","ORANGE","WHITE"];
       const colors={
@@ -721,6 +748,10 @@
       const endAt=now()+sec*1000;
       const gap=400;
       let offM=null, offMM=null;
+
+      // track congruency run to avoid long clusters
+      let prevCongruent=null;
+      let runLen=0;
 
       function finish(){
         if(finished) return;
@@ -744,7 +775,16 @@
       }
 
       function nextPair(){
-        const wantCong=Math.random()<0.5;
+        // choose whether we WANT a congruent trial, with run-length limiting
+        let wantCong;
+        if(prevCongruent===true && runLen>=2){
+          wantCong=false;          // too many congruent in a row → force incongruent
+        }else if(prevCongruent===false && runLen>=2){
+          wantCong=true;           // too many incongruent in a row → force congruent
+        }else{
+          wantCong=Math.random()<0.5; // otherwise 50/50
+        }
+
         let wordChoices=names.filter(w=>w!==prevWord);
         if(!wordChoices.length) wordChoices=names.slice();
         let word=wordChoices[Math.floor(Math.random()*wordChoices.length)];
@@ -752,21 +792,36 @@
         let colorChoices=names.filter(c=>c!==prevColor);
         if(!colorChoices.length) colorChoices=names.slice();
 
+        let colorName, isCong;
         if(wantCong){
+          // ensure word != prevColor if we're going to use it as color as well
           if(word===prevColor){
             const other=wordChoices.filter(w=>w!==prevColor);
             if(other.length) word=other[Math.floor(Math.random()*other.length)];
           }
-          const colorName=word;
-          prevWord=word; prevColor=colorName;
-          return {word,colorName,congruent:true};
+          colorName=word;
+          isCong=true;
         }else{
           let incongChoices=colorChoices.filter(c=>c!==word);
           if(!incongChoices.length) incongChoices=names.filter(c=>c!==word);
-          const colorName=incongChoices[Math.floor(Math.random()*incongChoices.length)];
-          prevWord=word; prevColor=colorName;
-          return {word,colorName,congruent:false};
+          colorName=incongChoices[Math.floor(Math.random()*incongChoices.length)];
+          isCong=false;
         }
+
+        // update run length tracking
+        if(prevCongruent===null){
+          prevCongruent=isCong;
+          runLen=1;
+        }else if(prevCongruent===isCong){
+          runLen++;
+        }else{
+          prevCongruent=isCong;
+          runLen=1;
+        }
+
+        prevWord=word;
+        prevColor=colorName;
+        return {word,colorName,congruent:isCong};
       }
 
       let current=null;
@@ -833,7 +888,7 @@
   }
 
   async function runTwoBack(groups){
-    show(nbackPane); hide(srtPane); hide(stroopPane); hide(preNbackPane);
+    show(nbackPane); hide(srtPane); hide(stroopPane); hide(preNbackPane); hide(betweenPane);
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
     const VIS=250, GAP=100; let tStim=0; twoBackButtons.style.visibility="hidden";
 
@@ -937,7 +992,7 @@
   function computeScoring(srt,stro,nb,baseline){
     const today={
       srt_median:srt.medianRT, srt_lapses:srt.lapses, srt_false:srt.falseStarts,
-      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stro_score:stro.stroopScore,
+      stro_acc:stro.acc, stro_mean_rt:stro.meanRTCorrect, stro_cost:stro.congruencyCost, stroopScore:stro.stroopScore,
       nb_hit:nb.hitRate, nb_fa:nb.faRate, nb_d:nb.dprime, nb_hit_rt:nb.meanHitRT
     };
     const base=computeBaselineStats(baseline);
@@ -995,8 +1050,8 @@
     const lapseFlag=((srt.lapses>=4) || (isFinite(baseLaps) && srt.lapses>=lapseThreshold));
 
     let stroopTScore=NaN, stroopMessage="—";
-    if(isFinite(today.stro_score)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
-      const zSt=(today.stro_score-base.mean.stro_score)/base.sd.stro_score;
+    if(isFinite(today.stroopScore)&&isFinite(base.mean.stro_score)&&base.sd.stro_score>0){
+      const zSt=(today.stroopScore-base.mean.stro_score)/base.sd.stro_score;
       stroopTScore=50+10*zSt;
       const drop=(50-stroopTScore)/50;
       if(drop<=0.10) stroopMessage="you do not show a meaningful decline in executive function compared to your baseline.";
@@ -1249,7 +1304,7 @@
   };
 
   const fratQuestionsDiv=$("#fratQuestions");
-  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn");
+  const fratCalcBtn=$("#fratCalcBtn"), fratResetBtn=$("#fratResetBtn);
   const fratResultCard=$("#fratResultCard"), fratDot=$("#fratDot"), fratStatusLabel=$("#fratStatusLabel"), fratScoreText=$("#fratScoreText");
   const fratNarrative=$("#fratNarrative"), fratGuidance=$("#fratGuidance"), fratBreakdown=$("#fratBreakdown"), fratBandRef=$("#fratBandRef"), fratExportBtn=$("#fratExportBtn");
 
@@ -1411,4 +1466,3 @@
 </script>
 </body>
 </html>
-
