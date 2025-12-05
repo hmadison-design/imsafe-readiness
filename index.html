@@ -13,11 +13,14 @@
   <section id="modeCard" class="card">
     <header class="row" style="justify-content:space-between;align-items:flex-start">
       <div class="row" style="align-items:center;gap:16px">
-        <!-- Logo on white -->
-        <div style="background:#ffffff;border-radius:16px;padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.35);">
+        <!-- App icon + OST logo -->
+        <div style="background:#ffffff;border-radius:16px;padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.35);display:flex;flex-direction:column;align-items:center;">
+          <img src="2ndOpinionIcon.svg"
+               alt="Second Opinion app icon"
+               style="height:72px;display:block;margin-bottom:8px;">
           <img src="SVG_VERSION_OST_Main_Logo.svg"
                alt="On Second Thought logo"
-               style="height:96px;display:block;">
+               style="height:40px;display:block;opacity:0.9;">
         </div>
         <!-- Title + tagline -->
         <div>
@@ -25,6 +28,8 @@
           <div class="tagline"><i>Real Flights – Human Factors – Safer Skies</i></div>
           <div style="margin-top:8px;">
             <a href="javascript:void(0)" id="appInfoLink" class="infoLink">What’s this?</a>
+            <span class="muted" style="margin:0 6px;">·</span>
+            <a href="javascript:void(0)" id="aboutAppLink" class="infoLink">About</a>
           </div>
         </div>
       </div>
@@ -35,28 +40,15 @@
     <div class="grid grid-2">
       <div>
         <h2>Cognition &amp; Acuity Assessment</h2>
-        <button id="goTmdBtn" type="button" class="btn" style="margin-top:8px;">Cognition &amp; Acuity Assessment</button>
+        <button id="goTmdBtn" type="button" class="btn mainMenuBtn">Cognition &amp; Acuity Assessment</button>
       </div>
       <div>
         <h2>FRAT Assessment</h2>
-        <button id="goFratBtn" type="button" class="btn btn-ghost" style="margin-top:8px;">FRAT Assessment</button>
+        <button id="goFratBtn" type="button" class="btn mainMenuBtn">FRAT Assessment</button>
       </div>
     </div>
 
     <div class="hr"></div>
-    <div class="muted" style="font-size:.9rem">
-      <i>Second Opinion</i> was developed by instructional designer and pilot Harvey Madison, co-host of
-      <i>On Second Thought</i>, to assist pilots in making more objective, data-informed decisions about
-      their fitness to fly at any given moment.
-      The underlying tasks draw on established brain-science paradigms:
-      a simple reaction-time task related to the Psychomotor Vigilance Task used in fatigue research;
-      a color–word interference (Stroop) task for executive control;
-      and a 2-back working-memory task widely used in cognitive neuroscience.
-      <br/><br/>
-      The app is designed to be one tool among many in your IM SAFE and ADM workflow. These tools support your
-      decision-making; they do not replace your CFI, the regulations, or your own judgment. All go/no-go decisions
-      remain entirely the responsibility of each pilot—just as they always have.
-    </div>
     <div class="footer-link muted">
       Learn more about the show at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
     </div>
@@ -104,7 +96,26 @@
     </div>
   </section>
 
-  <!-- ABOUT OST CARD (marketing copy) -->
+  <!-- ABOUT SECOND OPINION CARD -->
+  <section id="aboutAppCard" class="card hide">
+    <h2>About <i>Second Opinion</i></h2>
+    <div class="muted">
+      <p><i>Second Opinion</i> was developed by instructional designer and pilot Harvey Madison, co-host of
+      <i>On Second Thought</i>, to assist pilots in making more objective, data-informed decisions about
+      their fitness to fly at any given moment.</p>
+      <p>The underlying tasks draw on established brain-science paradigms:
+      a simple reaction-time task related to the Psychomotor Vigilance Task used in fatigue research;
+      a color–word interference (Stroop) task for executive control;
+      and a 2-back working-memory task widely used in cognitive neuroscience.</p>
+      <p>The app is designed to be one tool among many in your IM SAFE and ADM workflow. These tools support your
+      decision-making; they do not replace your CFI, the regulations, or your own judgment. All go/no-go decisions
+      remain entirely the responsibility of each pilot—just as they always have.</p>
+    </div>
+    <div class="hr"></div>
+    <button id="aboutAppBackBtn" type="button" class="btn btn-ghost">Back to main menu</button>
+  </section>
+
+  <!-- ABOUT OST CARD -->
   <section id="aboutOstCard" class="card hide">
     <h2>About <i>On Second Thought</i></h2>
     <div class="muted">
@@ -132,14 +143,17 @@
   <!-- ========================= -->
   <div id="tmdRoot" class="hide">
 
-    <!-- Mental Status Home (Cognition & Acuity) -->
+    <!-- Mental Status Home -->
     <section id="tmdHome" class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
         <div class="row" style="align-items:center;gap:18px">
-          <div style="background:#ffffff;border-radius:20px;padding:14px 18px;box-shadow:0 10px 26px rgba(0,0,0,0.4);">
+          <div style="background:#ffffff;border-radius:20px;padding:12px 16px;box-shadow:0 10px 26px rgba(0,0,0,0.4);display:flex;flex-direction:column;align-items:center;">
+            <img src="2ndOpinionIcon.svg"
+                 alt="Second Opinion app icon"
+                 style="height:80px;display:block;margin-bottom:8px;">
             <img src="SVG_VERSION_OST_Main_Logo.svg"
                  alt="On Second Thought logo"
-                 style="height:120px;display:block;">
+                 style="height:40px;display:block;opacity:0.9;">
           </div>
           <div>
             <h1>Cognition &amp; Acuity Assessment</h1>
@@ -206,7 +220,7 @@
     <!-- Test card -->
     <section id="testCard" class="card hide">
       <div class="row" style="justify-content:space-between;align-items:center">
-        <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
+        <div class="pill"><span id="stepName">Warm-up</span></div>
         <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
       </div>
       <div class="bar" style="margin:12px 0 10px"><i id="progressBar"></i></div>
@@ -314,7 +328,8 @@
     <section class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
         <div class="row" style="align-items:center;gap:10px">
-          <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:28px;opacity:.7;">
+          <img src="2ndOpinionIcon.svg" alt="Second Opinion icon" style="height:32px;">
+          <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:24px;opacity:.7;">
           <div>
             <h1>FRAT Assessment</h1>
             <div class="muted" style="margin-top:4px;font-size:.95rem;">
@@ -410,6 +425,6 @@
 
 </div>
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 </body>
 </html>
