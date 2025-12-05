@@ -1,391 +1,116 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Second Opinion</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Second Opinion — Pilot Readiness &amp; Risk Tools</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <header class="app-header">
-      <div class="app-title-row">
-        <h1 class="app-title">Second Opinion</h1>
-        <span class="app-pill">Beta</span>
+<div class="wrap">
+
+  <!-- MAIN MODE CARD -->
+  <section id="modeCard" class="card">
+    <header class="row" style="justify-content:space-between;align-items:flex-start">
+      <div class="row" style="align-items:center;gap:16px">
+        <!-- Logo on white -->
+        <div style="background:#ffffff;border-radius:16px;padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.35);">
+          <img src="SVG_VERSION_OST_Main_Logo.svg"
+               alt="On Second Thought logo"
+               style="height:96px;display:block;">
+        </div>
+        <!-- Title + tagline -->
+        <div>
+          <h1>Second Opinion</h1>
+          <div class="tagline"><i>Real Flights – Human Factors – Safer Skies</i></div>
+          <div style="margin-top:8px;">
+            <a href="javascript:void(0)" id="appInfoLink" class="infoLink">What’s this?</a>
+          </div>
+        </div>
       </div>
-      <p class="app-subtitle">
-        A quick cognitive &amp; FRAT check to support your
-        <span class="nowrap">IM SAFE</span> and ADM decisions.
-      </p>
     </header>
 
-    <main id="app-main" class="app-main">
-      <!-- HOME / MAIN MENU -->
-      <section id="screen-home" class="screen screen--active">
-        <div class="card card--primary">
-          <h2 class="card-title">Pilot Fitness Snapshot</h2>
-          <p class="card-body-text">
-            Run a short sequence of attention and working-memory tasks,
-            then layer in a quick FRAT-style risk check.
-          </p>
+    <div class="hr"></div>
 
-          <div class="button-stack">
-            <button id="btn-start-full-sequence" class="btn btn--primary">
-              Start Full Self-Test
-            </button>
-            <button id="btn-frat-only" class="btn btn--outline">
-              FRAT Questions Only
-            </button>
-          </div>
-        </div>
+    <div class="grid grid-2">
+      <div>
+        <h2>Cognition &amp; Acuity Assessment</h2>
+        <button id="goTmdBtn" type="button" class="btn" style="margin-top:8px;">Cognition &amp; Acuity Assessment</button>
+      </div>
+      <div>
+        <h2>FRAT Assessment</h2>
+        <button id="goFratBtn" type="button" class="btn btn-ghost" style="margin-top:8px;">FRAT Assessment</button>
+      </div>
+    </div>
 
-        <div class="card card--secondary">
-          <h3 class="card-title">What you&#8217;ll do</h3>
-          <ul class="bullet-list">
-            <li>Simple reaction-time task (fatigue &amp; alertness)</li>
-            <li>Color/word interference (executive control)</li>
-            <li>2-back sequence task (working memory)</li>
-            <li>Brief FRAT-style questions (operational risk)</li>
-          </ul>
-        </div>
+    <div class="hr"></div>
+    <div class="muted" style="font-size:.9rem">
+      <i>Second Opinion</i> was developed by instructional designer and pilot Harvey Madison, co-host of
+      <i>On Second Thought</i>, to assist pilots in making more objective, data-informed decisions about
+      their fitness to fly at any given moment.
+      The underlying tasks draw on established brain-science paradigms:
+      a simple reaction-time task related to the Psychomotor Vigilance Task used in fatigue research;
+      a color–word interference (Stroop) task for executive control;
+      and a 2-back working-memory task widely used in cognitive neuroscience.
+      <br/><br/>
+      The app is designed to be one tool among many in your IM SAFE and ADM workflow. These tools support your
+      decision-making; they do not replace your CFI, the regulations, or your own judgment. All go/no-go decisions
+      remain entirely the responsibility of each pilot—just as they always have.
+    </div>
+    <div class="footer-link muted">
+      Learn more about the show at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+    </div>
+  </section>
 
-        <button id="btn-open-about" class="link-button">
-          About Second Opinion
-        </button>
-      </section>
+  <!-- APP INFO / HOW-TO CARD -->
+  <section id="appInfoCard" class="card hide">
+    <h2>How to use <i>Second Opinion</i></h2>
+    <div class="muted">
+      <p><b>When to use it.</b> Use <i>Second Opinion</i> before a flight when you want a quick, private check of your
+      cognitive sharpness, alongside IM SAFE, weather, and the rest of your preflight workflow.</p>
 
-      <!-- SELF TEST FLOW: INTRO -->
-      <section id="screen-selftest-intro" class="screen">
-        <div class="card card--primary">
-          <h2 class="card-title">Self-Test Overview</h2>
-          <p class="card-body-text">
-            You&#8217;ll complete three short tasks back-to-back:
-          </p>
-          <ol class="ordered-list">
-            <li><strong>Reaction</strong> – Tap when the screen changes.</li>
-            <li><strong>Stroop</strong> – Match the color of the ink, not the word.</li>
-            <li><strong>2-Back</strong> – Decide if the current letter matches the one 2 steps ago.</li>
-          </ol>
-          <p class="card-body-text card-body-text--muted">
-            Try to run this in a quiet moment with no interruptions.
-            Total time: about 5–7 minutes.
-          </p>
+      <p><b>Step 1: Build a baseline.</b> On days when you feel well-rested, well-fed, not stressed, and
+      absolutely comfortable flying, run the Cognition &amp; Acuity Assessment a few times (ideally 3–5 sessions).
+      Add only those “good-day” runs to your baseline. Future runs are compared to that personal baseline instead
+      of an abstract population norm.</p>
 
-          <div class="button-stack">
-            <button id="btn-begin-pvt" class="btn btn--primary">
-              Begin Reaction Test
-            </button>
-            <button data-nav="home" class="btn btn--ghost">
-              Back to Home
-            </button>
-          </div>
-        </div>
-      </section>
+      <p><b>The three pieces.</b></p>
+      <ul>
+        <li><b>Reaction:</b> tap as quickly as you can when the circle turns green. Slower median reaction times and
+        more lapses suggest reduced alertness.</li>
+        <li><b>Color–word (Stroop):</b> decide whether the ink color matches the word. Conflicting items require you
+        to suppress the automatic reading response—this taps executive control.</li>
+        <li><b>2-back:</b> watch short groups of digits and decide if the third matches the digit two positions back.
+        This stresses online updating and working memory. The summary statistic (<i>d′</i>) is essentially a
+        signal-to-noise measure; higher is better separation between “same” and “not same”.</li>
+      </ul>
 
-      <!-- PVT / SIMPLE REACTION TIME -->
-      <section id="screen-pvt" class="screen">
-        <div class="card card--primary">
-          <h2 class="card-title">Reaction Test</h2>
-          <p class="card-body-text">
-            When the box turns <strong>green</strong>, tap it as quickly as you can.
-            If you tap too early, the trial won&#8217;t count.
-          </p>
-          <p class="card-body-text card-body-text--muted">
-            You&#8217;ll do <span id="pvt-total-trials-label">5</span> trials.
-          </p>
+      <p><b>Interpreting results.</b> The app focuses on how far you are from your own baseline, not anyone else’s.</p>
+      <ul>
+        <li>“Near baseline” looks like a typical good day—assuming your device is behaving.</li>
+        <li>“Mildly” or “moderately” below baseline suggests you’re softer than usual; consider adding margin or
+        delaying until after rest, food, or reduced stress.</li>
+        <li>“Well below baseline” is an “On Second Thought…” moment: either something is wrong with the device,
+        or you are not bringing your usual cognitive resources to the flight.</li>
+      </ul>
 
-          <div id="pvt-target" class="pvt-target pvt-target--waiting">
-            <span id="pvt-target-label" class="pvt-target-label">
-              Wait for green…
-            </span>
-          </div>
+      <p><b>Limitations.</b> A good score does not guarantee fitness to fly; a soft score does not prove unfitness.
+      Treat this as a conservative nudge, not a verdict.</p>
+    </div>
+    <div class="hr"></div>
+    <button id="appInfoBackBtn" type="button" class="btn btn-ghost">Back to main menu</button>
+    <div class="footer-link muted">
+      Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+    </div>
+  </section>
 
-          <p id="pvt-feedback" class="feedback-line"></p>
+  <!-- ABOUT OST CARD (marketing copy) -->
+  <section id="aboutOstCard" class="card hide">
+    <h2>About <i>On Second Thought</i></h2>
+    <div class="muted">
+      <p><i>On Second Thought</i> is a safety-focused series for general aviation pilots who want more than
+      airplane porn and hangar talk. Each episode takes a single real-world accident and unpacks the human factors
+      behind it—attention, bias, pressure, habit patterns, and all the tiny choices that add up to a big outcome.</p>
 
-          <div class="inline-metrics">
-            <div>
-              <span class="metric-label">Trial</span>
-              <span id="pvt-trial-counter" class="metric-value">1 / 5</span>
-            </div>
-            <div>
-              <span class="metric-label">Mean so far</span>
-              <span id="pvt-mean-so-far" class="metric-value">–</span>
-            </div>
-          </div>
-
-          <div class="button-stack button-stack--compact">
-            <button id="btn-pvt-restart" class="btn btn--ghost">
-              Restart PVT
-            </button>
-            <button id="btn-pvt-skip" class="btn btn--outline">
-              Skip to Stroop
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- STROOP -->
-      <section id="screen-stroop" class="screen">
-        <div class="card card--primary">
-          <h2 class="card-title">Stroop Task</h2>
-          <p class="card-body-text">
-            Select the <strong>color of the ink</strong>, not the word itself.
-          </p>
-
-          <div id="stroop-stimulus" class="stroop-stimulus">RED</div>
-
-          <div class="stroop-buttons">
-            <button class="btn btn--stroop" data-color="red">Red</button>
-            <button class="btn btn--stroop" data-color="green">Green</button>
-            <button class="btn btn--stroop" data-color="blue">Blue</button>
-            <button class="btn btn--stroop" data-color="yellow">Yellow</button>
-          </div>
-
-          <p id="stroop-feedback" class="feedback-line"></p>
-
-          <div class="inline-metrics">
-            <div>
-              <span class="metric-label">Trial</span>
-              <span id="stroop-trial-counter" class="metric-value">1 / 20</span>
-            </div>
-            <div>
-              <span class="metric-label">Accuracy</span>
-              <span id="stroop-accuracy" class="metric-value">–</span>
-            </div>
-          </div>
-
-          <div class="button-stack button-stack--compact">
-            <button id="btn-stroop-restart" class="btn btn--ghost">
-              Restart Stroop
-            </button>
-            <button id="btn-stroop-skip" class="btn btn--outline">
-              Skip to 2-Back
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- 2-BACK -->
-      <section id="screen-nback" class="screen">
-        <div class="card card--primary">
-          <h2 class="card-title">2-Back Task</h2>
-          <p class="card-body-text">
-            Watch the letters. Tap <strong>“Match”</strong> if the current letter
-            matches the one from <strong>two trials ago</strong>.
-          </p>
-
-          <div id="nback-stimulus" class="nback-stimulus">A</div>
-
-          <div class="button-stack button-stack--horizontal">
-            <button id="btn-nback-match" class="btn btn--primary">
-              Match
-            </button>
-            <button id="btn-nback-nomatch" class="btn btn--outline">
-              No Match
-            </button>
-          </div>
-
-          <p id="nback-feedback" class="feedback-line"></p>
-
-          <div class="inline-metrics">
-            <div>
-              <span class="metric-label">Trial</span>
-              <span id="nback-trial-counter" class="metric-value">1 / 20</span>
-            </div>
-            <div>
-              <span class="metric-label">Hits</span>
-              <span id="nback-hits" class="metric-value">0</span>
-            </div>
-            <div>
-              <span class="metric-label">Errors</span>
-              <span id="nback-errors" class="metric-value">0</span>
-            </div>
-          </div>
-
-          <div class="button-stack button-stack--compact">
-            <button id="btn-nback-restart" class="btn btn--ghost">
-              Restart 2-Back
-            </button>
-            <button id="btn-nback-finish" class="btn btn--outline">
-              Finish &amp; Go to FRAT
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- FRAT QUESTIONS -->
-      <section id="screen-frat" class="screen">
-        <div class="card card--primary">
-          <h2 class="card-title">Quick FRAT Check</h2>
-          <p class="card-body-text">
-            Answer a few high-level questions about today&#8217;s flight.
-            These are placeholders until we plug in your exact FAA FRAT table.
-          </p>
-
-          <form id="frat-form" class="frat-form">
-            <div class="frat-item">
-              <label class="frat-label">
-                1. Weather for planned route and ETA?
-              </label>
-              <div class="frat-options">
-                <label><input type="radio" name="frat-weather" value="0" /> VFR, stable,
-                  well above personal mins</label>
-                <label><input type="radio" name="frat-weather" value="2" /> Marginal
-                  VFR or approaching minima</label>
-                <label><input type="radio" name="frat-weather" value="4" /> IFR / rapidly
-                  changing / convective nearby</label>
-              </div>
-            </div>
-
-            <div class="frat-item">
-              <label class="frat-label">
-                2. Pilot currency &amp; recent experience for this mission?
-              </label>
-              <div class="frat-options">
-                <label><input type="radio" name="frat-currency" value="0" /> Fully current,
-                  similar flights in last 30 days</label>
-                <label><input type="radio" name="frat-currency" value="2" /> Some rust
-                  or limited recent experience</label>
-                <label><input type="radio" name="frat-currency" value="4" /> Significant
-                  lapse in relevant experience</label>
-              </div>
-            </div>
-
-            <div class="frat-item">
-              <label class="frat-label">
-                3. Operational complexity (airspace, terrain, night, etc.)?
-              </label>
-              <div class="frat-options">
-                <label><input type="radio" name="frat-complexity" value="0" /> Simple,
-                  familiar &amp; daytime</label>
-                <label><input type="radio" name="frat-complexity" value="2" /> Some
-                  combination of busy / terrain / night</label>
-                <label><input type="radio" name="frat-complexity" value="4" /> Multiple
-                  factors stacked (mountains, IMC, busy, night)</label>
-              </div>
-            </div>
-
-            <div class="frat-item">
-              <label class="frat-label">
-                4. External pressure / schedule / passenger expectations?
-              </label>
-              <div class="frat-options">
-                <label><input type="radio" name="frat-pressure" value="0" /> Minimal; easy
-                  to delay or cancel</label>
-                <label><input type="radio" name="frat-pressure" value="2" /> Moderate;
-                  some schedule importance</label>
-                <label><input type="radio" name="frat-pressure" value="4" /> High; strong
-                  pressure to complete</label>
-              </div>
-            </div>
-
-            <div class="button-stack">
-              <button type="submit" class="btn btn--primary">
-                Calculate FRAT Score
-              </button>
-              <button type="button" id="btn-frat-skip-summary" class="btn btn--ghost">
-                Skip to Summary
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <!-- SUMMARY -->
-      <section id="screen-summary" class="screen">
-        <div class="card card--primary">
-          <h2 class="card-title">Today&#8217;s Snapshot</h2>
-
-          <div class="summary-block">
-            <h3 class="summary-heading">Cognitive Tasks</h3>
-            <ul class="summary-list">
-              <li>
-                <strong>PVT Mean RT:</strong>
-                <span id="summary-pvt-mean">–</span>
-              </li>
-              <li>
-                <strong>Stroop Accuracy:</strong>
-                <span id="summary-stroop-accuracy">–</span>
-              </li>
-              <li>
-                <strong>2-Back Performance:</strong>
-                <span id="summary-nback">–</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="summary-block">
-            <h3 class="summary-heading">FRAT</h3>
-            <ul class="summary-list">
-              <li>
-                <strong>Total Score:</strong>
-                <span id="summary-frat-score">–</span>
-              </li>
-              <li>
-                <strong>Risk Band:</strong>
-                <span id="summary-frat-band">–</span>
-              </li>
-            </ul>
-          </div>
-
-          <p class="card-body-text card-body-text--muted">
-            This tool is one data point. It supports your ADM;
-            it does not replace your CFI, the regulations, or your own judgment.
-          </p>
-
-          <div class="button-stack">
-            <button id="btn-summary-restart" class="btn btn--primary">
-              Run Again
-            </button>
-            <button data-nav="home" class="btn btn--ghost">
-              Back to Home
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ABOUT -->
-      <section id="screen-about" class="screen">
-        <div class="card card--primary">
-          <h2 class="card-title">About Second Opinion</h2>
-          <p class="card-body-text">
-            Second Opinion was developed by instructional designer and pilot
-            Harvey Madison, co-host of <em>On Second Thought</em>, to assist
-            pilots in making more objective, data-informed decisions about their
-            fitness to fly at any given moment.
-          </p>
-          <p class="card-body-text">
-            The underlying tasks draw on established brain-science paradigms:
-            a simple reaction-time task related to the Psychomotor Vigilance
-            Task used in fatigue research; a color–word interference (Stroop)
-            task for executive control; and a 2-back working-memory task
-            widely used in cognitive neuroscience.
-          </p>
-          <p class="card-body-text">
-            The app is designed to be one tool among many in your
-            <span class="nowrap">IM SAFE</span> and ADM workflow. These tools
-            support your decision-making; they do not replace your CFI,
-            the regulations, or your own judgment. All go/no-go decisions
-            remain entirely the responsibility of each pilot—just as they always have.
-          </p>
-          <p class="card-body-text card-body-text--muted">
-            Learn more about the show at <strong>OnSecondThought.me</strong>.
-          </p>
-
-          <div class="button-stack">
-            <button data-nav="home" class="btn btn--primary">
-              Back to Home
-            </button>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="app-footer">
-      <span>Second Opinion · Experimental / Advisory Only</span>
-    </footer>
-  </div>
-
-  <script src="app.js"></script>
-</body>
-</html>
+      <p>The show is co-hosted by instructional designer and GA pilot Harvey Madison and psychotherapist /
+      long-time aviation safety advocate Jolie Lucas.
