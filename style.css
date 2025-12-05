@@ -49,6 +49,7 @@ p{margin:.3rem 0 .3rem}
 }
 .grid-2{
   grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch;
 }
 .muted{color:var(--muted)}
 .big{font-size:2.2rem;font-weight:700}
@@ -67,6 +68,10 @@ p{margin:.3rem 0 .3rem}
   min-width:150px;
   user-select:none;
   font-size:1rem;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
 }
 .btn:disabled{opacity:.6;cursor:not-allowed}
 .btn-ghost{
@@ -83,6 +88,16 @@ p{margin:.3rem 0 .3rem}
   transform:translateY(1px) scale(.98);
   opacity:.9;
 }
+
+/* Main menu buttons: square-ish, full-width in their column, equal height */
+.mainMenuBtn{
+  width:100%;
+  min-height:52px;
+  border-radius:12px;
+  padding:14px 12px;
+  margin-top:8px;
+}
+
 .kbd{
   display:inline-block;
   padding:.2rem .45rem;
