@@ -113,4 +113,303 @@
       behind it—attention, bias, pressure, habit patterns, and all the tiny choices that add up to a big outcome.</p>
 
       <p>The show is co-hosted by instructional designer and GA pilot Harvey Madison and psychotherapist /
-      long-time aviation safety advocate Jolie Lucas.
+      long-time aviation safety advocate Jolie Lucas. Together they blend solid research, story-driven case studies,
+      and practical “what would you actually do in this cockpit?” discussions aimed squarely at line pilots—
+      not just test pilots or airline crews.</p>
+
+      <p><i>Second Opinion</i> is part of that ecosystem: a quick, private way to pause, think twice, and give yourself
+      a reality check before you go fly on purpose.</p>
+    </div>
+    <div class="hr"></div>
+    <button id="aboutOstBackBtn" type="button" class="btn btn-ghost">Back</button>
+    <div class="footer-link muted">
+      Visit <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a> for episodes, articles, and upcoming events.
+    </div>
+  </section>
+
+  <!-- ========================= -->
+  <!-- COGNITION & ACUITY ROOT   -->
+  <!-- ========================= -->
+  <div id="tmdRoot" class="hide">
+
+    <!-- Mental Status Home (Cognition & Acuity) -->
+    <section id="tmdHome" class="card">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div class="row" style="align-items:center;gap:18px">
+          <div style="background:#ffffff;border-radius:20px;padding:14px 18px;box-shadow:0 10px 26px rgba(0,0,0,0.4);">
+            <img src="SVG_VERSION_OST_Main_Logo.svg"
+                 alt="On Second Thought logo"
+                 style="height:120px;display:block;">
+          </div>
+          <div>
+            <h1>Cognition &amp; Acuity Assessment</h1>
+            <div class="muted" style="margin-top:4px;">
+              A quick mental snapshot before you go fly: reaction speed, color–word control, and 2-back working memory.
+            </div>
+            <div style="margin-top:12px;">
+              <button id="startBtn" type="button" class="btn">Start Assessment</button>
+            </div>
+            <div style="margin-top:8px;">
+              <a href="javascript:void(0)" id="tmdInfoBtn" class="infoLink">What is this?</a>
+            </div>
+          </div>
+        </div>
+        <button id="tmdMenuBtn" type="button" class="btn btn-sm btn-ghost" aria-label="Cognition &amp; Acuity menu">☰</button>
+      </div>
+
+      <div id="tmdMenu" class="card hide">
+        <h3>Cognition &amp; Acuity menu</h3>
+        <div class="muted" style="margin-bottom:4px;font-size:.9rem">
+          Actions apply to this device only.
+        </div>
+        <div class="row" style="margin-top:4px;">
+          <button id="menuAddBaseline" type="button" class="btn btn-sm">Add this result to baseline</button>
+          <button id="menuManageBaseline" type="button" class="btn btn-sm btn-ghost">Manage baseline</button>
+        </div>
+        <div class="row" style="margin-top:8px;">
+          <button id="menuExport" type="button" class="btn btn-sm btn-ghost">Export Assessment PDF</button>
+          <button id="menuAboutOst" type="button" class="btn btn-sm btn-ghost">About OST</button>
+          <button id="menuMain" type="button" class="btn btn-sm btn-ghost">Main Menu</button>
+        </div>
+      </div>
+
+      <div class="footer-link muted">
+        Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+      </div>
+    </section>
+
+    <!-- Info card for Cognition & Acuity -->
+    <section id="tmdInfoCard" class="card hide">
+      <h2>About the Cognition &amp; Acuity Assessment</h2>
+      <div class="muted">
+        <p>
+          This assessment is an experimental, on-device tool inspired by IM SAFE and human-factors research.
+          It samples three domains:
+        </p>
+        <ul>
+          <li><b>Reaction:</b> how quickly you respond to a simple “go” cue.</li>
+          <li><b>Color–Word (Stroop):</b> how well you resist interference between words and colors.</li>
+          <li><b>2-back:</b> a small working-memory task, similar to what’s used in many lab studies.</li>
+        </ul>
+        <p>
+          The goal isn’t to diagnose anything. It’s to give you a private, repeatable sense of whether today feels
+          like one of your “good” days, a “soft” day, or a “not today” day—<b>before</b> you add the workload of a flight.
+        </p>
+        <p>
+          All data stays on this device. It’s a supplement to IM SAFE and good ADM, not a replacement.
+        </p>
+      </div>
+      <div class="hr"></div>
+      <button id="tmdInfoBackBtn" type="button" class="btn btn-ghost">Back to Cognition &amp; Acuity</button>
+    </section>
+
+    <!-- Test card -->
+    <section id="testCard" class="card hide">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
+        <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
+      </div>
+      <div class="bar" style="margin:12px 0 10px"><i id="progressBar"></i></div>
+
+      <!-- SRT -->
+      <div id="srtPane" class="center" style="min-height:260px">
+        <div id="srtTarget" class="tapTarget" role="button" aria-label="Tap when it turns green">WAIT</div>
+      </div>
+
+      <!-- Stroop -->
+      <div id="stroopPane" class="hide" style="min-height:260px">
+        <div class="center" style="margin:10px 0 18px">
+          <div id="stroopWord" class="wordBox mono" aria-live="off">RED</div>
+        </div>
+        <div class="row center" style="justify-content:center">
+          <button id="btnMatch" type="button" class="btn">MATCH</button>
+          <button id="btnMismatch" type="button" class="btn btn-ghost">MISMATCH</button>
+        </div>
+        <div class="muted center" style="margin-top:8px">
+          Keyboard: <span class="kbd">F</span>=MATCH, <span class="kbd">J</span>=MISMATCH
+        </div>
+      </div>
+
+      <!-- Between-tests countdown -->
+      <div id="betweenPane" class="center hide" style="min-height:200px;flex-direction:column;gap:14px;">
+        <div class="muted">The next evaluation begins in</div>
+        <div id="betweenCountdown" class="big" style="font-size:3rem;">5</div>
+      </div>
+
+      <!-- Pre 2-back start -->
+      <div id="preNbackPane" class="center hide" style="min-height:120px;margin-top:10px;flex-direction:column;gap:8px;">
+        <div class="muted">When you’re ready, start the working-memory segment.</div>
+        <button id="startNbackBtn" type="button" class="btn">Tap to begin 2-Back Test</button>
+        <div class="muted" id="preNbackHint"></div>
+      </div>
+
+      <!-- 2-back -->
+      <div id="nbackPane" class="hide" style="min-height:260px">
+        <div class="center" style="margin:6px 0 6px;">
+          <div class="pill">Session: <b id="groupLabel">Group 1</b> of 12</div>
+        </div>
+        <div class="center" style="margin:10px 0 16px; min-height:3.2rem">
+          <div id="nbackDigit" class="big mono" style="visibility:hidden">5</div>
+        </div>
+        <div class="center" id="twoBackButtons" style="visibility:hidden">
+          <div class="row center" style="justify-content:center">
+            <button id="btnTarget" type="button" class="btn">TARGET (same as 2 ago)</button>
+            <button id="btnNotTarget" type="button" class="btn btn-ghost">NOT TARGET</button>
+          </div>
+        </div>
+        <div class="muted center" style="margin-top:8px">
+          Each group: flash 2 digits, then show the 3rd and respond.
+          Keyboard: <span class="kbd">Space</span>=TARGET, <span class="kbd">N</span>=NOT TARGET.
+        </div>
+      </div>
+    </section>
+
+    <!-- Result card -->
+    <section id="resultCard" class="card hide">
+      <h2>Result</h2>
+      <div class="row" style="align-items:center;gap:14px;margin-top:4px;">
+        <div><span id="lightDot" class="dot"></span><b id="lightLabel">Overall status</b></div>
+        <div class="big" id="statusText">—</div>
+      </div>
+      <div class="muted" id="driverText" style="margin-top:6px"></div>
+      <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
+        <b>On Second Thought…</b> <span id="guidanceText">—</span>
+      </div>
+      <div class="grid grid-2" style="margin-top:6px;">
+        <div>
+          <h3>Today’s metrics</h3>
+          <div class="muted" id="metricToday"></div>
+        </div>
+        <div>
+          <h3>Baseline (mean ± SD)</h3>
+          <div class="muted" id="metricBase"></div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="row" style="gap:10px;">
+        <button id="againBtn" type="button" class="btn">Start Assessment Again</button>
+        <button id="addBaselineBtn2" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
+        <button id="backToMainBtn" type="button" class="btn btn-ghost">Main Menu</button>
+      </div>
+      <div class="muted" style="margin-top:8px;font-size:.9rem;">
+        This tool supports—but does not replace—your own judgment and the full IM SAFE self-assessment.
+      </div>
+    </section>
+
+    <!-- Baseline card -->
+    <section id="baselineCard" class="card hide">
+      <h2>Baseline Sessions</h2>
+      <div id="baselineList" class="muted">No baseline yet.</div>
+      <div class="row" style="margin-top:10px">
+        <button id="deleteBaselineBtn" type="button" class="btn btn-ghost">Delete All Baseline</button>
+        <button id="closeBaselineBtn" type="button" class="btn">Close</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========================= -->
+  <!-- FRAT ROOT                 -->
+  <!-- ========================= -->
+  <div id="fratRoot" class="hide">
+    <section class="card">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div class="row" style="align-items:center;gap:10px">
+          <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:28px;opacity:.7;">
+          <div>
+            <h1>FRAT Assessment</h1>
+            <div class="muted" style="margin-top:4px;font-size:.95rem;">
+              FAA-style True/False risk items with weighted scores and a VFR/IFR risk-band matrix.
+            </div>
+          </div>
+        </div>
+        <button id="backFromFrat" type="button" class="btn btn-sm btn-ghost">Back to main menu</button>
+      </div>
+      <div class="hr"></div>
+
+      <div class="grid grid-2">
+        <div>
+          <h2>Flight profile</h2>
+          <div class="muted" style="font-size:.95rem;">
+            Select flight rules and your experience in this aircraft / avionics type.
+          </div>
+          <div class="sectionTitle">Flight rules</div>
+          <div class="row" style="margin-top:4px;font-size:.95rem;">
+            <label><input type="radio" name="fratRules" value="VFR"> VFR</label>
+            <label><input type="radio" name="fratRules" value="IFR"> IFR</label>
+          </div>
+          <div class="sectionTitle" style="margin-top:8px">Experience in type</div>
+          <div class="row" style="margin-top:4px;font-size:.95rem;">
+            <label><input type="radio" name="fratExp" value="<100"> &lt;100 hours in type</label>
+            <label><input type="radio" name="fratExp" value=">=100"> ≥100 hours in type</label>
+          </div>
+          <div class="muted" style="margin-top:6px;font-size:.85rem;">
+            These bands mirror one published FAA FRAT example. Your SOP or CFI may use different thresholds.
+          </div>
+        </div>
+        <div>
+          <h2>Risk bands (reference)</h2>
+          <div class="muted" style="font-size:.9rem;">
+            After scoring, your total is placed into one of these bands. High scores are a cue to slow down and think hard about mitigation, alternatives, or delay.
+          </div>
+          <div class="card" style="margin-top:8px;background:#0f1622;border:1px solid #223042">
+            <div class="sectionTitle">IFR</div>
+            <div class="muted" style="font-size:.9rem;">
+              <b>&lt;100 in type:</b> Low 20–25, Moderate 25–30, High &gt;30<br>
+              <b>≥100 in type:</b> Low 25–30, Moderate 30–35, High &gt;35
+            </div>
+            <div class="sectionTitle" style="margin-top:6px">VFR</div>
+            <div class="muted" style="font-size:.9rem;">
+              <b>&lt;100 in type:</b> Low 5–15, Moderate 15–20, High &gt;20<br>
+              <b>≥100 in type:</b> Low 15–20, Moderate 20–25, High &gt;25
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hr"></div>
+
+      <div class="muted" style="margin-bottom:6px;font-size:.9rem;">
+        All questions are True/False. “True” applies the score shown; “False” contributes zero. Questions shown update based on VFR vs IFR.
+      </div>
+
+      <div id="fratQuestions"></div>
+
+      <div class="hr"></div>
+      <div class="row" style="gap:10px;">
+        <button id="fratCalcBtn" type="button" class="btn">Calculate FRAT Score</button>
+        <button id="fratResetBtn" type="button" class="btn btn-ghost">Clear Answers</button>
+      </div>
+      <div class="footer-link muted">
+        Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+      </div>
+    </section>
+
+    <section id="fratResultCard" class="card hide">
+      <h2>FRAT Result</h2>
+      <div class="row" style="align-items:center;gap:14px;margin-top:4px;">
+        <div><span id="fratDot" class="dot"></span><b id="fratStatusLabel">—</b></div>
+        <div class="big" id="fratScoreText">—</div>
+      </div>
+      <div class="muted" id="fratNarrative" style="margin-top:6px"></div>
+      <div class="card" style="margin:10px 0;background:#0f1622;border:1px solid #223042">
+        <b>On Second Thought…</b> <span id="fratGuidance">—</span>
+      </div>
+      <div class="grid grid-2" style="margin-top:6px;">
+        <div>
+          <h3>Score breakdown</h3>
+          <div class="muted" id="fratBreakdown"></div>
+        </div>
+        <div>
+          <h3>Band reference</h3>
+          <div class="muted" id="fratBandRef"></div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <button id="fratExportBtn" type="button" class="btn btn-ghost">Open printable summary</button>
+    </section>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
