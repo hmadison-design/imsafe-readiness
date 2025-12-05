@@ -17,6 +17,7 @@
   const tmdInfoBtn=$("#tmdInfoBtn"), tmdInfoBackBtn=$("#tmdInfoBackBtn");
 
   const appInfoLink=$("#appInfoLink"), appInfoCard=$("#appInfoCard"), appInfoBackBtn=$("#appInfoBackBtn");
+  const aboutAppLink=$("#aboutAppLink"), aboutAppCard=$("#aboutAppCard"), aboutAppBackBtn=$("#aboutAppBackBtn");
   const aboutOstCard=$("#aboutOstCard");
   const aboutOstBackBtn=$("#aboutOstBackBtn");
 
@@ -24,6 +25,7 @@
     hide(tmdRoot);
     hide(fratRoot);
     hide(appInfoCard);
+    hide(aboutAppCard);
     hide(aboutOstCard);
     show(modeCard);
   }
@@ -31,6 +33,7 @@
   goTmdBtn.addEventListener("click",()=>{
     hide(modeCard);
     hide(appInfoCard);
+    hide(aboutAppCard);
     hide(aboutOstCard);
     fratRoot.classList.add("hide");
     tmdRoot.classList.remove("hide");
@@ -45,6 +48,7 @@
   goFratBtn.addEventListener("click",()=>{
     hide(modeCard);
     hide(appInfoCard);
+    hide(aboutAppCard);
     hide(aboutOstCard);
     tmdRoot.classList.add("hide");
     fratRoot.classList.remove("hide");
@@ -54,10 +58,19 @@
 
   appInfoLink.addEventListener("click",()=>{
     hide(modeCard);
+    hide(aboutAppCard);
     hide(aboutOstCard);
     show(appInfoCard);
   });
   appInfoBackBtn.addEventListener("click",goMain);
+
+  aboutAppLink.addEventListener("click",()=>{
+    hide(modeCard);
+    hide(appInfoCard);
+    hide(aboutOstCard);
+    show(aboutAppCard);
+  });
+  aboutAppBackBtn.addEventListener("click",goMain);
 
   aboutOstBackBtn.addEventListener("click",()=>{
     hide(aboutOstCard);
@@ -222,9 +235,11 @@
     show(testCard);
     testCard.scrollIntoView({behavior:"auto"});
 
-    // Warm-up
+    // Warm-up — label now "Countdown to start Xs"
     await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{
-      countdown.textContent=Math.ceil(t)+"s";
+      const secs=Math.ceil(t);
+      stepName.textContent=`Countdown to start ${secs}s`;
+      countdown.textContent=" ";
       setProgress((DUR.warmup - t)/TOTAL_TIME);
       srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
       show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane); hide(betweenPane);
@@ -499,7 +514,7 @@
   async function runTwoBack(groups){
     show(nbackPane); hide(srtPane); hide(stroopPane); hide(preNbackPane); hide(betweenPane);
 
-    // Small pause so the first digit doesn't slam in immediately
+    // Small pause before the very first group
     await sleep(1000);
 
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
@@ -510,6 +525,14 @@
 
     async function doGroup(){
       if(group>groups) return;
+
+      // NEW: short blank gap between groups so the first digit is clearly a new group
+      if(group>1){
+        setDigit("", false);
+        twoBackButtons.style.visibility="hidden";
+        await sleep(300); // 250–500 ms; tuned to 300 ms here
+      }
+
       groupLabel.textContent=`Group ${group}`;
       twoBackButtons.style.visibility="hidden";
       const a=rDigit(null), b=rDigit(null), target=Math.random()<0.5, c=target?a:rDigit(a);
