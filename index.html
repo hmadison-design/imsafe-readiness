@@ -11,45 +11,33 @@
 
   <!-- MAIN MODE CARD -->
   <section id="modeCard" class="card">
-    <header class="row" style="justify-content:space-between;align-items:flex-start">
-      <div class="row" style="align-items:center;gap:16px">
-        <!-- Brand block: 2nd Opinion icon + OST logo -->
-        <div class="brandBlockSmall">
-          <img src="2ndOpinionIcon.svg"
-               alt="Second Opinion app icon"
-               class="brandIconMainSmall">
-          <img src="SVG_VERSION_OST_Main_Logo.svg"
-               alt="On Second Thought logo"
-               class="brandIconOstSmall">
-        </div>
-        <!-- Title + tagline -->
-        <div>
-          <h1>Second Opinion</h1>
-          <div class="tagline"><i>Real Flights – Human Factors – Safer Skies</i></div>
-          <div style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;">
-            <a href="javascript:void(0)" id="appInfoLink" class="infoLink">What’s this?</a>
-            <a href="javascript:void(0)" id="aboutAppLink" class="infoLink">About</a>
-          </div>
-        </div>
+    <!-- HERO ICON BLOCK + TAGLINE + LINKS -->
+    <header class="center" style="flex-direction:column;gap:10px;">
+      <div class="brandBlockHero">
+        <img src="2ndOpinionIcon.svg"
+             alt="Second Opinion app icon"
+             class="brandIconHeroMain">
+        <img src="SVG_VERSION_OST_Main_Logo.svg"
+             alt="On Second Thought logo"
+             class="brandIconHeroOst">
+      </div>
+      <div class="tagline"><i>Real Flights – Human Factors – Safer Skies</i></div>
+      <div style="margin-top:4px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+        <a href="javascript:void(0)" id="appInfoLink" class="infoLink">What’s this?</a>
+        <a href="javascript:void(0)" id="aboutAppLink" class="infoLink">About</a>
       </div>
     </header>
 
     <div class="hr"></div>
 
-    <!-- Main mode buttons -->
+    <!-- Main mode buttons (square, side-by-side, labels only inside buttons) -->
     <div class="grid grid-2">
-      <div>
-        <h2>Cognition &amp; Acuity Assessment</h2>
-        <button id="goTmdBtn" type="button" class="btn mainMenuBtn">
-          Cognition &amp; Acuity Assessment
-        </button>
-      </div>
-      <div>
-        <h2>FRAT Assessment</h2>
-        <button id="goFratBtn" type="button" class="btn mainMenuBtn">
-          FRAT Assessment
-        </button>
-      </div>
+      <button id="goTmdBtn" type="button" class="btn mainMenuBtn">
+        Cognition &amp; Acuity Assessment
+      </button>
+      <button id="goFratBtn" type="button" class="btn mainMenuBtn">
+        FRAT Assessment
+      </button>
     </div>
 
     <div class="hr"></div>
