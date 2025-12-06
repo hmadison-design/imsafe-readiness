@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Second Opinion — Pilot Readiness &amp; Risk Tools</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="wrap">
@@ -13,22 +13,21 @@
   <section id="modeCard" class="card">
     <header class="row" style="justify-content:space-between;align-items:flex-start">
       <div class="row" style="align-items:center;gap:16px">
-        <!-- App icon + OST logo -->
-        <div style="background:#ffffff;border-radius:16px;padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,0.35);display:flex;flex-direction:column;align-items:center;">
+        <!-- Brand block: 2nd Opinion icon + OST logo -->
+        <div class="brandBlockSmall">
           <img src="2ndOpinionIcon.svg"
                alt="Second Opinion app icon"
-               style="height:72px;display:block;margin-bottom:8px;">
+               class="brandIconMainSmall">
           <img src="SVG_VERSION_OST_Main_Logo.svg"
                alt="On Second Thought logo"
-               style="height:40px;display:block;opacity:0.9;">
+               class="brandIconOstSmall">
         </div>
         <!-- Title + tagline -->
         <div>
           <h1>Second Opinion</h1>
           <div class="tagline"><i>Real Flights – Human Factors – Safer Skies</i></div>
-          <div style="margin-top:8px;">
+          <div style="margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;">
             <a href="javascript:void(0)" id="appInfoLink" class="infoLink">What’s this?</a>
-            <span class="muted" style="margin:0 6px;">·</span>
             <a href="javascript:void(0)" id="aboutAppLink" class="infoLink">About</a>
           </div>
         </div>
@@ -37,20 +36,28 @@
 
     <div class="hr"></div>
 
+    <!-- Main mode buttons -->
     <div class="grid grid-2">
       <div>
         <h2>Cognition &amp; Acuity Assessment</h2>
-        <button id="goTmdBtn" type="button" class="btn mainMenuBtn">Cognition &amp; Acuity Assessment</button>
+        <button id="goTmdBtn" type="button" class="btn mainMenuBtn">
+          Cognition &amp; Acuity Assessment
+        </button>
       </div>
       <div>
         <h2>FRAT Assessment</h2>
-        <button id="goFratBtn" type="button" class="btn mainMenuBtn">FRAT Assessment</button>
+        <button id="goFratBtn" type="button" class="btn mainMenuBtn">
+          FRAT Assessment
+        </button>
       </div>
     </div>
 
     <div class="hr"></div>
     <div class="footer-link muted">
-      Learn more about the show at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+      Learn more about the show at
+      <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">
+        OnSecondThought.me
+      </a>.
     </div>
   </section>
 
@@ -59,35 +66,35 @@
     <h2>How to use <i>Second Opinion</i></h2>
     <div class="muted">
       <p><b>When to use it.</b> Use <i>Second Opinion</i> before a flight when you want a quick, private check of your
-      cognitive sharpness, alongside IM SAFE, weather, and the rest of your preflight workflow.</p>
+        cognitive sharpness, alongside IM SAFE, weather, and the rest of your preflight workflow.</p>
 
       <p><b>Step 1: Build a baseline.</b> On days when you feel well-rested, well-fed, not stressed, and
-      absolutely comfortable flying, run the Cognition &amp; Acuity Assessment a few times (ideally 3–5 sessions).
-      Add only those “good-day” runs to your baseline. Future runs are compared to that personal baseline instead
-      of an abstract population norm.</p>
+        absolutely comfortable flying, run the Cognition &amp; Acuity Assessment a few times (ideally 3–5 sessions).
+        Add only those “good-day” runs to your baseline. Future runs are compared to that personal baseline instead
+        of an abstract population norm.</p>
 
       <p><b>The three pieces.</b></p>
       <ul>
         <li><b>Reaction:</b> tap as quickly as you can when the circle turns green. Slower median reaction times and
-        more lapses suggest reduced alertness.</li>
+          more lapses suggest reduced alertness.</li>
         <li><b>Color–word (Stroop):</b> decide whether the ink color matches the word. Conflicting items require you
-        to suppress the automatic reading response—this taps executive control.</li>
+          to suppress the automatic reading response—this taps executive control.</li>
         <li><b>2-back:</b> watch short groups of digits and decide if the third matches the digit two positions back.
-        This stresses online updating and working memory. The summary statistic (<i>d′</i>) is essentially a
-        signal-to-noise measure; higher is better separation between “same” and “not same”.</li>
+          This stresses online updating and working memory. The summary statistic (<i>d′</i>) is essentially a
+          signal-to-noise measure; higher is better separation between “same” and “not same”.</li>
       </ul>
 
       <p><b>Interpreting results.</b> The app focuses on how far you are from your own baseline, not anyone else’s.</p>
       <ul>
         <li>“Near baseline” looks like a typical good day—assuming your device is behaving.</li>
         <li>“Mildly” or “moderately” below baseline suggests you’re softer than usual; consider adding margin or
-        delaying until after rest, food, or reduced stress.</li>
+          delaying until after rest, food, or reduced stress.</li>
         <li>“Well below baseline” is an “On Second Thought…” moment: either something is wrong with the device,
-        or you are not bringing your usual cognitive resources to the flight.</li>
+          or you are not bringing your usual cognitive resources to the flight.</li>
       </ul>
 
       <p><b>Limitations.</b> A good score does not guarantee fitness to fly; a soft score does not prove unfitness.
-      Treat this as a conservative nudge, not a verdict.</p>
+        Treat this as a conservative nudge, not a verdict.</p>
     </div>
     <div class="hr"></div>
     <button id="appInfoBackBtn" type="button" class="btn btn-ghost">Back to main menu</button>
@@ -96,45 +103,55 @@
     </div>
   </section>
 
-  <!-- ABOUT SECOND OPINION CARD -->
+  <!-- ABOUT APP CARD (long description moved off main menu) -->
   <section id="aboutAppCard" class="card hide">
-    <h2>About <i>Second Opinion</i></h2>
+    <h2>About the <i>Second Opinion</i> app</h2>
     <div class="muted">
-      <p><i>Second Opinion</i> was developed by instructional designer and pilot Harvey Madison, co-host of
-      <i>On Second Thought</i>, to assist pilots in making more objective, data-informed decisions about
-      their fitness to fly at any given moment.</p>
-      <p>The underlying tasks draw on established brain-science paradigms:
-      a simple reaction-time task related to the Psychomotor Vigilance Task used in fatigue research;
-      a color–word interference (Stroop) task for executive control;
-      and a 2-back working-memory task widely used in cognitive neuroscience.</p>
-      <p>The app is designed to be one tool among many in your IM SAFE and ADM workflow. These tools support your
-      decision-making; they do not replace your CFI, the regulations, or your own judgment. All go/no-go decisions
-      remain entirely the responsibility of each pilot—just as they always have.</p>
+      <p>
+        <i>Second Opinion</i> was developed by instructional designer and pilot Harvey Madison, co-host of
+        <i>On Second Thought</i>, to assist pilots in making more objective, data-informed decisions about
+        their fitness to fly at any given moment.
+      </p>
+      <p>
+        The underlying tasks draw on established brain-science paradigms:
+        a simple reaction-time task related to the Psychomotor Vigilance Task used in fatigue research;
+        a color–word interference (Stroop) task for executive control;
+        and a 2-back working-memory task widely used in cognitive neuroscience.
+      </p>
+      <p>
+        The app is designed to be one tool among many in your IM SAFE and ADM workflow. These tools support your
+        decision-making; they do not replace your CFI, the regulations, or your own judgment. All go/no-go decisions
+        remain entirely the responsibility of each pilot—just as they always have.
+      </p>
     </div>
     <div class="hr"></div>
     <button id="aboutAppBackBtn" type="button" class="btn btn-ghost">Back to main menu</button>
+    <div class="footer-link muted">
+      Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+    </div>
   </section>
 
-  <!-- ABOUT OST CARD -->
+  <!-- ABOUT OST CARD (marketing copy) -->
   <section id="aboutOstCard" class="card hide">
     <h2>About <i>On Second Thought</i></h2>
     <div class="muted">
       <p><i>On Second Thought</i> is a safety-focused series for general aviation pilots who want more than
-      airplane porn and hangar talk. Each episode takes a single real-world accident and unpacks the human factors
-      behind it—attention, bias, pressure, habit patterns, and all the tiny choices that add up to a big outcome.</p>
+        airplane porn and hangar talk. Each episode takes a single real-world accident and unpacks the human factors
+        behind it—attention, bias, pressure, habit patterns, and all the tiny choices that add up to a big outcome.</p>
 
       <p>The show is co-hosted by instructional designer and GA pilot Harvey Madison and psychotherapist /
-      long-time aviation safety advocate Jolie Lucas. Together they blend solid research, story-driven case studies,
-      and practical “what would you actually do in this cockpit?” discussions aimed squarely at line pilots—
-      not just test pilots or airline crews.</p>
+        long-time aviation safety advocate Jolie Lucas. Together they blend solid research, story-driven case studies,
+        and practical “what would you actually do in this cockpit?” discussions aimed squarely at line pilots—
+        not just test pilots or airline crews.</p>
 
       <p><i>Second Opinion</i> is part of that ecosystem: a quick, private way to pause, think twice, and give yourself
-      a reality check before you go fly on purpose.</p>
+        a reality check before you go fly on purpose.</p>
     </div>
     <div class="hr"></div>
     <button id="aboutOstBackBtn" type="button" class="btn btn-ghost">Back</button>
     <div class="footer-link muted">
-      Visit <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a> for episodes, articles, and upcoming events.
+      Visit <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>
+      for episodes, articles, and upcoming events.
     </div>
   </section>
 
@@ -143,34 +160,37 @@
   <!-- ========================= -->
   <div id="tmdRoot" class="hide">
 
-    <!-- Mental Status Home -->
+    <!-- Mental Status Home (Cognition & Acuity) -->
     <section id="tmdHome" class="card">
-      <div class="row" style="justify-content:space-between;align-items:flex-start">
-        <div class="row" style="align-items:center;gap:18px">
-          <div style="background:#ffffff;border-radius:20px;padding:12px 16px;box-shadow:0 10px 26px rgba(0,0,0,0.4);display:flex;flex-direction:column;align-items:center;">
-            <img src="2ndOpinionIcon.svg"
-                 alt="Second Opinion app icon"
-                 style="height:80px;display:block;margin-bottom:8px;">
-            <img src="SVG_VERSION_OST_Main_Logo.svg"
-                 alt="On Second Thought logo"
-                 style="height:40px;display:block;opacity:0.9;">
-          </div>
-          <div>
-            <h1>Cognition &amp; Acuity Assessment</h1>
-            <div class="muted" style="margin-top:4px;">
-              A quick mental snapshot before you go fly: reaction speed, color–word control, and 2-back working memory.
-            </div>
-            <div style="margin-top:12px;">
-              <button id="startBtn" type="button" class="btn">Start Assessment</button>
-            </div>
-            <div style="margin-top:8px;">
-              <a href="javascript:void(0)" id="tmdInfoBtn" class="infoLink">What is this?</a>
-            </div>
-          </div>
+      <!-- Hamburger at top right -->
+      <button id="tmdMenuBtn" type="button"
+              class="btn btn-sm btn-ghost tmdMenuBtn"
+              aria-label="Cognition &amp; Acuity menu">☰</button>
+
+      <!-- Centered brand block -->
+      <div class="center" style="margin-top:4px;margin-bottom:14px;">
+        <div class="brandBlock">
+          <img src="2ndOpinionIcon.svg"
+               alt="Second Opinion app icon"
+               class="brandIconMain">
+          <img src="SVG_VERSION_OST_Main_Logo.svg"
+               alt="On Second Thought logo"
+               class="brandIconOst">
         </div>
-        <button id="tmdMenuBtn" type="button" class="btn btn-sm btn-ghost" aria-label="Cognition &amp; Acuity menu">☰</button>
       </div>
 
+      <h1>Cognition &amp; Acuity Assessment</h1>
+      <div class="muted" style="margin-top:4px;">
+        A quick mental snapshot before you go fly: reaction speed, color–word control, and 2-back working memory.
+      </div>
+      <div style="margin-top:12px;">
+        <button id="startBtn" type="button" class="btn">Start Assessment</button>
+      </div>
+      <div style="margin-top:8px;">
+        <a href="javascript:void(0)" id="tmdInfoBtn" class="infoLink">What is this?</a>
+      </div>
+
+      <!-- Dropdown menu -->
       <div id="tmdMenu" class="card hide">
         <h3>Cognition &amp; Acuity menu</h3>
         <div class="muted" style="margin-bottom:4px;font-size:.9rem">
@@ -188,7 +208,10 @@
       </div>
 
       <div class="footer-link muted">
-        Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
+        Learn more at
+        <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">
+          OnSecondThought.me
+        </a>.
       </div>
     </section>
 
@@ -220,8 +243,12 @@
     <!-- Test card -->
     <section id="testCard" class="card hide">
       <div class="row" style="justify-content:space-between;align-items:center">
-        <div class="pill"><span id="stepName">Warm-up</span></div>
-        <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
+        <div class="pill" id="stepPill">
+          <span id="stepName">Countdown to start</span>
+        </div>
+        <div class="pill" id="timePill">
+          <span>Time:</span> <b id="countdown">0s</b>
+        </div>
       </div>
       <div class="bar" style="margin:12px 0 10px"><i id="progressBar"></i></div>
 
@@ -328,8 +355,7 @@
     <section class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
         <div class="row" style="align-items:center;gap:10px">
-          <img src="2ndOpinionIcon.svg" alt="Second Opinion icon" style="height:32px;">
-          <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:24px;opacity:.7;">
+          <img src="SVG_VERSION_OST_Main_Logo.svg" alt="OST" style="height:28px;opacity:.7;">
           <div>
             <h1>FRAT Assessment</h1>
             <div class="muted" style="margin-top:4px;font-size:.95rem;">
@@ -425,6 +451,6 @@
 
 </div>
 
-<script src="app.js" defer></script>
+<script src="app.js"></script>
 </body>
 </html>
