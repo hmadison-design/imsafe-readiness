@@ -1,5 +1,4 @@
 :root{
-  /* Updated background color */
   --bg:#00354dfe;
   --card:#101724;
   --ink:#e9eef5;
@@ -49,13 +48,14 @@ p{margin:.3rem 0 .3rem}
 }
 .grid-2{
   grid-template-columns:repeat(2,minmax(0,1fr));
-  align-items:stretch;
 }
 .muted{color:var(--muted)}
 .big{font-size:2.2rem;font-weight:700}
 .mono{
   font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace;
 }
+
+/* Buttons */
 .btn{
   appearance:none;
   border:0;
@@ -69,8 +69,8 @@ p{margin:.3rem 0 .3rem}
   user-select:none;
   font-size:1rem;
   display:inline-flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   text-align:center;
 }
 .btn:disabled{opacity:.6;cursor:not-allowed}
@@ -89,30 +89,16 @@ p{margin:.3rem 0 .3rem}
   opacity:.9;
 }
 
-/* Main menu buttons: square-ish, full-width in their column, equal height */
+/* Main menu square tiles */
 .mainMenuBtn{
   width:100%;
   aspect-ratio:1 / 1;
   min-height:120px;
   border-radius:18px;
-  padding:14px 10px;
   margin-top:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
 }
 
-@media (max-width: 720px){
-  .grid-2{
-    grid-template-columns:1fr;
-  }
-  .wrap{
-    padding:12px 12px 20px;
-  }
-}
-
-
+/* Keyboard / pills / chips */
 .kbd{
   display:inline-block;
   padding:.2rem .45rem;
@@ -158,6 +144,8 @@ p{margin:.3rem 0 .3rem}
   width:0;
   background:linear-gradient(90deg,#4da3ff,#13c27a);
 }
+
+/* Reaction tap target */
 .tapTarget{
   width:240px;
   height:240px;
@@ -175,6 +163,8 @@ p{margin:.3rem 0 .3rem}
 .tapTarget.ready{background:#6a7688}
 .tapTarget.go{background:#3aa657}
 .tapTarget.active{transform:scale(.97);filter:brightness(1.05)}
+
+/* Stroop */
 .wordBox{
   font-weight:900;
   font-size:2.6rem;
@@ -184,9 +174,12 @@ p{margin:.3rem 0 .3rem}
   background:#0e1520;
   min-width:8ch;
 }
-.hide{display:none}
+
+/* N-back buttons */
 #btnMatch,#btnMismatch{min-width:160px}
 #btnTarget,#btnNotTarget{min-width:200px}
+
+/* Dots */
 .dot{
   width:12px;
   height:12px;
@@ -198,10 +191,13 @@ p{margin:.3rem 0 .3rem}
 .dot.green{background:var(--good)}
 .dot.amber{background:var(--warn)}
 .dot.red{background:var(--bad)}
+
 .sectionTitle{
   margin-top:10px;
   font-weight:600;
 }
+
+/* FRAT questions */
 .frat-q{
   display:flex;
   justify-content:space-between;
@@ -217,15 +213,38 @@ p{margin:.3rem 0 .3rem}
   white-space:nowrap;
   font-size:.9rem;
 }
-/* Mental Status home menu */
+
+/* Mental Status home menu as dropdown */
+#tmdHome{
+  position:relative;
+  padding-top:40px;
+}
+.tmdMenuBtn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  padding:6px 10px;
+  border-radius:999px;
+  z-index:6;
+}
 #tmdMenu{
-  margin-top:10px;
+  position:absolute;
+  top:44px;
+  right:12px;
   background:#0f1622;
   border:1px solid #223042;
+  border-radius:10px;
+  padding:8px 10px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.55);
+  z-index:5;
 }
 #tmdMenu .btn{
-  margin:4px 6px 4px 0;
+  width:100%;
+  margin:4px 0;
+  justify-content:flex-start;
 }
+
+/* Links / text */
 a.infoLink{
   color:var(--accent);
   text-decoration:none;
@@ -246,3 +265,57 @@ a.infoLink:hover{text-decoration:underline}
   text-decoration:none;
 }
 .footer-link a:hover{text-decoration:underline}
+
+.hide{display:none}
+
+/* Brand blocks */
+.brandBlock{
+  background:#ffffff;
+  border-radius:24px;
+  padding:16px 18px 14px;
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.brandIconMain{
+  height:110px;
+  display:block;
+  margin-bottom:10px;
+}
+.brandIconOst{
+  height:40px;
+  display:block;
+  opacity:.9;
+}
+
+/* Smaller version on main menu */
+.brandBlockSmall{
+  background:#ffffff;
+  border-radius:20px;
+  padding:10px 14px;
+  box-shadow:0 8px 22px rgba(0,0,0,.4);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.brandIconMainSmall{
+  height:72px;
+  display:block;
+  margin-bottom:8px;
+}
+.brandIconOstSmall{
+  height:30px;
+  display:block;
+  opacity:.95;
+}
+
+/* Responsive adjustments */
+@media (max-width: 720px){
+  .grid-2{
+    grid-template-columns:1fr;
+  }
+  .wrap{
+    padding:12px 12px 20px;
+  }
+}
