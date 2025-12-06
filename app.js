@@ -21,6 +21,7 @@
   const aboutOstCard=$("#aboutOstCard");
   const aboutOstBackBtn=$("#aboutOstBackBtn");
 
+
   function goMain(){
     hide(tmdRoot);
     hide(fratRoot);
@@ -30,62 +31,77 @@
     show(modeCard);
   }
 
-  goTmdBtn.addEventListener("click",()=>{
-    hide(modeCard);
-    hide(appInfoCard);
-    hide(aboutAppCard);
-    hide(aboutOstCard);
-    fratRoot.classList.add("hide");
-    tmdRoot.classList.remove("hide");
-    show(tmdHome);
-    hide(tmdInfoCard);
-    hide($("#testCard"));
-    hide($("#resultCard"));
-    hide($("#baselineCard"));
-    hide($("#tmdMenu"));
-  });
+  if (goTmdBtn) {
+    goTmdBtn.addEventListener("click",()=>{
+      hide(modeCard);
+      hide(appInfoCard);
+      hide(aboutAppCard);
+      hide(aboutOstCard);
+      fratRoot.classList.add("hide");
+      tmdRoot.classList.remove("hide");
+      show(tmdHome);
+      hide(tmdInfoCard);
+      hide($("#testCard"));
+      hide($("#resultCard"));
+      hide($("#baselineCard"));
+      hide($("#tmdMenu"));
+    });
+  }
 
-  goFratBtn.addEventListener("click",()=>{
-    hide(modeCard);
-    hide(appInfoCard);
-    hide(aboutAppCard);
-    hide(aboutOstCard);
-    tmdRoot.classList.add("hide");
-    fratRoot.classList.remove("hide");
-  });
+  if (goFratBtn) {
+    goFratBtn.addEventListener("click",()=>{
+      hide(modeCard);
+      hide(appInfoCard);
+      hide(aboutAppCard);
+      hide(aboutOstCard);
+      tmdRoot.classList.add("hide");
+      fratRoot.classList.remove("hide");
+    });
+  }
 
   $("#backFromFrat").addEventListener("click",goMain);
 
-  appInfoLink.addEventListener("click",()=>{
-    hide(modeCard);
-    hide(aboutAppCard);
-    hide(aboutOstCard);
-    show(appInfoCard);
-  });
-  appInfoBackBtn.addEventListener("click",goMain);
+  if (appInfoLink && appInfoCard) {
+    appInfoLink.addEventListener("click",()=>{
+      hide(modeCard);
+      hide(aboutAppCard);
+      hide(aboutOstCard);
+      show(appInfoCard);
+    });
+  }
+  if (appInfoBackBtn) appInfoBackBtn.addEventListener("click",goMain);
 
-  aboutAppLink.addEventListener("click",()=>{
-    hide(modeCard);
-    hide(appInfoCard);
-    hide(aboutOstCard);
-    show(aboutAppCard);
-  });
-  aboutAppBackBtn.addEventListener("click",goMain);
+  if (aboutAppLink && aboutAppCard) {
+    aboutAppLink.addEventListener("click",()=>{
+      hide(modeCard);
+      hide(appInfoCard);
+      hide(aboutOstCard);
+      show(aboutAppCard);
+    });
+  }
+  if (aboutAppBackBtn) aboutAppBackBtn.addEventListener("click",goMain);
 
-  aboutOstBackBtn.addEventListener("click",()=>{
-    hide(aboutOstCard);
-    goMain();
-  });
+  if (aboutOstBackBtn) {
+    aboutOstBackBtn.addEventListener("click",()=>{
+      hide(aboutOstCard);
+      goMain();
+    });
+  }
 
-  tmdInfoBtn.addEventListener("click",()=>{
-    hide(tmdHome);
-    hide($("#tmdMenu"));
-    show(tmdInfoCard);
-  });
-  tmdInfoBackBtn.addEventListener("click",()=>{
-    hide(tmdInfoCard);
-    show(tmdHome);
-  });
+  if (tmdInfoBtn) {
+    tmdInfoBtn.addEventListener("click",()=>{
+      hide(tmdHome);
+      hide($("#tmdMenu"));
+      show(tmdInfoCard);
+    });
+  }
+  if (tmdInfoBackBtn) {
+    tmdInfoBackBtn.addEventListener("click",()=>{
+      hide(tmdInfoCard);
+      show(tmdHome);
+    });
+  }
+
 
   // ---------- Shared helpers ----------
   const lastPress=new WeakMap();
