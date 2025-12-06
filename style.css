@@ -92,11 +92,26 @@ p{margin:.3rem 0 .3rem}
 /* Main menu buttons: square-ish, full-width in their column, equal height */
 .mainMenuBtn{
   width:100%;
-  min-height:52px;
-  border-radius:12px;
-  padding:14px 12px;
+  aspect-ratio:1 / 1;
+  min-height:120px;
+  border-radius:18px;
+  padding:14px 10px;
   margin-top:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
 }
+
+@media (max-width: 720px){
+  .grid-2{
+    grid-template-columns:1fr;
+  }
+  .wrap{
+    padding:12px 12px 20px;
+  }
+}
+
 
 .kbd{
   display:inline-block;
