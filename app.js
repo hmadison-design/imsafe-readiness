@@ -21,7 +21,6 @@
   const aboutOstCard=$("#aboutOstCard");
   const aboutOstBackBtn=$("#aboutOstBackBtn");
 
-
   function goMain(){
     hide(tmdRoot);
     hide(fratRoot);
@@ -102,7 +101,6 @@
     });
   }
 
-
   // ---------- Shared helpers ----------
   const lastPress=new WeakMap();
   function onPressPointer(el,fn,db=200){
@@ -135,6 +133,7 @@
   const menuExport=$("#menuExport"), menuMain=$("#menuMain"), menuAboutOst=$("#menuAboutOst");
 
   const testCard=$("#testCard"), stepName=$("#stepName"), countdown=$("#countdown"), progressBar=$("#progressBar");
+  const timePill=$("#timePill");
   const srtPane=$("#srtPane"), srtTarget=$("#srtTarget");
   const stroopPane=$("#stroopPane"), stroopWord=$("#stroopWord"), btnMatch=$("#btnMatch"), btnMismatch=$("#btnMismatch");
   const betweenPane=$("#betweenPane"), betweenCountdown=$("#betweenCountdown");
@@ -149,74 +148,90 @@
 
   function setProgress(p){progressBar.style.width=(p*100).toFixed(1)+"%";}
 
-  tmdMenuBtn.addEventListener("click",()=>{
-    if(tmdMenu.classList.contains("hide")) show(tmdMenu); else hide(tmdMenu);
-  });
+  if (tmdMenuBtn) {
+    tmdMenuBtn.addEventListener("click",()=>{
+      if(tmdMenu.classList.contains("hide")) show(tmdMenu); else hide(tmdMenu);
+    });
+  }
 
-  menuAddBaseline.addEventListener("click",()=>{
-    hide(tmdMenu);
-    addCurrentToBaseline();
-  });
+  if (menuAddBaseline) {
+    menuAddBaseline.addEventListener("click",()=>{
+      hide(tmdMenu);
+      addCurrentToBaseline();
+    });
+  }
 
-  menuManageBaseline.addEventListener("click",()=>{
-    hide(tmdMenu);
-    updateBaselineList();
-    hide(resultCard);
-    hide(testCard);
-    hide(tmdInfoCard);
-    show(baselineCard);
-  });
+  if (menuManageBaseline) {
+    menuManageBaseline.addEventListener("click",()=>{
+      hide(tmdMenu);
+      updateBaselineList();
+      hide(resultCard);
+      hide(testCard);
+      hide(tmdInfoCard);
+      show(baselineCard);
+    });
+  }
 
-  menuExport.addEventListener("click",()=>{
-    hide(tmdMenu);
-    exportPDF();
-  });
+  if (menuExport) {
+    menuExport.addEventListener("click",()=>{
+      hide(tmdMenu);
+      exportPDF();
+    });
+  }
 
-  menuMain.addEventListener("click",()=>{
-    hide(tmdMenu);
-    hide(baselineCard);
-    hide(testCard);
-    hide(resultCard);
-    hide(tmdInfoCard);
-    tmdRoot.classList.add("hide");
-    show(modeCard);
-  });
+  if (menuMain) {
+    menuMain.addEventListener("click",()=>{
+      hide(tmdMenu);
+      hide(baselineCard);
+      hide(testCard);
+      hide(resultCard);
+      hide(tmdInfoCard);
+      tmdRoot.classList.add("hide");
+      show(modeCard);
+    });
+  }
 
-  menuAboutOst.addEventListener("click",()=>{
-    hide(tmdMenu);
-    hide(tmdHome);
-    hide(testCard);
-    hide(resultCard);
-    hide(baselineCard);
-    hide(tmdInfoCard);
-    show(aboutOstCard);
-  });
+  if (menuAboutOst) {
+    menuAboutOst.addEventListener("click",()=>{
+      hide(tmdMenu);
+      hide(tmdHome);
+      hide(testCard);
+      hide(resultCard);
+      hide(baselineCard);
+      hide(tmdInfoCard);
+      show(aboutOstCard);
+    });
+  }
 
-  backToMainBtn.addEventListener("click", () => {
-    hide(resultCard);
-    hide(testCard);
-    hide(baselineCard);
-    hide(tmdInfoCard);
-    tmdRoot.classList.add("hide");
-    show(modeCard);
-  });
+  if (backToMainBtn) {
+    backToMainBtn.addEventListener("click", () => {
+      hide(resultCard);
+      hide(testCard);
+      hide(baselineCard);
+      hide(tmdInfoCard);
+      tmdRoot.classList.add("hide");
+      show(modeCard);
+    });
+  }
 
-  startBtn.addEventListener('click', runTest);
-  againBtn.addEventListener('click', runTest);
-  addBaselineBtn2.addEventListener('click', addCurrentToBaseline);
-  deleteBaselineBtn.addEventListener('click', ()=>{
-    if(confirm("Delete ALL baseline sessions on this device?")){
-      baselineSessions=[]; saveBaseline(baselineSessions); updateBaselineList();
-    }
-  });
-  closeBaselineBtn.addEventListener('click', ()=>hide(baselineCard));
+  if (startBtn) startBtn.addEventListener('click', runTest);
+  if (againBtn) againBtn.addEventListener('click', runTest);
+  if (addBaselineBtn2) addBaselineBtn2.addEventListener('click', addCurrentToBaseline);
+  if (deleteBaselineBtn) {
+    deleteBaselineBtn.addEventListener('click', ()=>{
+      if(confirm("Delete ALL baseline sessions on this device?")){
+        baselineSessions=[]; saveBaseline(baselineSessions); updateBaselineList();
+      }
+    });
+  }
+  if (closeBaselineBtn) closeBaselineBtn.addEventListener('click', ()=>hide(baselineCard));
 
   const DUR={warmup:5,srt:30,stroop:45,nbackGroups:12};
   const TOTAL_TIME=DUR.warmup + DUR.srt + DUR.stroop + 15;
   const BASELINE_MIN=3;
 
   function sectionTimer(name,sec,tick){
-    stepName.textContent=name;
+    // name kept for potential future use
     const t0=now(), total=sec*1000;
     return new Promise(res=>{
       function frame(){
@@ -233,7 +248,7 @@
     show(betweenPane);
     hide(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane);
     await sectionTimer(label, seconds,(tleft,p)=>{
-      countdown.textContent=Math.ceil(tleft)+"s";
+      if (countdown) countdown.textContent=Math.ceil(tleft)+"s";
       betweenCountdown.textContent=Math.ceil(tleft);
       const elapsed=elapsedBefore + (seconds - tleft);
       setProgress(elapsed / TOTAL_TIME);
@@ -243,7 +258,7 @@
 
   async function runTest(){
     sessionResult=null;
-    addBaselineBtn2.disabled=true;
+    if (addBaselineBtn2) addBaselineBtn2.disabled=true;
     hide(resultCard);
     hide(baselineCard);
     hide(tmdHome);
@@ -252,14 +267,16 @@
     testCard.scrollIntoView({behavior:"auto"});
 
     // Warm-up — label now "Countdown to start Xs"
+    if (timePill) timePill.style.visibility = "hidden";
     await sectionTimer("Warm-up",DUR.warmup,(t,p)=>{
       const secs=Math.ceil(t);
       stepName.textContent=`Countdown to start ${secs}s`;
-      countdown.textContent=" ";
+      if (countdown) countdown.textContent=" ";
       setProgress((DUR.warmup - t)/TOTAL_TIME);
       srtTarget.textContent="WAIT"; srtTarget.className="tapTarget ready";
       show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane); hide(betweenPane);
     });
+    if (timePill) timePill.style.visibility = "visible";
 
     const srt=await runSRT(DUR.srt);
 
@@ -289,7 +306,7 @@
   function waitForNbackStart(timeoutMs){
     show(preNbackPane); hide(srtPane); hide(stroopPane); hide(nbackPane); hide(betweenPane);
     preNbackHint.textContent="If you don’t start within about 10 seconds, this run will be cancelled.";
-    countdown.textContent="—";
+    if (countdown) countdown.textContent="—";
     stepName.textContent="Prepare: 2-back";
     return new Promise(res=>{
       let done=false;
@@ -307,7 +324,7 @@
     });
   }
 
-  function randomGap(){ return 1000 + Math.random()*4500; } // 1.0–5.5 seconds approx
+  function randomGap(){ return 1000 + Math.random()*4500; }
 
   async function runSRT(sec){
     show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane); hide(betweenPane);
@@ -363,7 +380,7 @@
       scheduleNext();
 
       sectionTimer("Reaction",sec,(tleft,p)=>{
-        countdown.textContent=Math.ceil(tleft)+"s";
+        if (countdown) countdown.textContent=Math.ceil(tleft)+"s";
         const elapsed=DUR.warmup + (DUR.srt - tleft);
         setProgress(elapsed / TOTAL_TIME);
       }).then(()=>{
@@ -517,7 +534,7 @@
 
       showTrial();
       sectionTimer("Color–Word",sec,(tleft,p)=>{
-        countdown.textContent=Math.ceil(tleft)+"s";
+        if (countdown) countdown.textContent=Math.ceil(tleft)+"s";
         const elapsed=DUR.warmup + DUR.srt + (DUR.stroop - tleft);
         setProgress(elapsed / TOTAL_TIME);
       }).then(()=>{
@@ -530,7 +547,7 @@
   async function runTwoBack(groups){
     show(nbackPane); hide(srtPane); hide(stroopPane); hide(preNbackPane); hide(betweenPane);
 
-    // Small pause before the very first group
+    // Small pause before first group
     await sleep(1000);
 
     let group=1, hits=0, fas=0, miss=0, hitRTs=[];
@@ -542,15 +559,12 @@
     async function doGroup(){
       if(group>groups) return;
 
-      // NEW: short blank gap between groups so the first digit is clearly a new group
-      if(group>1){
-        setDigit("", false);
-        twoBackButtons.style.visibility="hidden";
-        await sleep(300); // 250–500 ms; tuned to 300 ms here
-      }
+      // Inter-group gap (no digit visible)
+      setDigit("",false);
+      twoBackButtons.style.visibility="hidden";
+      await sleep(400);
 
       groupLabel.textContent=`Group ${group}`;
-      twoBackButtons.style.visibility="hidden";
       const a=rDigit(null), b=rDigit(null), target=Math.random()<0.5, c=target?a:rDigit(a);
 
       await new Promise(res=>{
@@ -585,6 +599,7 @@
 
         showA();
       });
+
       group++;
       await doGroup();
     }
@@ -775,7 +790,7 @@
     statusText.textContent=res.hasBaseline? res.statusLabel:"Baseline needed";
     driverText.textContent=res.driver;
     guidanceText.textContent=res.guidance;
-    addBaselineBtn2.disabled=false;
+    if (addBaselineBtn2) addBaselineBtn2.disabled=false;
     const totalPresses=srt.falseStarts+srt.n, fsRate=totalPresses?(100*srt.falseStarts/totalPresses):0;
     const shownNbD=res.today.nb_d;
 
@@ -956,6 +971,7 @@
   ];
 
   function buildFratQuestions(){
+    if (!fratQuestionsDiv) return;
     fratQuestionsDiv.innerHTML="";
     const cats=[...new Set(FRAT_ITEMS.map(i=>i.cat))];
     cats.forEach(cat=>{
@@ -1002,136 +1018,142 @@
     return itemRule===rules;
   }
 
-  fratCalcBtn.addEventListener("click",()=>{
-    const {rules,exp}=getFratProfile();
-    if(!rules || !exp){
-      alert("Please select flight rules (VFR/IFR) and experience in type before scoring.");
-      return;
-    }
-    let total=0;
-    const byCat={};
-    FRAT_ITEMS.forEach(item=>{
-      if(!applicableToRules(item.rule,rules)) return;
-      const val=document.querySelector(`input[name="${item.id}"]:checked`)?.value;
-      if(val==="true"){
-        total+=item.score;
-        byCat[item.cat]=(byCat[item.cat]||0)+item.score;
+  if (fratCalcBtn) {
+    fratCalcBtn.addEventListener("click",()=>{
+      const {rules,exp}=getFratProfile();
+      if(!rules || !exp){
+        alert("Please select flight rules (VFR/IFR) and experience in type before scoring.");
+        return;
       }
-    });
-
-    let band="Low", dotClass="green", narrative="", guidance="";
-    let bandText="";
-    if(rules==="IFR"){
-      if(exp==="<100"){
-        if(total<20){band="Below ref range";dotClass="green";}
-        else if(total<=25){band="Low";dotClass="green";}
-        else if(total<=30){band="Moderate";dotClass="amber";}
-        else {band="High";dotClass="red";}
-        bandText="IFR • <100 in type: Low 20–25, Moderate 25–30, High >30.";
-      }else{
-        if(total<25){band="Below ref range";dotClass="green";}
-        else if(total<=30){band="Low";dotClass="green";}
-        else if(total<=35){band="Moderate";dotClass="amber";}
-        else {band="High";dotClass="red";}
-        bandText="IFR • ≥100 in type: Low 25–30, Moderate 30–35, High >35.";
-      }
-    }else{
-      if(exp==="<100"){
-        if(total<5){band="Below ref range";dotClass="green";}
-        else if(total<=15){band="Low";dotClass="green";}
-        else if(total<=20){band="Moderate";dotClass="amber";}
-        else {band="High";dotClass="red";}
-        bandText="VFR • <100 in type: Low 5–15, Moderate 15–20, High >20.";
-      }else{
-        if(total<15){band="Below ref range";dotClass="green";}
-        else if(total<=20){band="Low";dotClass="green";}
-        else if(total<=25){band="Moderate";dotClass="amber";}
-        else {band="High";dotClass="red";}
-        bandText="VFR • ≥100 in type: Low 15–20, Moderate 20–25, High >25.";
-      }
-    }
-
-    if(band==="Below ref range"){
-      narrative="Your numeric score is below the reference “Low” band for this profile. That can happen if conditions are benign and you answered “False” to most items.";
-      guidance="don’t let a low number lull you into complacency. Keep scanning for traps that the form doesn’t capture—especially external pressure, fatigue, and subtle weather changes.";
-    }else if(band==="Low"){
-      narrative="Your risk score falls in the reference Low band for this profile.";
-      guidance="this is where a lot of routine, well-planned flights end up. Still, it’s worth a quick second look at any items you answered “True” on; those are the specific edges you’re choosing to accept today.";
-    }else if(band==="Moderate"){
-      narrative="Your risk score is in the Moderate band for this profile.";
-      guidance="this is a good moment for an “On Second Thought…” pause: can you mitigate any of the True items? Change routing or timing, add fuel, bring another pilot, or delay? Moderate scores reward deliberate, not automatic, go-decisions.";
-    }else{
-      narrative="Your risk score is in the High band for this profile.";
-      guidance="this deserves a very slow, very honest second look. If your answers are accurate, you’re stacking several meaningful risk factors. Scrubbing or substantially reshaping the plan is often the safest—and most professional—choice.";
-    }
-
-    fratDot.className="dot "+(dotClass==="green"?"green":dotClass==="red"?"red":"amber");
-    fratStatusLabel.textContent=`${band} risk band`;
-    fratScoreText.textContent=`Score: ${total}`;
-    fratNarrative.textContent=narrative;
-    fratGuidance.textContent=guidance;
-
-    const catLines=Object.keys(byCat).sort().map(cat=>{
-      return `<div><b>${cat}:</b> ${byCat[cat]} points</div>`;
-    });
-    fratBreakdown.innerHTML=catLines.length?catLines.join(""):"<div>No items scored True.</div>";
-    fratBandRef.textContent=bandText;
-
-    fratResultCard.classList.remove("hide");
-    fratResultCard.scrollIntoView({behavior:"auto"});
-    fratResultCard.dataset.payload=JSON.stringify({total,band,byCat,rules,exp});
-  });
-
-  fratResetBtn.addEventListener("click",()=>{
-    document.querySelectorAll("#fratQuestions input[type=radio]").forEach(r=>r.checked=false);
-    fratResultCard.classList.add("hide");
-  });
-
-  fratExportBtn.addEventListener("click",()=>{
-    const payload=fratResultCard.dataset.payload?JSON.parse(fratResultCard.dataset.payload):null;
-    const when=new Date().toLocaleString();
-    const {rules,exp}=getFratProfile();
-    let html=`<html><head><title>Second Opinion — FRAT Summary</title>
-      <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px;color:#111}
-      h1{font-size:20px;margin:0 0 6px} h2{font-size:16px;margin:18px 0 6px}
-      .muted{color:#555}.box{border:1px solid #ddd;border-radius:8px;padding:12px}</style></head><body>
-      <h1>Second Opinion — Flight Risk Assessment (FRAT)</h1>
-      <div class="muted">Generated: ${when}</div>`;
-    if(!payload){
-      html+=`<p>No FRAT result to export.</p></body></html>`;
-      const w=window.open("","_blank"); if(w){w.document.write(html);w.document.close();w.focus();w.print();}
-      else alert("Pop-up blocked — please allow pop-ups to view the summary.");
-      return;
-    }
-    const {total,band,byCat}=payload;
-    html+=`
-      <h2>Overall</h2>
-      <div class="box">
-        <div><b>Flight rules:</b> ${rules||"—"} • <b>Experience in type:</b> ${exp||"—"}</div>
-        <div><b>Total FRAT score:</b> ${total}</div>
-        <div><b>Reference band:</b> ${band}</div>
-        <div><b>On Second Thought…</b> ${fratGuidance.textContent}</div>
-      </div>
-      <h2>Category breakdown</h2>
-      <div class="box">`;
-    const cats=Object.keys(byCat).sort();
-    if(!cats.length){
-      html+=`No items scored True.`;
-    }else{
-      cats.forEach(cat=>{
-        html+=`<div><b>${cat}:</b> ${byCat[cat]} points</div>`;
+      let total=0;
+      const byCat={};
+      FRAT_ITEMS.forEach(item=>{
+        if(!applicableToRules(item.rule,rules)) return;
+        const val=document.querySelector(`input[name="${item.id}"]:checked`)?.value;
+        if(val==="true"){
+          total+=item.score;
+          byCat[item.cat]=(byCat[item.cat]||0)+item.score;
+        }
       });
-    }
-    html+=`</div></body></html>`;
-    const w=window.open("","_blank");
-    if(w){
-      w.document.write(html);
-      w.document.close();
-      w.focus();
-      w.print();
-    }else{
-      alert("Pop-up blocked — please allow pop-ups to view the summary.");
-    }
-  });
+
+      let band="Low", dotClass="green", narrative="", guidance="";
+      let bandText="";
+      if(rules==="IFR"){
+        if(exp==="<100"){
+          if(total<20){band="Below ref range";dotClass="green";}
+          else if(total<=25){band="Low";dotClass="green";}
+          else if(total<=30){band="Moderate";dotClass="amber";}
+          else {band="High";dotClass="red";}
+          bandText="IFR • <100 in type: Low 20–25, Moderate 25–30, High >30.";
+        }else{
+          if(total<25){band="Below ref range";dotClass="green";}
+          else if(total<=30){band="Low";dotClass="green";}
+          else if(total<=35){band="Moderate";dotClass="amber";}
+          else {band="High";dotClass="red";}
+          bandText="IFR • ≥100 in type: Low 25–30, Moderate 30–35, High >35.";
+        }
+      }else{
+        if(exp==="<100"){
+          if(total<5){band="Below ref range";dotClass="green";}
+          else if(total<=15){band="Low";dotClass="green";}
+          else if(total<=20){band="Moderate";dotClass="amber";}
+          else {band="High";dotClass="red";}
+          bandText="VFR • <100 in type: Low 5–15, Moderate 15–20, High >20.";
+        }else{
+          if(total<15){band="Below ref range";dotClass="green";}
+          else if(total<=20){band="Low";dotClass="green";}
+          else if(total<=25){band="Moderate";dotClass="amber";}
+          else {band="High";dotClass="red";}
+          bandText="VFR • ≥100 in type: Low 15–20, Moderate 20–25, High >25.";
+        }
+      }
+
+      if(band==="Below ref range"){
+        narrative="Your numeric score is below the reference “Low” band for this profile. That can happen if conditions are benign and you answered “False” to most items.";
+        guidance="don’t let a low number lull you into complacency. Keep scanning for traps that the form doesn’t capture—especially external pressure, fatigue, and subtle weather changes.";
+      }else if(band==="Low"){
+        narrative="Your risk score falls in the reference Low band for this profile.";
+        guidance="this is where a lot of routine, well-planned flights end up. Still, it’s worth a quick second look at any items you answered “True” on; those are the specific edges you’re choosing to accept today.";
+      }else if(band==="Moderate"){
+        narrative="Your risk score is in the Moderate band for this profile.";
+        guidance="this is a good moment for an “On Second Thought…” pause: can you mitigate any of the True items? Change routing or timing, add fuel, bring another pilot, or delay? Moderate scores reward deliberate, not automatic, go-decisions.";
+      }else{
+        narrative="Your risk score is in the High band for this profile.";
+        guidance="this deserves a very slow, very honest second look. If your answers are accurate, you’re stacking several meaningful risk factors. Scrubbing or substantially reshaping the plan is often the safest—and most professional—choice.";
+      }
+
+      fratDot.className="dot "+(dotClass==="green"?"green":dotClass==="red"?"red":"amber");
+      fratStatusLabel.textContent=`${band} risk band`;
+      fratScoreText.textContent=`Score: ${total}`;
+      fratNarrative.textContent=narrative;
+      fratGuidance.textContent=guidance;
+
+      const catLines=Object.keys(byCat).sort().map(cat=>{
+        return `<div><b>${cat}:</b> ${byCat[cat]} points</div>`;
+      });
+      fratBreakdown.innerHTML=catLines.length?catLines.join(""):"<div>No items scored True.</div>";
+      fratBandRef.textContent=bandText;
+
+      fratResultCard.classList.remove("hide");
+      fratResultCard.scrollIntoView({behavior:"auto"});
+      fratResultCard.dataset.payload=JSON.stringify({total,band,byCat,rules,exp});
+    });
+  }
+
+  if (fratResetBtn) {
+    fratResetBtn.addEventListener("click",()=>{
+      document.querySelectorAll("#fratQuestions input[type=radio]").forEach(r=>r.checked=false);
+      fratResultCard.classList.add("hide");
+    });
+  }
+
+  if (fratExportBtn) {
+    fratExportBtn.addEventListener("click",()=>{
+      const payload=fratResultCard.dataset.payload?JSON.parse(fratResultCard.dataset.payload):null;
+      const when=new Date().toLocaleString();
+      const {rules,exp}=getFratProfile();
+      let html=`<html><head><title>Second Opinion — FRAT Summary</title>
+        <style>body{font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:24px;color:#111}
+        h1{font-size:20px;margin:0 0 6px} h2{font-size:16px;margin:18px 0 6px}
+        .muted{color:#555}.box{border:1px solid #ddd;border-radius:8px;padding:12px}</style></head><body>
+        <h1>Second Opinion — Flight Risk Assessment (FRAT)</h1>
+        <div class="muted">Generated: ${when}</div>`;
+      if(!payload){
+        html+=`<p>No FRAT result to export.</p></body></html>`;
+        const w=window.open("","_blank"); if(w){w.document.write(html);w.document.close();w.focus();w.print();}
+        else alert("Pop-up blocked — please allow pop-ups to view the summary.");
+        return;
+      }
+      const {total,band,byCat}=payload;
+      html+=`
+        <h2>Overall</h2>
+        <div class="box">
+          <div><b>Flight rules:</b> ${rules||"—"} • <b>Experience in type:</b> ${exp||"—"}</div>
+          <div><b>Total FRAT score:</b> ${total}</div>
+          <div><b>Reference band:</b> ${band}</div>
+          <div><b>On Second Thought…</b> ${fratGuidance.textContent}</div>
+        </div>
+        <h2>Category breakdown</h2>
+        <div class="box">`;
+      const cats=Object.keys(byCat).sort();
+      if(!cats.length){
+        html+=`No items scored True.`;
+      }else{
+        cats.forEach(cat=>{
+          html+=`<div><b>${cat}:</b> ${byCat[cat]} points</div>`;
+        });
+      }
+      html+=`</div></body></html>`;
+      const w=window.open("","_blank");
+      if(w){
+        w.document.write(html);
+        w.document.close();
+        w.focus();
+        w.print();
+      }else{
+        alert("Pop-up blocked — please allow pop-ups to view the summary.");
+      }
+    });
+  }
 
 })();
