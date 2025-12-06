@@ -93,9 +93,8 @@ p{margin:.3rem 0 .3rem}
 .mainMenuBtn{
   width:100%;
   aspect-ratio:1 / 1;
-  min-height:120px;
   border-radius:18px;
-  margin-top:8px;
+  margin-top:0;
 }
 
 /* Keyboard / pills / chips */
@@ -289,33 +288,44 @@ a.infoLink:hover{text-decoration:underline}
   opacity:.9;
 }
 
-/* Smaller version on main menu */
-.brandBlockSmall{
+/* HERO brand block on main menu */
+.brandBlockHero{
   background:#ffffff;
-  border-radius:20px;
-  padding:10px 14px;
-  box-shadow:0 8px 22px rgba(0,0,0,.4);
+  border-radius:24px;
+  padding:18px 22px 16px;
+  box-shadow:0 14px 32px rgba(0,0,0,.45);
   display:flex;
   flex-direction:column;
   align-items:center;
 }
-.brandIconMainSmall{
-  height:72px;
+.brandIconHeroMain{
+  height:120px;
   display:block;
-  margin-bottom:8px;
+  margin-bottom:10px;
 }
-.brandIconOstSmall{
-  height:30px;
+.brandIconHeroOst{
+  height:44px;
   display:block;
   opacity:.95;
 }
 
 /* Responsive adjustments */
-@media (max-width: 720px){
+@media (max-width:720px){
+  .wrap{
+    padding:12px 12px 20px;
+  }
   .grid-2{
     grid-template-columns:1fr;
   }
-  .wrap{
-    padding:12px 12px 20px;
+  /* Keep the two main menu buttons side-by-side even on phones */
+  #modeCard .grid-2{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media (max-width:480px){
+  .mainMenuBtn{
+    font-size:.9rem;
+    padding:10px 10px;
   }
 }
