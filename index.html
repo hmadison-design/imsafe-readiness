@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -75,6 +74,9 @@
       min-width:150px;
       user-select:none;
       font-size:1rem;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
     .btn:disabled{opacity:.6;cursor:not-allowed}
     .btn-ghost{
@@ -195,7 +197,7 @@
       white-space:nowrap;
       font-size:.9rem;
     }
-    /* Mental Status home menu */
+    /* Mental Status home menu (legacy local menu – button hidden globally) */
     #tmdMenu{
       margin-top:10px;
       background:#0f1622;
@@ -203,6 +205,10 @@
     }
     #tmdMenu .btn{
       margin:4px 6px 4px 0;
+    }
+    /* Hide the old Cognition-only hamburger so we only have the global one */
+    #tmdMenuBtn{
+      display:none;
     }
     a.infoLink{
       color:var(--accent);
@@ -224,10 +230,61 @@
       text-decoration:none;
     }
     .footer-link a:hover{text-decoration:underline}
+
+    /* ---------- Global hamburger menu ---------- */
+    .globalMenuBtn{
+      position:fixed;
+      top:10px;
+      right:10px;
+      width:40px;
+      height:40px;
+      border-radius:999px;
+      border:1px solid #223042;
+      background:rgba(0,0,0,0.55);
+      color:var(--ink);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.1rem;
+      z-index:9999;
+      cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,.45);
+    }
+    .globalMenuBtn:active{
+      transform:translateY(1px) scale(.97);
+    }
+    .globalMenuSheet{
+      position:fixed;
+      top:56px;
+      right:10px;
+      width:260px;
+      z-index:9998;
+    }
+    .globalMenuSheet .btn{
+      width:100%;
+      justify-content:flex-start;
+      text-align:left;
+      margin:4px 0;
+    }
   </style>
 </head>
 <body>
 <div class="wrap">
+
+  <!-- GLOBAL MENU OVERLAY -->
+  <button id="globalMenuBtn" type="button" class="globalMenuBtn" aria-label="Open menu">☰</button>
+  <section id="globalMenuSheet" class="card globalMenuSheet hide" aria-label="Second Opinion menu">
+    <h3 style="margin-top:0;">Menu</h3>
+    <button id="menuMainGlobal" type="button" class="btn btn-sm btn-ghost">Main menu</button>
+    <button id="menuCogGlobal" type="button" class="btn btn-sm">Cognition &amp; Acuity Assessment</button>
+    <button id="menuFratGlobal" type="button" class="btn btn-sm btn-ghost">FRAT Assessment</button>
+    <div class="hr"></div>
+    <button id="menuAppInfoGlobal" type="button" class="btn btn-sm btn-ghost">About this app</button>
+    <button id="menuOstGlobal" type="button" class="btn btn-sm btn-ghost">About On Second Thought</button>
+    <div class="hr"></div>
+    <button id="menuBaselineGlobal" type="button" class="btn btn-sm btn-ghost">Baseline sessions</button>
+    <button id="menuExportGlobal" type="button" class="btn btn-sm btn-ghost">Export Cognition summary</button>
+  </section>
 
   <!-- MAIN MODE CARD -->
   <section id="modeCard" class="card">
@@ -374,6 +431,7 @@
             </div>
           </div>
         </div>
+        <!-- Old local menu button is now hidden via CSS (#tmdMenuBtn) -->
         <button id="tmdMenuBtn" type="button" class="btn btn-sm btn-ghost" aria-label="Cognition &amp; Acuity menu">☰</button>
       </div>
 
@@ -653,6 +711,24 @@
   const aboutOstCard=$("#aboutOstCard");
   const aboutOstBackBtn=$("#aboutOstBackBtn");
 
+  const globalMenuBtn=$("#globalMenuBtn"), globalMenuSheet=$("#globalMenuSheet");
+
+  function closeGlobalMenu(){ globalMenuSheet.classList.add("hide"); }
+  function toggleGlobalMenu(){ globalMenuSheet.classList.toggle("hide"); }
+
+  globalMenuBtn.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    toggleGlobalMenu();
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener("click",(e)=>{
+    if(globalMenuSheet.classList.contains("hide")) return;
+    if(!globalMenuSheet.contains(e.target) && e.target!==globalMenuBtn){
+      closeGlobalMenu();
+    }
+  });
+
   function goMain(){
     hide(tmdRoot);
     hide(fratRoot);
@@ -661,7 +737,7 @@
     show(modeCard);
   }
 
-  goTmdBtn.addEventListener("click",()=>{
+  function openCognitionHome(){
     hide(modeCard);
     hide(appInfoCard);
     hide(aboutOstCard);
@@ -673,15 +749,19 @@
     hide($("#resultCard"));
     hide($("#baselineCard"));
     hide($("#tmdMenu"));
-  });
+  }
 
-  goFratBtn.addEventListener("click",()=>{
+  function openFrat(){
     hide(modeCard);
     hide(appInfoCard);
     hide(aboutOstCard);
     tmdRoot.classList.add("hide");
     fratRoot.classList.remove("hide");
-  });
+  }
+
+  goTmdBtn.addEventListener("click",openCognitionHome);
+
+  goFratBtn.addEventListener("click",openFrat);
 
   $("#backFromFrat").addEventListener("click",goMain);
 
@@ -694,7 +774,6 @@
 
   aboutOstBackBtn.addEventListener("click",()=>{
     hide(aboutOstCard);
-    // Return to main by default; if you want, this could remember where you came from.
     goMain();
   });
 
@@ -1730,6 +1809,56 @@
     }else{
       alert("Pop-up blocked — please allow pop-ups to view the summary.");
     }
+  });
+
+  // =====================================================================
+  //                    GLOBAL MENU NAV ACTIONS
+  // =====================================================================
+
+  $("#menuMainGlobal").addEventListener("click",()=>{
+    closeGlobalMenu();
+    goMain();
+  });
+
+  $("#menuCogGlobal").addEventListener("click",()=>{
+    closeGlobalMenu();
+    openCognitionHome();
+  });
+
+  $("#menuFratGlobal").addEventListener("click",()=>{
+    closeGlobalMenu();
+    openFrat();
+  });
+
+  $("#menuAppInfoGlobal").addEventListener("click",()=>{
+    closeGlobalMenu();
+    hide(modeCard);
+    hide(aboutOstCard);
+    show(appInfoCard);
+  });
+
+  $("#menuOstGlobal").addEventListener("click",()=>{
+    closeGlobalMenu();
+    hide(modeCard);
+    hide(appInfoCard);
+    show(aboutOstCard);
+  });
+
+  $("#menuBaselineGlobal").addEventListener("click",()=>{
+    closeGlobalMenu();
+    if(!baselineSessions.length){
+      alert("No baseline sessions stored on this device yet. Run the assessment on a good day and add results to baseline first.");
+      return;
+    }
+    openCognitionHome();
+    updateBaselineList();
+    show(baselineCard);
+    baselineCard.scrollIntoView({behavior:"auto"});
+  });
+
+  $("#menuExportGlobal").addEventListener("click",()=>{
+    closeGlobalMenu();
+    exportPDF();
   });
 
 })();
