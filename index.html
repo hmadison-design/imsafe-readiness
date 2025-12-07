@@ -1,7 +1,10 @@
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Second Opinion — Pilot Readiness &amp; Risk Tools</title>
-  <link rel="stylesheet" href="style.css">
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Second Opinion — Pilot Readiness &amp; Risk Tools</title>
   <style>
     :root{
       /* Updated background color */
@@ -224,56 +227,9 @@
   </style>
 </head>
 <body>
-<div id="splash">
-  <div id="splash-icon" class="splash-stage">
-    <img src="2ndOpinionIcon.svg" alt="Second Opinion icon">
-  </div>
-  <div id="splash-ost" class="splash-stage">
-    <div class="splash-caption">Brought to you by…</div>
-    <img src="SVG_VERSION_OST_Main_Logo.svg" alt="On Second Thought logo">
-  </div>
-</div>
 <div class="wrap">
-  <header class="appHeader">
-    <div class="appHeader-left">
-      <img src="2ndOpinionIcon.svg" alt="Second Opinion icon" class="appHeader-icon">
-      <div class="appHeader-text">
-        <div class="appHeader-title">Second Opinion</div>
-        <div class="appHeader-subtitle">Pilot Readiness &amp; Risk Tools</div>
-      </div>
-    </div>
-    <button id="globalHamburger" class="hamburger-btn" aria-label="Open navigation menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </header>
 
-  <div id="globalHamburgerOverlay" class="hamburger-menu-overlay">
-    <div class="hamburger-menu">
-      <div class="hamburger-menu-title">Navigate</div>
-      <button class="menu-item" data-view-target="modeCard">Main menu</button>
-      <button class="menu-item" data-view-target="tmdRoot">Cognition &amp; Acuity</button>
-      <button class="menu-item" data-view-target="fratRoot">FRAT assessment</button>
-      <button class="menu-item" data-view-target="appInfoCard">How to use Second Opinion</button>
-      <button class="menu-item" data-view-target="aboutAppCard">About Second Opinion</button>
-      <button class="menu-item" data-view-target="aboutOstCard">About On Second Thought</button>
-      <button class="menu-item btn-ghost" id="globalHamburgerClose">Close</button>
-    </div>
-  </div>
-
-<!-- MAIN MODE CARD -->
-  <section id="modeCard" class="card view-screen">
-    <!-- HERO ICON BLOCK + TAGLINE + LINKS -->
-    <div class="brandBlockHero">
-      <img src="2ndOpinionIcon.svg" alt="Second Opinion icon" class="brandIconHeroMain">
-      <img src="SVG_VERSION_OST_Main_Logo.svg" alt="On Second Thought logo" class="brandIconHeroOst">
-      <p class="muted" style="margin-top:6px;">
-        Quick, repeatable checks on your current mental sharpness and operational risk — before you launch.
-      </p>
-      <div class="linkRow">
-        <button id="appInfoLink" type="button" class="btn btn-ghost btn-sm">How to use Second Opinion</button>
-        <button id="aboutAppLink" type="button" class="btn btn-ghost btn-sm">About this app</button>
+  <!-- MAIN MODE CARD -->
   <section id="modeCard" class="card">
     <header class="row" style="justify-content:space-between;align-items:flex-start">
       <div class="row" style="align-items:center;gap:16px">
@@ -291,27 +247,12 @@
             <a href="javascript:void(0)" id="appInfoLink" class="infoLink">What’s this?</a>
           </div>
         </div>
-</div>
-    </div>
+      </div>
     </header>
 
-<div class="hr"></div>
+    <div class="hr"></div>
 
-    <!-- MAIN MENU TILES -->
-<div class="grid grid-2">
-      <button id="goTmdBtn" type="button" class="btn mainMenuBtn">
-        <div class="mainMenuContent">
-          <div class="mainMenuTitle">Cognition &amp;<br>acuity assessment</div>
-          <div class="mainMenuDesc">Simple reaction, Stroop, and 2-back, tuned for pilots.</div>
-        </div>
-      </button>
-
-      <button id="goFratBtn" type="button" class="btn mainMenuBtn">
-        <div class="mainMenuContent">
-          <div class="mainMenuTitle">FRAT<br>assessment</div>
-          <div class="mainMenuDesc">A structured preflight risk tool, adapted for GA.</div>
-        </div>
-      </button>
+    <div class="grid grid-2">
       <div>
         <h2>Cognition &amp; Acuity Assessment</h2>
         <button id="goTmdBtn" type="button" class="btn" style="margin-top:8px;">Cognition &amp; Acuity Assessment</button>
@@ -320,21 +261,9 @@
         <h2>FRAT Assessment</h2>
         <button id="goFratBtn" type="button" class="btn btn-ghost" style="margin-top:8px;">FRAT Assessment</button>
       </div>
-</div>
+    </div>
 
-<div class="hr"></div>
-
-    <section class="cardSection">
-      <h2>What Second Opinion is — and isn’t</h2>
-      <p>
-        Second Opinion gives you fast, repeatable snapshots of your current cognitive performance and
-        selected operational risks. It’s an extra data point for your <b>IM SAFE</b> and Aeronautical Decision Making (ADM) flow.
-      </p>
-      <p class="muted">
-        It does <b>not</b> replace the regulations, your POH, your CFI, your own judgment, or common sense.
-        You are always the pilot in command.
-      </p>
-    </section>
+    <div class="hr"></div>
     <div class="muted" style="font-size:.9rem">
       <i>Second Opinion</i> was developed by instructional designer and pilot Harvey Madison, co-host of
       <i>On Second Thought</i>, to assist pilots in making more objective, data-informed decisions about
@@ -351,23 +280,8 @@
     <div class="footer-link muted">
       Learn more about the show at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
     </div>
-</section>
+  </section>
 
-  <!-- HOW-TO CARD -->
-  <section id="appInfoCard" class="card hide view-screen">
-    <h1>Using Second Opinion effectively</h1>
-    <p>
-      Second Opinion is meant to be quick. A full Cognition &amp; Acuity run typically takes a few minutes;
-      a FRAT can often be completed in under two.
-    </p>
-    <ul>
-      <li>Run the Cognition &amp; Acuity test at various times (rested, tired, stressed) to build a baseline.</li>
-      <li>Use FRAT on days when the operation, environment, or passengers add complexity.</li>
-      <li>Look for <b>trends</b> across days, not just a single “good” or “bad” score.</li>
-    </ul>
-    <p class="muted">
-      The app can’t make a go/no-go decision for you, but it can nudge you toward more deliberate choices.
-    </p>
   <!-- APP INFO / HOW-TO CARD -->
   <section id="appInfoCard" class="card hide">
     <h2>How to use <i>Second Opinion</i></h2>
@@ -404,29 +318,12 @@
       Treat this as a conservative nudge, not a verdict.</p>
     </div>
     <div class="hr"></div>
-<button id="appInfoBackBtn" type="button" class="btn btn-ghost">Back to main menu</button>
+    <button id="appInfoBackBtn" type="button" class="btn btn-ghost">Back to main menu</button>
     <div class="footer-link muted">
       Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
     </div>
-</section>
-
-  <!-- ABOUT APP CARD -->
-  <section id="aboutAppCard" class="card hide view-screen">
-    <h1>About Second Opinion</h1>
-    <p>
-      Second Opinion combines three classic cognitive paradigms — simple reaction time, Stroop, and 2-back —
-      into a compact, pilot-oriented self-check.
-    </p>
-    <p>
-      The scoring emphasizes stability and trends more than any single trial. A “bad” result is a cue
-      to pause and reassess, not a diagnosis or a grounding order.
-    </p>
-    <p class="muted">
-      Second Opinion is a supplemental decision aid. All responsibility for flight decisions rests
-      with the pilot in command.
-    </p>
-    <button id="aboutAppBackBtn" type="button" class="btn btn-ghost">Back to main menu</button>
   </section>
+
   <!-- ABOUT OST CARD (marketing copy) -->
   <section id="aboutOstCard" class="card hide">
     <h2>About <i>On Second Thought</i></h2>
@@ -440,50 +337,23 @@
       and practical “what would you actually do in this cockpit?” discussions aimed squarely at line pilots—
       not just test pilots or airline crews.</p>
 
-  <!-- ABOUT OST CARD -->
-  <section id="aboutOstCard" class="card hide view-screen">
-    <h1>About On Second Thought</h1>
-    <p>
-      <b>On Second Thought</b> is a show that dives deep into single aviation accidents — not to assign blame,
-      but to understand the chain of decisions, pressures, and human factors that led there.
-    </p>
-    <p>
-      Second Opinion grew out of the same mission: help pilots notice subtle trends earlier,
-      when they’re still easy to correct.
-    </p>
       <p><i>Second Opinion</i> is part of that ecosystem: a quick, private way to pause, think twice, and give yourself
       a reality check before you go fly on purpose.</p>
     </div>
     <div class="hr"></div>
-<button id="aboutOstBackBtn" type="button" class="btn btn-ghost">Back</button>
+    <button id="aboutOstBackBtn" type="button" class="btn btn-ghost">Back</button>
     <div class="footer-link muted">
       Visit <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a> for episodes, articles, and upcoming events.
     </div>
-</section>
+  </section>
 
-<!-- ========================= -->
-<!-- COGNITION & ACUITY ROOT   -->
-<!-- ========================= -->
-  <div id="tmdRoot" class="hide view-screen">
+  <!-- ========================= -->
+  <!-- COGNITION & ACUITY ROOT   -->
+  <!-- ========================= -->
   <div id="tmdRoot" class="hide">
 
-<!-- Mental Status Home (Cognition & Acuity) -->
-<section id="tmdHome" class="card">
-      <!-- Hamburger at top right -->
-      <button id="tmdMenuBtn" type="button"
-              class="btn btn-sm btn-ghost tmdMenuBtn"
-              aria-label="Cognition &amp; Acuity menu">☰</button>
-
-      <!-- Centered brand block -->
-      <div class="center" style="margin-top:4px;margin-bottom:14px;">
-        <div class="brandBlock">
-          <img src="2ndOpinionIcon.svg"
-               alt="Second Opinion icon" class="brandIconMain">
-          <img src="SVG_VERSION_OST_Main_Logo.svg"
-               alt="On Second Thought logo" class="brandIconOst">
-          <p class="muted" style="margin-top:6px;">
-            A short, repeatable series of tasks tuned for pilot cognition and acuity.
-          </p>
+    <!-- Mental Status Home (Cognition & Acuity) -->
+    <section id="tmdHome" class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
         <div class="row" style="align-items:center;gap:18px">
           <div style="background:#ffffff;border-radius:20px;padding:14px 18px;box-shadow:0 10px 26px rgba(0,0,0,0.4);">
@@ -503,12 +373,10 @@
               <a href="javascript:void(0)" id="tmdInfoBtn" class="infoLink">What is this?</a>
             </div>
           </div>
-</div>
+        </div>
         <button id="tmdMenuBtn" type="button" class="btn btn-sm btn-ghost" aria-label="Cognition &amp; Acuity menu">☰</button>
-</div>
+      </div>
 
-      <div class="center">
-        <button id="startBtn" type="button" class="btn">Start assessment</button>
       <div id="tmdMenu" class="card hide">
         <h3>Cognition &amp; Acuity menu</h3>
         <div class="muted" style="margin-bottom:4px;font-size:.9rem">
@@ -523,16 +391,13 @@
           <button id="menuAboutOst" type="button" class="btn btn-sm btn-ghost">About OST</button>
           <button id="menuMain" type="button" class="btn btn-sm btn-ghost">Main Menu</button>
         </div>
-</div>
+      </div>
 
-      <div class="hr"></div>
       <div class="footer-link muted">
         Learn more at <a href="https://OnSecondThought.me" target="_blank" rel="noopener noreferrer">OnSecondThought.me</a>.
       </div>
     </section>
 
-      <section class="cardSection">
-        <h2>What this assessment measures</h2>
     <!-- Info card for Cognition & Acuity -->
     <section id="tmdInfoCard" class="card hide">
       <h2>About the Cognition &amp; Acuity Assessment</h2>
@@ -541,88 +406,37 @@
           This assessment is an experimental, on-device tool inspired by IM SAFE and human-factors research.
           It samples three domains:
         </p>
-<ul>
-          <li><b>Simple reaction time</b> – how quickly you respond to a visual change.</li>
-          <li><b>Stroop interference</b> – executive control and resistance to distraction.</li>
-          <li><b>2-back</b> – short-term working memory and sustained attention.</li>
+        <ul>
           <li><b>Reaction:</b> how quickly you respond to a simple “go” cue.</li>
           <li><b>Color–Word (Stroop):</b> how well you resist interference between words and colors.</li>
           <li><b>2-back:</b> a small working-memory task, similar to what’s used in many lab studies.</li>
-</ul>
-      </section>
-
-      <section class="cardSection">
-        <h2>Baselines and trends</h2>
-<p>
-          The real value emerges when you gather several sessions over time, under different conditions.
+        </ul>
+        <p>
           The goal isn’t to diagnose anything. It’s to give you a private, repeatable sense of whether today feels
           like one of your “good” days, a “soft” day, or a “not today” day—<b>before</b> you add the workload of a flight.
-</p>
-        <p class="muted">
-          Use the menu to add today’s result to your baseline or to review past sessions.
+        </p>
         <p>
           All data stays on this device. It’s a supplement to IM SAFE and good ADM, not a replacement.
-</p>
-      </section>
-    </section>
-
-    <!-- TMD MENU DROPDOWN -->
-    <section id="tmdMenu" class="card hide tmdMenuCard">
-      <button id="menuAddBaseline" type="button" class="btn btn-ghost">Add this session to baseline</button>
-      <button id="menuManageBaseline" type="button" class="btn btn-ghost">Manage baseline</button>
-      <button id="menuExport" type="button" class="btn btn-ghost">Export latest result</button>
-      <button id="menuMain" type="button" class="btn btn-ghost">Back to Cognition &amp; Acuity home</button>
-      <button id="menuAboutOst" type="button" class="btn btn-ghost">About On Second Thought</button>
-    </section>
-
-    <!-- INFO CARD -->
-    <section id="tmdInfoCard" class="card hide">
-      <h1>Cognition &amp; Acuity: how it works</h1>
-      <p>
-        This assessment walks you through three segments in sequence. Try to treat it like a flight:
-        consistent posture, minimal distractions, and similar lighting each time you run it.
-      </p>
-      <ul>
-        <li>Relax your shoulders and hands, but stay engaged.</li>
-        <li>Silence notifications and secure the device to avoid movement.</li>
-        <li>Don’t “game” the test — respond naturally and honestly.</li>
-      </ul>
-      <button id="tmdInfoBackBtn" type="button" class="btn btn-ghost">Back to assessment home</button>
+        </p>
       </div>
       <div class="hr"></div>
       <button id="tmdInfoBackBtn" type="button" class="btn btn-ghost">Back to Cognition &amp; Acuity</button>
-</section>
+    </section>
 
-    <!-- TEST CARD -->
     <!-- Test card -->
-<section id="testCard" class="card hide">
-      <div class="testHeader">
-        <div id="stepName"></div>
-        <div class="pillRow">
-          <span class="pill" id="timePill"></span>
-        </div>
+    <section id="testCard" class="card hide">
       <div class="row" style="justify-content:space-between;align-items:center">
         <div class="pill"><span>Step:</span> <b id="stepName">Warm-up</b></div>
         <div class="pill"><span>Time:</span> <b id="countdown">0s</b></div>
-</div>
-      <div class="progressBar"><i id="progressBar"></i></div>
-      <div id="countdown" class="countdown"></div>
+      </div>
       <div class="bar" style="margin:12px 0 10px"><i id="progressBar"></i></div>
 
-      <!-- Simple Reaction Time -->
-      <div id="srtPane" class="pane">
-        <div id="srtTarget" class="tapTarget">WAIT</div>
       <!-- SRT -->
       <div id="srtPane" class="center" style="min-height:260px">
         <div id="srtTarget" class="tapTarget" role="button" aria-label="Tap when it turns green">WAIT</div>
-</div>
+      </div>
 
-<!-- Stroop -->
-      <div id="stroopPane" class="pane hide">
-        <div id="stroopWord" class="stroopWord">RED</div>
-        <div class="stroopButtons">
-          <button id="btnMatch" type="button" class="btn btn-ghost">Matches word</button>
-          <button id="btnMismatch" type="button" class="btn btn-ghost">Matches ink color</button>
+      <!-- Stroop -->
       <div id="stroopPane" class="hide" style="min-height:260px">
         <div class="center" style="margin:10px 0 18px">
           <div id="stroopWord" class="wordBox mono" aria-live="off">RED</div>
@@ -633,40 +447,23 @@
         </div>
         <div class="muted center" style="margin-top:8px">
           Keyboard: <span class="kbd">F</span>=MATCH, <span class="kbd">J</span>=MISMATCH
-</div>
-</div>
+        </div>
+      </div>
 
-      <!-- Between segments -->
-      <div id="betweenPane" class="pane hide">
-        <p class="muted">Pause — next segment begins in <span id="betweenCountdown"></span>…</p>
       <!-- Between-tests countdown -->
       <div id="betweenPane" class="center hide" style="min-height:200px;flex-direction:column;gap:14px;">
         <div class="muted">The next evaluation begins in</div>
         <div id="betweenCountdown" class="big" style="font-size:3rem;">5</div>
-</div>
+      </div>
 
-      <!-- Pre 2-back explanation -->
-      <div id="preNbackPane" class="pane hide">
-        <p>
-          Next is a <b>2-back</b> working-memory task. You’ll see a stream of digits.
-          Tap when the current digit matches the one from two steps ago.
-        </p>
-        <p id="preNbackHint" class="muted"></p>
-        <button id="startNbackBtn" type="button" class="btn">Start 2-back</button>
       <!-- Pre 2-back start -->
       <div id="preNbackPane" class="center hide" style="min-height:120px;margin-top:10px;flex-direction:column;gap:8px;">
         <div class="muted">When you’re ready, start the working-memory segment.</div>
         <button id="startNbackBtn" type="button" class="btn">Tap to begin 2-Back Test</button>
         <div class="muted" id="preNbackHint"></div>
-</div>
+      </div>
 
-<!-- 2-back -->
-      <div id="nbackPane" class="pane hide">
-        <div id="groupLabel" class="muted"></div>
-        <div id="nbackDigit" class="nbackDigit">3</div>
-        <div id="twoBackButtons" class="twoBackButtons">
-          <button id="btnTarget" type="button" class="btn btn-ghost">Match</button>
-          <button id="btnNotTarget" type="button" class="btn btn-ghost">No match</button>
+      <!-- 2-back -->
       <div id="nbackPane" class="hide" style="min-height:260px">
         <div class="center" style="margin:6px 0 6px;">
           <div class="pill">Session: <b id="groupLabel">Group 1</b> of 12</div>
@@ -683,14 +480,12 @@
         <div class="muted center" style="margin-top:8px">
           Each group: flash 2 digits, then show the 3rd and respond.
           Keyboard: <span class="kbd">Space</span>=TARGET, <span class="kbd">N</span>=NOT TARGET.
-</div>
-</div>
-</section>
+        </div>
+      </div>
+    </section>
 
-    <!-- RESULT CARD -->
     <!-- Result card -->
-<section id="resultCard" class="card hide">
-      <div class="resultHeader">
+    <section id="resultCard" class="card hide">
       <h2>Result</h2>
       <div class="row" style="align-items:center;gap:14px;margin-top:4px;">
         <div><span id="lightDot" class="dot"></span><b id="lightLabel">Overall status</b></div>
@@ -701,52 +496,16 @@
         <b>On Second Thought…</b> <span id="guidanceText">—</span>
       </div>
       <div class="grid grid-2" style="margin-top:6px;">
-<div>
-          <h2>Today’s Cognition &amp; Acuity result</h2>
-          <div class="muted">Relative to your baseline (if available)</div>
+        <div>
           <h3>Today’s metrics</h3>
           <div class="muted" id="metricToday"></div>
-</div>
-        <div class="resultLightWrap">
-          <span id="lightDot" class="lightDot"></span>
-          <span id="lightLabel" class="muted"></span>
+        </div>
         <div>
           <h3>Baseline (mean ± SD)</h3>
           <div class="muted" id="metricBase"></div>
-</div>
-</div>
-
-      <div class="grid grid-3 resultGrid">
-        <section>
-          <h3>Simple reaction</h3>
-          <p>Median RT: <b id="metricSrtMedian">—</b></p>
-          <p>Lapses &gt; 500 ms: <b id="metricSrtLapses">—</b></p>
-        </section>
-        <section>
-          <h3>Stroop</h3>
-          <p>Accuracy: <b id="metricStroopAcc">—</b></p>
-          <p>Median RT: <b id="metricStroopMedian">—</b></p>
-        </section>
-        <section>
-          <h3>2-back</h3>
-          <p>Accuracy: <b id="metricNbackAcc">—</b></p>
-          <p>Bias / balance: <b id="metricNbackBias">—</b></p>
-        </section>
+        </div>
       </div>
-
-<div class="hr"></div>
-
-      <section>
-        <h3>How this compares to your baseline</h3>
-        <p id="metricSummary" class="muted">Baseline comparison summary will appear here.</p>
-        <p class="muted" id="metricToday"></p>
-        <p class="muted" id="metricBase"></p>
-      </section>
-
-      <div class="resultActions">
-        <button id="againBtn" type="button" class="btn">Run assessment again</button>
-        <button id="addBaselineBtn2" type="button" class="btn btn-ghost">Add this result to baseline</button>
-        <button id="backToMainBtn" type="button" class="btn btn-ghost">Back to main menu</button>
+      <div class="hr"></div>
       <div class="row" style="gap:10px;">
         <button id="againBtn" type="button" class="btn">Start Assessment Again</button>
         <button id="addBaselineBtn2" type="button" class="btn btn-ghost" disabled>Add This Result to Baseline</button>
@@ -754,56 +513,23 @@
       </div>
       <div class="muted" style="margin-top:8px;font-size:.9rem;">
         This tool supports—but does not replace—your own judgment and the full IM SAFE self-assessment.
-</div>
-</section>
+      </div>
+    </section>
 
-    <!-- BASELINE CARD -->
     <!-- Baseline card -->
-<section id="baselineCard" class="card hide">
-      <h2>Your Cognition &amp; Acuity baseline</h2>
-      <p class="muted">
-        These are locally stored on this device only.
-      </p>
-      <div id="baselineList" class="baselineList"></div>
-      <div class="hr"></div>
-      <button id="deleteBaselineBtn" type="button" class="btn btn-ghost">Delete all baseline sessions</button>
-      <button id="closeBaselineBtn" type="button" class="btn btn-ghost">Close</button>
+    <section id="baselineCard" class="card hide">
       <h2>Baseline Sessions</h2>
       <div id="baselineList" class="muted">No baseline yet.</div>
       <div class="row" style="margin-top:10px">
         <button id="deleteBaselineBtn" type="button" class="btn btn-ghost">Delete All Baseline</button>
         <button id="closeBaselineBtn" type="button" class="btn">Close</button>
       </div>
-</section>
-</div>
-
-<!-- ========================= -->
-<!-- FRAT ROOT                 -->
-<!-- ========================= -->
-  <div id="fratRoot" class="hide view-screen">
-    <section id="fratIntroCard" class="card">
-      <h1>FRAT (Flight Risk Assessment Tool)</h1>
-      <p>
-        This FRAT is tailored for typical GA operations. It blends pilot, aircraft, environment, and operational
-        factors into a single score plus narrative guidance.
-      </p>
-      <p class="muted">
-        Use it to support — not replace — your judgment as PIC.
-      </p>
-      <button id="fratStartBtn" type="button" class="btn">Start FRAT assessment</button>
-      <button id="fratBackToMainBtn" type="button" class="btn btn-ghost">Back to main menu</button>
     </section>
+  </div>
 
-    <section id="fratQuestionsCard" class="card hide">
-      <h2>FRAT questions</h2>
-      <p class="muted">
-        Check all items that apply to this flight. Some items appear only in VFR or IFR contexts.
-      </p>
-      <div id="fratQuestions"></div>
-      <div class="hr"></div>
-      <div class="fratActions">
-        <button id="fratCalcBtn" type="button" class="btn">Calculate FRAT score</button>
-        <button id="fratResetBtn" type="button" class="btn btn-ghost">Reset</button>
+  <!-- ========================= -->
+  <!-- FRAT ROOT                 -->
+  <!-- ========================= -->
   <div id="fratRoot" class="hide">
     <section class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
@@ -817,20 +543,11 @@
           </div>
         </div>
         <button id="backFromFrat" type="button" class="btn btn-sm btn-ghost">Back to main menu</button>
-</div>
-    </section>
+      </div>
       <div class="hr"></div>
 
-    <section id="fratResultCard" class="card hide">
-      <h2>FRAT result</h2>
-      <p class="muted">
-        This summary is a cue for conversation with yourself, your CFI, or another trusted pilot.
-      </p>
-      <div class="resultHeader">
       <div class="grid grid-2">
-<div>
-          <div class="muted">Status</div>
-          <div id="fratStatusLabel"></div>
+        <div>
           <h2>Flight profile</h2>
           <div class="muted" style="font-size:.95rem;">
             Select flight rules and your experience in this aircraft / avionics type.
@@ -848,10 +565,7 @@
           <div class="muted" style="margin-top:6px;font-size:.85rem;">
             These bands mirror one published FAA FRAT example. Your SOP or CFI may use different thresholds.
           </div>
-</div>
-        <div class="resultLightWrap">
-          <span id="fratDot" class="lightDot"></span>
-          <span id="fratScoreText" class="muted"></span>
+        </div>
         <div>
           <h2>Risk bands (reference)</h2>
           <div class="muted" style="font-size:.9rem;">
@@ -869,20 +583,17 @@
               <b>≥100 in type:</b> Low 15–20, Moderate 20–25, High &gt;25
             </div>
           </div>
-</div>
-</div>
+        </div>
+      </div>
+      <div class="hr"></div>
 
-<div class="hr"></div>
-
-      <div id="fratNarrative" class="muted"></div>
-      <div id="fratGuidance" class="muted" style="margin-top:8px;"></div>
       <div class="muted" style="margin-bottom:6px;font-size:.9rem;">
         All questions are True/False. “True” applies the score shown; “False” contributes zero. Questions shown update based on VFR vs IFR.
       </div>
 
       <div id="fratQuestions"></div>
 
-<div class="hr"></div>
+      <div class="hr"></div>
       <div class="row" style="gap:10px;">
         <button id="fratCalcBtn" type="button" class="btn">Calculate FRAT Score</button>
         <button id="fratResetBtn" type="button" class="btn btn-ghost">Clear Answers</button>
@@ -892,7 +603,6 @@
       </div>
     </section>
 
-      <div class="grid grid-2">
     <section id="fratResultCard" class="card hide">
       <h2>FRAT Result</h2>
       <div class="row" style="align-items:center;gap:14px;margin-top:4px;">
@@ -904,14 +614,22 @@
         <b>On Second Thought…</b> <span id="fratGuidance">—</span>
       </div>
       <div class="grid grid-2" style="margin-top:6px;">
-<div>
-<h3>Score breakdown</h3>
-<div class="muted" id="fratBreakdown"></div>
-@@ -400,6 +629,1109 @@ <h3>Band reference</h3>
+        <div>
+          <h3>Score breakdown</h3>
+          <div class="muted" id="fratBreakdown"></div>
+        </div>
+        <div>
+          <h3>Band reference</h3>
+          <div class="muted" id="fratBandRef"></div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <button id="fratExportBtn" type="button" class="btn btn-ghost">Open printable summary</button>
+    </section>
+  </div>
 
 </div>
 
-<script src="app.js"></script>
 <script>
 (function(){
   const $ = s=>document.querySelector(s);
