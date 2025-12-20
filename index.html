@@ -647,9 +647,17 @@
       </div>
 
       <div id="betweenPane" class="center hide" style="min-height:200px;flex-direction:column;gap:14px;">
-        <div class="muted">The next evaluation begins in</div>
+        <div id="betweenLabel" class="muted">The next evaluation begins in</div>
+
+        <!-- NEW: message shown immediately after a test ends -->
+        <div id="betweenMessage"
+             class="big"
+             style="display:none;font-size:1.8rem;line-height:1.2;white-space:pre-line;">
+        </div>
+
         <div id="betweenCountdown" class="big" style="font-size:3rem;">5</div>
       </div>
+
 
       <div id="preNbackPane" class="center hide" style="min-height:120px;margin-top:10px;flex-direction:column;gap:8px;">
         <div class="muted">When you’re ready, start the working-memory segment.</div>
@@ -1119,6 +1127,8 @@
   const srtPane=$("#srtPane"), srtTarget=$("#srtTarget");
   const stroopPane=$("#stroopPane"), stroopWord=$("#stroopWord"), btnMatch=$("#btnMatch"), btnMismatch=$("#btnMismatch");
   const betweenPane=$("#betweenPane"), betweenCountdown=$("#betweenCountdown");
+  const betweenLabel = $("#betweenLabel");
+  const betweenMessage = $("#betweenMessage");
   const preNbackPane=$("#preNbackPane"), startNbackBtn=$("#startNbackBtn"), preNbackHint=$("#preNbackHint");
   const nbackPane=$("#nbackPane"), nbackDigit=$("#nbackDigit"), btnTarget=$("#btnTarget"), btnNotTarget=$("#btnNotTarget"), twoBackButtons=$("#twoBackButtons"), groupLabel=$("#groupLabel");
   const resultLine=$("#resultLine"),
@@ -1217,6 +1227,52 @@
     });
     hide(betweenPane);
   }
+  
+  async function endMessageThenMaybeCountdown({
+    messageText = "TEST OVER\nGET READY FOR THE NEXT ONE",
+    messageMs = 1500,
+    countdownSeconds = 5,      // set to 0 / null to skip countdown
+    elapsedBefore = 0
+  } = {}){
+    show(betweenPane);
+    hide(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane);
+
+    // Show message
+    betweenLabel.textContent = "";
+    betweenMessage.style.display = "block";
+    betweenMessage.textContent = messageText;
+    betweenCountdown.style.display = "none";
+
+    // Keep progress stable during message
+    setProgress(elapsedBefore / TOTAL_TIME);
+    countdown.textContent = "—";
+
+    await sleep(messageMs);
+
+    // Skip countdown if requested
+    if(!countdownSeconds || countdownSeconds <= 0){
+      hide(betweenPane);
+      betweenMessage.style.display = "none";
+      betweenCountdown.style.display = "";
+      return;
+    }
+
+    // Show countdown (your existing behavior)
+    betweenLabel.textContent = "The next evaluation begins in";
+    betweenMessage.style.display = "none";
+    betweenCountdown.style.display = "";
+
+    await sectionTimer("Pause", countdownSeconds, (tleft,p)=>{
+      countdown.textContent = Math.ceil(tleft) + "s";
+      betweenCountdown.textContent = Math.ceil(tleft);
+
+      // Progress: advance across the countdown
+      const elapsed = elapsedBefore + (countdownSeconds - tleft);
+      setProgress(elapsed / TOTAL_TIME);
+    });
+
+    hide(betweenPane);
+  }
 
   async function runTest(){
     sessionResult=null;
@@ -1235,10 +1291,24 @@
       show(srtPane); hide(stroopPane); hide(nbackPane); hide(preNbackPane); hide(betweenPane);
     });
 
-    const srt=await runSRT(DUR.srt);
-    await betweenSegments("Pause",5, DUR.warmup + DUR.srt);
-    const stro=await runStroop(DUR.stroop);
-    await betweenSegments("Pause",5, DUR.warmup + DUR.srt + DUR.stroop);
+    const srt = await runSRT(DUR.srt);
+
+    await endMessageThenMaybeCountdown({
+      messageText: "TEST OVER\nGET READY FOR THE NEXT ONE",
+      messageMs: 1500,
+      countdownSeconds: 5,
+      elapsedBefore: DUR.warmup + DUR.srt
+    });
+
+    const stro = await runStroop(DUR.stroop);
+
+    await endMessageThenMaybeCountdown({
+      messageText: "TEST OVER\nGET READY FOR THE NEXT ONE",
+      messageMs: 1500,
+      countdownSeconds: 0, // <-- skip countdown before 2-back
+      elapsedBefore: DUR.warmup + DUR.srt + 5 + DUR.stroop   // include the earlier 5-sec countdown
+    });
+
 
     const started=await waitForNbackStart(10000);
     hide(preNbackPane);
@@ -1283,6 +1353,8 @@
     return await new Promise(resolve=>{
       let rts=[], falseStarts=0, lapses=0;
       let waiting=true, goTime=0, timeOver=false, finished=false;
+      let finalTapArmed = false;   // NEW: once true, the next tap ends the segment
+      let endRequested = false;    // NEW: timer expired
       const endAt=now()+sec*1000;
       let offHandler=null;
 
@@ -1319,8 +1391,12 @@
         if(rt>500) lapses++;
         else if(rt>=100) rts.push(rt);
         waiting=true;
-        if(t>=endAt || timeOver){ finish(); }
-        else { scheduleNext(); }
+        // If timer has expired, this tap is the one that ends the test.
+        if(finalTapArmed || t>=endAt || endRequested){
+          finish();
+        } else {
+          scheduleNext();
+        }
       });
 
       scheduleNext();
@@ -1330,8 +1406,21 @@
         const elapsed=DUR.warmup + (DUR.srt - tleft);
         setProgress(elapsed / TOTAL_TIME);
       }).then(()=>{
-        timeOver=true;
-        if(waiting && !finished) finish();
+        timeOver = true;
+        endRequested = true;
+
+        // Arm a final "TAP" so the user's last tap ends the segment.
+        if(finished) return;
+
+        // If we are currently in WAIT state, force a final GO right now.
+        if(waiting){
+          srtTarget.textContent = "TAP";
+          srtTarget.className = "tapTarget go";
+          waiting = false;
+          goTime = now();
+        }
+
+        finalTapArmed = true;
       });
     });
   }
@@ -1346,6 +1435,8 @@
       };
       let trials=[], tStim=0, awaiting=false, prevWord=null, prevColor=null;
       let timeOver=false, finished=false;
+      let finalResponseArmed = false;  // NEW
+      let allowFinalTrial = false;     // NEW (lets us show one last trial even after timeOver)
       const endAt=now()+sec*1000;
       const gap=400;
       let offM=null, offMM=null;
@@ -1412,13 +1503,15 @@
 
       let current=null;
       function showTrial(){
-        if(finished || timeOver) return;
-        current=nextPair();
-        stroopWord.textContent=current.word;
-        stroopWord.style.color=colors[current.colorName];
-        stroopWord.style.visibility="visible";
-        tStim=now();
-        awaiting=true;
+        if(finished) return;
+        if(timeOver && !allowFinalTrial) return;
+
+        current = nextPair();
+        stroopWord.textContent = current.word;
+        stroopWord.style.color = colors[current.colorName];
+        stroopWord.style.visibility = "visible";
+        tStim = now();
+        awaiting = true;
         btnMatch.classList.remove("active");
         btnMismatch.classList.remove("active");
       }
@@ -1445,8 +1538,14 @@
         trials.push({rt,correct,congruent:current.congruent});
         (which==="MATCH"?btnMatch:btnMismatch).classList.add('active');
 
-        if(timeOver || now()>endAt) finish();
-        else queueNext();
+        if(finalResponseArmed){
+          finish();
+        } else if(timeOver || now() > endAt){
+          // (Shouldn't typically hit now because we arm finalResponseArmed instead)
+          finish();
+        } else {
+          queueNext();
+        }
       }
 
       offM=onPressPointer(btnMatch,()=>respond("MATCH"));
@@ -1464,9 +1563,22 @@
         const elapsed=DUR.warmup + DUR.srt + (DUR.stroop - tleft);
         setProgress(elapsed / TOTAL_TIME);
       }).then(()=>{
-        timeOver=true;
-        if(!awaiting && !finished) finish();
+        timeOver = true;
+        if(finished) return;
+
+        finalResponseArmed = true;
+
+        if(awaiting){
+          // Great: user will answer this visible trial and that answer ends Stroop.
+          return;
+        }
+
+        // Not currently awaiting (e.g., between trials). Show one last trial and end on response.
+        allowFinalTrial = true;
+        showTrial();
+        allowFinalTrial = false;
       });
+
     });
   }
 
